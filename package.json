@@ -1,0 +1,25 @@
+{
+    "name": "logger",
+    "description": "logger for echuandan",
+    "version": "0.0.1",
+    "scripts": {
+        "start": "node server.js"
+    },
+    "private": true,
+    "homepage": "app/views/index.hbs",
+    "dependencies": {
+        "async": "*",
+        "connect-mongo": "*",
+        "connect-multiparty": "*",
+        "cron": "*",
+        "express": "3.5.0",
+        "fs-extra": "*",
+        "lodash": "*",
+        "moment": "*",
+        "mongodb": "*",
+        "mongoose": "*",
+        "request": "*",
+        "should": "*",
+        "time": "*"
+    }
+}
