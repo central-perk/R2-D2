@@ -6,5 +6,7 @@ path = require('path');
 ctrl = require(path.join(process.g.controllersPath, 'mapping', 'index'));
 
 module.exports = function(app, mw) {
-  return app.get('/', mw.distribute);
+  app.get('/', mw.distribute);
+  app.post('/storage', ctrl.storage);
+  return app.get('/login', ctrl.list('login'));
 };

@@ -77,7 +77,7 @@ DaoBase = (function() {
         var options, query;
         query = criteria.query || {};
         options = criteria.query;
-        return Model.find(query).sort(sort).limit(options.perPage).skip(options.perPage * options.page).exec(callback);
+        return Model.find(query, '-__v -_id').sort(sort).limit(options.perPage).skip(options.perPage * options.page).exec(callback);
       },
       listPopulate: function(criteria, sort, populates, callback) {
         var query, temp;

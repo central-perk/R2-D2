@@ -45,5 +45,31 @@ module.exports = {
     });
     process.g.libs = libs;
     return process.g.utils = require(libs.utils);
+  },
+  pagination: function(page, perPage, count) {
+    var clas, curpage, p, pages, pagination, _i;
+    pagination = {};
+    pages = Math.ceil(count / perPage);
+    curpage = page;
+    clas = page === (curpage ? 'active' : 'no');
+    if (count <= perPage) {
+      return null;
+    }
+    pagination.left = (page - 1) > 1 ? page - 1 : 1;
+    pagination.content = [];
+    for (p = _i = 0; 0 <= pages ? _i <= pages : _i >= pages; p = 0 <= pages ? ++_i : --_i) {
+      curpage = p;
+      clas = page === (curpage ? 'active' : 'no');
+      if (page === curpage) {
+        pagination.active = curpage;
+      }
+      pagination.content.push({
+        pclass: clas,
+        curpage: curpage,
+        ptext: curpage
+      });
+    }
+    pagination.right = (parseInt(page) + 1) >= pages ? pages : parseInt(page) + 1;
+    return pagination;
   }
 };

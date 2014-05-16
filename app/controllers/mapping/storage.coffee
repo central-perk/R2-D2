@@ -14,20 +14,24 @@ log2json = (data)->
 	)
 	return logs
 
-module.exports = ()->
+module.exports = (cb, flag)->
+	logFileLength = fs.readdirSync(logsPath).length
 	_.each(fs.readdirSync(logsPath), (file, index)->
-		if ~file.indexOf '.log'
-			filePath = path.join(logsPath, file)
-			model = file.split('.')[0]
-			TS = file.split('.')[1]
-			if utils.getTime(new Date()) > TS
-				Dao[model] = require(process.g.daoPath)[model]
-				logs = fs.readFileSync(filePath, 'utf-8')
-				logs = log2json(logs)
-				Dao[model].create(logs, (err, data)->
-					if !err
-						fs.deleteSync(filePath)
-					else
-						console.log err
-				)
+		filePath = path.join(logsPath, file)
+		model = file.split('.')[0]
+		TS = Number(file.split('.')[1])
+		if utils.getTime(new Date()) > TS || flag
+			Dao[model] = require(process.g.daoPath)[model]
+			logs = fs.readFileSync(filePath, 'utf-8')
+			logs = log2json(logs)
+			Dao[model].create(logs, (err, data)->
+				if !err
+					fs.deleteSync(filePath)
+				else
+					console.log err
+					cb(err)
+				# 最后一条log callback
+				if logFileLength == index + 1
+					cb(null)
+			)
 	)

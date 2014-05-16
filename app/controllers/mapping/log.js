@@ -12,11 +12,11 @@ logsPath = process.g.logsPath;
 module.exports = function(logName) {
   var fileName;
   fileName = logName + '.' + utils.getTime() + '.log';
-  return function(message) {
+  return function(message, cb) {
     message = JSON.stringify(message, null, 0) + '\n';
-    return fs.writeFileSync(path.join(logsPath, fileName), message, {
+    return fs.writeFile(path.join(logsPath, fileName), message, {
       encoding: 'utf8',
       flag: 'a'
-    });
+    }, cb);
   };
 };

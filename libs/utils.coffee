@@ -34,4 +34,28 @@ module.exports = {
 		)
 		process.g.libs = libs
 		process.g.utils = require(libs.utils)
+	pagination: (page, perPage, count)->
+		pagination = {}
+		pages = Math.ceil(count / perPage)
+		curpage = page
+		clas = page == if curpage then 'active' else 'no'
+		if count <= perPage
+			return null
+		# 向左
+		pagination.left = if (page - 1) > 1 then (page - 1) else 1
+		pagination.content = []
+		# 中间所有页
+		for p in [0..pages]
+			curpage = p
+			clas = page == if curpage then 'active' else 'no'
+			if page == curpage
+				pagination.active = curpage
+			pagination.content.push({
+				pclass: clas,
+				curpage: curpage,
+				ptext: curpage
+	        })
+		# 向右
+		pagination.right = if (parseInt(page) + 1) >= pages then pages else (parseInt(page) + 1);
+		return pagination;
 }

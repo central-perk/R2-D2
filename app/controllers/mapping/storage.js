@@ -24,25 +24,29 @@ log2json = function(data) {
   return logs;
 };
 
-module.exports = function() {
+module.exports = function(cb, flag) {
+  var logFileLength;
+  logFileLength = fs.readdirSync(logsPath).length;
   return _.each(fs.readdirSync(logsPath), function(file, index) {
     var TS, filePath, logs, model;
-    if (~file.indexOf('.log')) {
-      filePath = path.join(logsPath, file);
-      model = file.split('.')[0];
-      TS = file.split('.')[1];
-      if (utils.getTime(new Date()) > TS) {
-        Dao[model] = require(process.g.daoPath)[model];
-        logs = fs.readFileSync(filePath, 'utf-8');
-        logs = log2json(logs);
-        return Dao[model].create(logs, function(err, data) {
-          if (!err) {
-            return fs.deleteSync(filePath);
-          } else {
-            return console.log(err);
-          }
-        });
-      }
+    filePath = path.join(logsPath, file);
+    model = file.split('.')[0];
+    TS = Number(file.split('.')[1]);
+    if (utils.getTime(new Date()) > TS || flag) {
+      Dao[model] = require(process.g.daoPath)[model];
+      logs = fs.readFileSync(filePath, 'utf-8');
+      logs = log2json(logs);
+      return Dao[model].create(logs, function(err, data) {
+        if (!err) {
+          fs.deleteSync(filePath);
+        } else {
+          console.log(err);
+          cb(err);
+        }
+        if (logFileLength === index + 1) {
+          return cb(null);
+        }
+      });
     }
   });
 };
