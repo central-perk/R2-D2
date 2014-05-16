@@ -1,3 +1,5 @@
+# 将日志文件从文件存到数据库
+
 fs = require('fs-extra')
 path  = require('path')
 _  = require('lodash')

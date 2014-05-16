@@ -9,7 +9,7 @@ CronJob = require('cron').CronJob;
 
 request = require('request');
 
-store = new CronJob('* */10 * * * *', function() {
+store = new CronJob('*/3 * * * * *', function() {
   return storage(function(err) {
     if (err) {
       return console.log(err);

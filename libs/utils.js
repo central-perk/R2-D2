@@ -17,18 +17,20 @@ module.exports = {
     return time = time - time % config.LOG_INTERVAL;
   },
   setG: function(rootPath) {
-    var appPath, configPath, libs, libsPath, logsPath;
+    var appPath, configPath, libs, libsPath, logsPath, publicPath;
     configPath = path.join(rootPath, 'config');
     appPath = path.join(rootPath, 'app');
     libsPath = path.join(rootPath, 'libs');
     logsPath = path.join(rootPath, 'logs');
+    publicPath = path.join(rootPath, 'public');
     process.g = {
       config: require(configPath),
       rootPath: rootPath,
       configPath: configPath,
       appPath: appPath,
       libsPath: libsPath,
-      logsPath: logsPath
+      logsPath: logsPath,
+      publicPath: publicPath
     };
     _.each(fs.readdirSync(appPath), function(dir, index) {
       var dirPath;

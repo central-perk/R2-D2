@@ -1,3 +1,5 @@
+# 将日志写入到文件
+
 path = require('path')
 fs = require('fs-extra')
 utils = process.g.utils

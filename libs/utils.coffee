@@ -14,13 +14,15 @@ module.exports = {
 		appPath = path.join(rootPath, 'app')
 		libsPath = path.join(rootPath, 'libs')
 		logsPath = path.join(rootPath, 'logs')
+		publicPath = path.join(rootPath, 'public')
 		process.g = {
 			config: require(configPath),
-			rootPath: rootPath,
-			configPath: configPath,
-			appPath: appPath,
-			libsPath: libsPath,
-			logsPath: logsPath
+			rootPath,
+			configPath,
+			appPath,
+			libsPath,
+			logsPath,
+			publicPath,
 		}
 		_.each(fs.readdirSync(appPath), (dir, index)->
 			dirPath = path.join(appPath, dir)

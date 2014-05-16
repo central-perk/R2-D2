@@ -1,0 +1,13 @@
+{
+    "name": "logger",
+    "version": "0.0.1",
+    "ignore": [
+        "**/*.txt"
+    ],
+    "dependencies": {
+        "bootstrap": "latest",
+        "handlebars": "latest",
+        "requirejs": "latest",
+        "requirejs-domready": "latest"
+    }
+}

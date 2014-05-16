@@ -8,7 +8,7 @@ request = require('request')
 # 	request.get('http://127.0.0.1:8001?_type=openLogin&timestamp=' + timestamp + '&openID=12345')
 # null, true, 'Asia/Shanghai')
 
-store = new CronJob('* */10 * * * *', ()->
+store = new CronJob('*/3 * * * * *', ()->
 	storage((err)->
 		if err
 			console.log err

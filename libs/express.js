@@ -8,6 +8,7 @@ express = require('express');
 config = process.g.config;
 
 module.exports = function(app, mongoose) {
+  var hbs;
   if (app.get('env') === 'dev') {
     app.use(express.errorHandler());
     app.set('view cache', false);
@@ -29,6 +30,9 @@ module.exports = function(app, mongoose) {
     return next();
   });
   app.set('port', config.PORT);
+  app.set('views', process.g.viewsPath);
+  app.set('view engine', 'html');
+  app.engine('html', require('hbs').__express);
   app.use(express.compress({
     filter: function(req, res) {
       return /json|text|javascript|css/.test(res.getHeader('Content-Type'));
@@ -41,5 +45,8 @@ module.exports = function(app, mongoose) {
   app.use(express.cookieParser());
   app.use(express.methodOverride());
   app.enable('jsonp callback');
-  return app.use(app.router);
+  app.use(app.router);
+  app.use(express["static"](process.g.publicPath));
+  hbs = require('hbs');
+  return hbs.registerPartials(path.join(process.g.viewsPath, 'api'));
 };

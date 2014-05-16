@@ -29,6 +29,9 @@ module.exports = (app, mongoose)->
             })
         next()
     app.set('port', config.PORT)
+    app.set('views', process.g.viewsPath)
+    app.set('view engine', 'html')
+    app.engine('html', require('hbs').__express)
     app.use(express.compress({
         filter: (req, res)->
             return (/json|text|javascript|css/).test(res.getHeader('Content-Type'))
@@ -41,3 +44,6 @@ module.exports = (app, mongoose)->
     app.use(express.methodOverride())
     app.enable('jsonp callback')
     app.use(app.router)
+    app.use(express.static(process.g.publicPath)) # 可以设置多个静态目录
+    hbs = require('hbs')
+    hbs.registerPartials(path.join(process.g.viewsPath, 'api'))
