@@ -32,6 +32,8 @@
 <a class="login storage">文件数据强制入库</a>
 
 #### 数据列表
+<a class="login list">获取数据列表</a>
+
 <div class="login_list"></div>
 
 

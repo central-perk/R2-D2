@@ -14,6 +14,11 @@ define(['jquery', 'hbs!/modules/login', 'moment'], function($, loginListTpl, mom
 		})
 	});
 
+	$('.container').on('click', '.login.list', function() {
+		getLoginList();
+	});
+
+
 	function getLoginList() {
 		var url = location.origin + '/login';
 		$.get(url, function(data) {
