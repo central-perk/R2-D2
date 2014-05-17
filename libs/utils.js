@@ -16,6 +16,10 @@ module.exports = {
     time = moment(date).utc().zone(-8).format("YYYYMMDDHHmm");
     return time = time - time % config.LOG_INTERVAL;
   },
+  formatTime: function(date) {
+    var time;
+    return time = moment(date).utc().zone(-8).format("YYYY-MM-DD HH:mm:ss");
+  },
   setG: function(rootPath) {
     var appPath, configPath, libs, libsPath, logsPath, publicPath;
     configPath = path.join(rootPath, 'config');

@@ -32,7 +32,7 @@ module.exports = {
     log = new logger('login');
     return log(req.query, function(err) {
       if (!err) {
-        return res.requestSucceed('success');
+        return res.requestSucceed('数据提交成功');
       } else {
         return res.requestError('fail');
       }
@@ -53,12 +53,30 @@ module.exports = {
       Dao = require(process.g.daoPath)[model];
       return Dao.count(criteria, function(err, count) {
         return Dao.list(criteria, {
-          'createdTime': -1
+          'timestamp': -1
         }, function(err, docs) {
-          var data;
+          var data, documents, keys;
           if (!err) {
+            documents = [];
+            if (docs.length) {
+              keys = _.keys(docs[0]._doc);
+              _.each(docs, function(doc, index) {
+                var key, _i, _len, _results;
+                documents[index] = {};
+                _results = [];
+                for (_i = 0, _len = keys.length; _i < _len; _i++) {
+                  key = keys[_i];
+                  if (key !== 'timestamp') {
+                    _results.push(documents[index][key] = doc[key]);
+                  } else {
+                    _results.push(documents[index]['timestamp'] = utils.formatTime(doc.timestamp));
+                  }
+                }
+                return _results;
+              });
+            }
             data = {};
-            data[model + 's'] = docs;
+            data[model + 's'] = documents;
             data['pagination'] = utils.pagination(page, perPage, count);
             return res.requestSucceed(data || null);
           } else {

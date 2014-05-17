@@ -9,6 +9,8 @@ module.exports = {
 		config = process.g.config
 		time = moment(date).utc().zone(-8).format("YYYYMMDDHHmm")
 		time = time - time % config.LOG_INTERVAL
+	formatTime: (date)->
+		time = moment(date).utc().zone(-8).format("YYYY-MM-DD HH:mm:ss")
 	setG: (rootPath)->
 		configPath = path.join(rootPath, 'config')
 		appPath = path.join(rootPath, 'app')

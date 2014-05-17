@@ -6,7 +6,8 @@
     ],
     "dependencies": {
         "bootstrap": "latest",
-        "handlebars": "latest",
+        "momentjs": "latest",
+        "require-handlebars-plugin": "latest",
         "requirejs": "latest",
         "requirejs-domready": "latest"
     }

@@ -1,15 +1,15 @@
 require.config({
 	paths: {
 		jquery: '/libs/jquery/dist/jquery.min',
-		handlebars: '/libs/handlebars/handlebars.min'
+		hbs: '/libs/require-handlebars-plugin/hbs',
+		login: '/js/login',
+		moment: '/libs/momentjs/moment'
 	},
 	shim: {
-		'handlebars': {
-			exports: 'handlebars'
-		}
+
 	}
 });
-define(['jquery', 'handlebars'], function($, handlebars) {
+define(['jquery', 'login'], function($) {
 	$().ready(function() {
 		function init_content() {
 			if (location.hash) {

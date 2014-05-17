@@ -16,7 +16,7 @@
         "fs-extra": "*",
         "hbs": "*",
         "lodash": "*",
-        "markdown": "*",
+        "markdown-js": "*",
         "moment": "*",
         "mongodb": "*",
         "mongoose": "*",

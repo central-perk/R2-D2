@@ -21,7 +21,7 @@ module.exports = {
 		log = new logger('login')
 		log(req.query, (err)->
 			if !err
-				res.requestSucceed('success')
+				res.requestSucceed('数据提交成功')
 			else
 				res.requestError('fail')
 		)
@@ -39,10 +39,21 @@ module.exports = {
 			Dao = require(process.g.daoPath)[model]
 
 			Dao.count(criteria, (err, count)->
-				Dao.list(criteria, {'createdTime': -1}, (err, docs)->
+				Dao.list(criteria, {'timestamp': -1}, (err, docs)->
 					if !err
+						documents = []
+						if docs.length
+							keys = _.keys(docs[0]._doc)
+							_.each(docs, (doc, index)->
+								documents[index] = {}
+								for key in keys
+									if key != 'timestamp'
+										documents[index][key] = doc[key]
+									else
+										documents[index]['timestamp'] = utils.formatTime(doc.timestamp)
+							)
 						data = {}
-						data[model + 's'] = docs
+						data[model + 's'] = documents
 						data['pagination'] = utils.pagination(page, perPage, count)
 						res.requestSucceed(data || null);
 					else
