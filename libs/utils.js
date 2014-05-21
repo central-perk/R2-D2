@@ -11,10 +11,8 @@ moment = require('moment');
 
 module.exports = {
   getTime: function(date) {
-    var config, time;
-    config = process.g.config;
-    time = moment(date).utc().zone(-8).format("YYYYMMDDHHmm");
-    return time = time - time % config.LOG_INTERVAL;
+    var time;
+    return time = moment(date).utc().zone(-8).format("YYYYMMDDHHmmss");
   },
   formatTime: function(date) {
     var time;
@@ -51,6 +49,9 @@ module.exports = {
     });
     process.g.libs = libs;
     return process.g.utils = require(libs.utils);
+  },
+  getCtrl: function(CtrlName) {
+    return require(path.join(process.g.controllersPath, 'mapping', CtrlName));
   },
   pagination: function(page, perPage, count) {
     var clas, curpage, p, pages, pagination, _i;

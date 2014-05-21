@@ -1,28 +1,18 @@
-path = require('path')
 fs = require('fs')
+path = require('path')
 _ = require('lodash')
 config = process.g.config
 utils = process.g.utils
 logger = require(path.join(__dirname, 'log'))
 storage = require(path.join(__dirname, 'storage'))
 
-fRegisterModel = require(path.join(__dirname, 'registerModel'))
-
 require(process.g.modelsPath)
 
 module.exports = {
-	storage: (req, res)->
-		storage((err)->
-			if !err
-				res.requestSucceed('数据已经被更新')
-			else
-				res.requestError('数据更新失败')
-		, true)
-
 	fWriteLog: (req, res)->
 		sModel = req.type
 		if !require('mongoose').models[sModel] # 模型不存在
-			fRegisterModel(sModel, {openID: String}) # 需要获取数据模型————————
+			res.requestError('日志类型不存在，请先创建')
 		fWriteLog = new logger(sModel)
 		fWriteLog(req.query, (err)->
 			if !err
@@ -30,6 +20,13 @@ module.exports = {
 			else
 				res.requestError('数据提交失败')
 		)
+	storage: (req, res)->
+		storage((err)->
+			if !err
+				res.requestSucceed('数据已经被更新')
+			else
+				res.requestError('数据更新失败')
+		, true)
 	list: (model)->
 		return (req, res)->
 			page = if (req.param('page') or 0) > 0 then req.param('page') else 1

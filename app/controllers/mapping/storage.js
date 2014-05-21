@@ -50,3 +50,8 @@ module.exports = function(cb, flag) {
     }
   });
 };
+
+module.exports = function(logFileName) {
+  var logFilePath;
+  return logFilePath = path.join(logsPath, logFileName);
+};

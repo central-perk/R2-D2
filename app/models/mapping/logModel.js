@@ -17,4 +17,4 @@ var schema = new Schema({
     }
 });
 
-mongoose.model('dataModel', schema);
+mongoose.model('logModel', schema);

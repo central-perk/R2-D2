@@ -6,9 +6,7 @@ moment = require('moment')
 
 module.exports = {
 	getTime: (date)->
-		config = process.g.config
-		time = moment(date).utc().zone(-8).format("YYYYMMDDHHmm")
-		time = time - time % config.LOG_INTERVAL
+		time = moment(date).utc().zone(-8).format("YYYYMMDDHHmmss")
 	formatTime: (date)->
 		time = moment(date).utc().zone(-8).format("YYYY-MM-DD HH:mm:ss")
 	setG: (rootPath)->
@@ -38,6 +36,8 @@ module.exports = {
 		)
 		process.g.libs = libs
 		process.g.utils = require(libs.utils)
+	getCtrl: (CtrlName)->
+		return require(path.join(process.g.controllersPath, 'mapping', CtrlName))
 	pagination: (page, perPage, count)->
 		pagination = {}
 		pages = Math.ceil(count / perPage)

@@ -4,59 +4,67 @@ path = require('path')
 fs = require('fs-extra')
 utils = process.g.utils
 config = process.g.config
+logFileStatus = config.STATUS.LOGFILE
+
 logsPath = process.g.logsPath
 
+logFileDao = require(process.g.daoPath)['logFile']
 
 
-
-fNewestLog = (logName)->
-	sNewestLog = ''
-	aLogFiles = fs.readdirSync(logsPath)
-	aLogFiles = _.sortBy(aLogFiles, (str)->
-		num = Number(str.split('.')[2])
-		return num
+# 返回可写日志文件的路径
+fWriteableLog = (logType, callback)->
+	logFileDao.getOne({type: logType, status: logFileStatus.writeable}, (err, oWriteableLog)->
+		if !err
+			if oWriteableLog # 状态为可写的日志文件存在
+				sWriteableLog = oWriteableLog.name
+				sWriteableLogPath = path.join(logsPath, sWriteableLog)
+				bLogSizeOK = fCheckLogSize(sWriteableLogPath)
+				if bLogSizeOK # 日志文件是否可以继续写入
+					# if config.STORAGE.delay # 如果设置了延时入库
+					# 	setTimeout(create, config.STORAGE.delay)
+					callback(null, sWriteableLogPath)
+				else
+					logFileDao.update({name: sWriteableLog}, {status: logFileStatus.unstorage}, (err, doc)->)
+					fCreateLogFile(logType, callback)
+			else # 状态为可写的日志文件不存在，则创建新文件
+				fCreateLogFile(logType, callback)
+		else
+			throw err
 	)
-	_.each(aLogFiles, (sFileName)->
-		rPat = new RegExp(logName)
-		if rPat.test(sFileName)
-			sNewestLog = sFileName
-	)
-	if Number(sNewestLog.split('.')[1]) == Number(utils.getTime())
-		return sNewestLog
-	else
-		return false
 
-fLogSize = (sNewestLogPath)->
-	nSize = fs.readFileSync(sNewestLogPath, 'utf8').length
+# 返回日志文件是否可以继续写入
+fCheckLogSize = (sWriteableLogPath)->
+	nSize = fs.readFileSync(sWriteableLogPath, 'utf8').length
 	return config.LOG_MAX_SIZE > nSize
 
-fWriteFile = (sNewestLogPath)->
+# 返回最新创建文件的路径
+fCreateLogFile = (logType, callback)->
+	sWriteableLog = "#{logType}.#{utils.getTime()}.log"
+	sWriteableLogPath = path.join(logsPath, sWriteableLog)
+	fs.createFileSync(sWriteableLogPath)
+	logFileDao.create({type: logType, name: sWriteableLog}, (err, raw)->
+		callback(err, sWriteableLogPath)
+	)
+
+
+fWriteFile = (sWriteableLogPath)->
 	return (message, cb)->
 		message = JSON.stringify(message, null, 0) + '\n'
-		fs.writeFile(sNewestLogPath, message, {
+		fs.writeFile(sWriteableLogPath, message, {
 			encoding: 'utf8'
 			flag:'a'
 		}, cb)
 
 
 
-module.exports = (logName)->
-	sNewestLogName = fNewestLog(logName) # 最新的log文件名
-	bLogExists = Boolean(sNewestLogName) # 是否存在log文件
-	if bLogExists # 日志文件存在
-		sNewestLogPath = path.join(logsPath, sNewestLogName)
-		bLogSizeOK = fLogSize(sNewestLogPath)
-		if bLogSizeOK # 日志文件未超出大小
-			return fWriteFile(sNewestLogPath)
-		else # 日志文件超出大小
-			# 创建下一个版本的log文件
-			aNewestLogName = sNewestLogName.split('.')
-			aNewestLogName[2] = Number(aNewestLogName[2]) + 1
-			sNewestLogName = aNewestLogName.join('.')
-			sNewestLogPath = path.join(logsPath, sNewestLogName) # 更新最新log文件路径
-			return fWriteFile(sNewestLogPath)
-	else # 日志文件不存在
-		# 创建首版本的log文件
-		sNewestLogName = logName + '.' + utils.getTime() + '.0.log'
-		sNewestLogPath = path.join(logsPath, sNewestLogName) # 更新最新log文件路径
-		return fWriteFile(sNewestLogPath)
+module.exports = (logType, callback)->
+	fWriteableLog(logType, (err, sWriteableLogPath)->
+		callback(null, fWriteFile(sWriteableLogPath))	
+	)
+	# async()
+	# return fWriteFile(sWriteableLogPath)
+
+	# return (oLog, callback)->
+	# 	console.log oLog
+	# 	callback(null)
+	# fNewestLog(logType)

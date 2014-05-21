@@ -1,17 +1,26 @@
 path = require('path')
-ctrl = require(path.join(process.g.controllersPath, 'mapping', 'index'))
-auth = require(path.join(process.g.controllersPath, 'mapping', 'auth'))
+utils = process.g.utils
+ctrl = utils.getCtrl('index')
+auth = utils.getCtrl('auth')
+kue  = utils.getCtrl('kue')
+
+
 
 aAuth = {}
 
 
+fEnqueue = (req, res)->
+	req.type = req.query.type
+	delete req.query.type
+	delete req.query.appID
+	delete req.query.token
+	kue(req)
+	res.requestSucceed('数据提交成功')
+
 
 module.exports = {
 	distribute: (req, res, next)->
-		console.log aAuth
-
-
-		type = req.query._type
+		type = req.query.type
 		appID = Number(req.query.appID)
 		token = req.query.token
 		ts = req.query.ts
@@ -25,16 +34,20 @@ module.exports = {
 		else if !token
 			res.requestError('缺少token')
 		else
-			if aAuth.appID and aAuth.appID.token == token
-				delete req.query._type
-				req.type = type
-				ctrl.fWriteLog(req, res)
+			if !require('mongoose').models[type] # 该日志类型的模型不存在
+				res.requestError('日志类型不存在，请先创建')
 			else
-				auth.get({appID}, (err, oAuth)->
-					if oAuth and oAuth.token == token
-						aAuth.appID = {token}
-						delete req.query._type
-						req.type = type
-						ctrl.fWriteLog(req, res)
-				)
+				if aAuth[appID] # 授权已经被缓存
+					if aAuth[appID]['token'] == token
+						fEnqueue(req, res)
+					else
+						res.requestError('未被授权')
+				else # 授权未被缓存
+					auth.get({appID}, (err, oAuth)->
+						if oAuth and oAuth.token == token
+							aAuth[appID] = {token}
+							fEnqueue(req, res)							
+						else
+							res.requestError('未被授权')
+					)
 }

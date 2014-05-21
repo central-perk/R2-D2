@@ -1,11 +1,22 @@
 path = require('path')
-ctrl = require(path.join(process.g.controllersPath, 'mapping', 'index'))
-auth = require(path.join(process.g.controllersPath, 'mapping', 'auth'))
+utils = process.g.utils
+
+ctrl = utils.getCtrl('index')
+auth = utils.getCtrl('auth')
+logModel = utils.getCtrl('logModel')
 
 
 
 
 module.exports = (app, mw)->
+	# 创建日志模型
+	app.post('/logmodel', logModel.create)
+
+
+	# 获取授权
+	app.post('/auth', auth.create)
+
+
 	# 日志入口，由中间件分发到对应的控制器进行处理
 	app.get('/', mw.distribute)
 
@@ -19,5 +30,4 @@ module.exports = (app, mw)->
 
 
 
-	# 获取授权
-	app.post('/auth', auth.create)
+

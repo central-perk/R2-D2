@@ -37,3 +37,7 @@ module.exports = (cb, flag)->
 					cb(null)
 			)
 	)
+
+
+module.exports = (logFileName)->
+	logFilePath = path.join(logsPath, logFileName)
