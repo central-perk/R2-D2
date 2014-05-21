@@ -5,9 +5,10 @@ config = process.g.config
 utils = process.g.utils
 logger = require(path.join(__dirname, 'log'))
 storage = require(path.join(__dirname, 'storage'))
-modelsPath = path.join(process.g.modelsPath , 'mapping')
 
+fRegisterModel = require(path.join(__dirname, 'registerModel'))
 
+require(process.g.modelsPath)
 
 module.exports = {
 	storage: (req, res)->
@@ -17,13 +18,17 @@ module.exports = {
 			else
 				res.requestError('数据更新失败')
 		, true)
-	openLogin: (req, res)->
-		log = new logger('login')
-		log(req.query, (err)->
+
+	fWriteLog: (req, res)->
+		sModel = req.type
+		if !require('mongoose').models[sModel] # 模型不存在
+			fRegisterModel(sModel, {openID: String}) # 需要获取数据模型————————
+		fWriteLog = new logger(sModel)
+		fWriteLog(req.query, (err)->
 			if !err
 				res.requestSucceed('数据提交成功')
 			else
-				res.requestError('fail')
+				res.requestError('数据提交失败')
 		)
 	list: (model)->
 		return (req, res)->

@@ -15,6 +15,7 @@
         "express": "3.5.0",
         "fs-extra": "*",
         "hbs": "*",
+        "kue": "*",
         "lodash": "*",
         "markdown-js": "*",
         "moment": "*",

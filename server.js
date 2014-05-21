@@ -13,6 +13,8 @@ require(libs.db).connect(function(mongoose) {
 	require(libs.express)(app, mongoose);
 	require(libs.routes)(app);
 	require(libs.cron);
+	require(libs.kue);
+
 	http.createServer(app).listen(app.get('port'), function() {
 		console.log('Listen on port: ' + app.get('port'))
 	});

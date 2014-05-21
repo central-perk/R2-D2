@@ -8,5 +8,4 @@ var schema = new Schema({
     timestamp: Date,
     openID: String
 });
-
 mongoose.model('login', schema);

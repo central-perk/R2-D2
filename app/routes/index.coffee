@@ -1,5 +1,10 @@
 path = require('path')
 ctrl = require(path.join(process.g.controllersPath, 'mapping', 'index'))
+auth = require(path.join(process.g.controllersPath, 'mapping', 'auth'))
+
+
+
+
 module.exports = (app, mw)->
 	# 日志入口，由中间件分发到对应的控制器进行处理
 	app.get('/', mw.distribute)
@@ -10,4 +15,9 @@ module.exports = (app, mw)->
 	app.post('/storage', ctrl.storage)
 
 	# 日志列表接口
-	app.get('/login', ctrl.list('login'));
+	app.get('/login', ctrl.list('login'))
+
+
+
+	# 获取授权
+	app.post('/auth', auth.create)
