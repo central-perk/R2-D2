@@ -1,4 +1,5 @@
 crypto = require('crypto')
+_ = require('lodash')
 config = process.g.config
 AUTH_STATUS = config.STATUS.AUTH
 authDao = require(process.g.daoPath).auth
@@ -30,9 +31,10 @@ module.exports = {
 					if !auth
 						authDao.create({appName, appID, token}, (err, raw)->
 							if !err
-								res.requestSucceed({appName, appID, token})
+								# res.requestSucceed({appName, appID, token})
+								res.requestSucceed('应用授权成功')
 							else
-								res.requestError('授权失败')
+								res.requestError('应用授权失败')
 						)
 					else # appID重复，概率很低
 						module.exports['create'](req, res)
@@ -40,7 +42,8 @@ module.exports = {
 			else
 				appID = auth.appID
 				token = auth.token
-				res.requestSucceed({appName, appID, token})
+				# res.requestSucceed({appName, appID, token})
+				res.requestError('应用已授权')
 		)
 	list: (req, res)->
 		criteria = {
@@ -50,11 +53,36 @@ module.exports = {
 		}
 		authDao.list(criteria, {ts: -1}, (err, auths)->
 			if !err
-				res.requestSucceed(auths)
+				aAuth = []
+				_.each(auths, (auth)->
+					aAuth.push({
+						appName: auth.appName,
+						appID: auth.appID,
+						token: auth.token,
+						ts: auth.ts,
+						status: auth.status
+					})
+				)
+				res.requestSucceed(aAuth)
 			else
 				res.requestError('授权列表获取失败')
 		)
 	# 内部接口
+	listAuth: (callback)->
+		authDao.listAll((err, auths)->
+			aAuth = []
+			if !err
+				_.each(auths, (auth)->
+					aAuth.push({
+						appName: auth.appName,
+						appID: auth.appID,
+						token: auth.token,
+						ts: auth.ts,
+						status: auth.status
+					})
+				)
+			callback(err, aAuth)			
+		)
 	checkAuth: (query, callback)->
 		appID = query.appID
 		token = query.token

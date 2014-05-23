@@ -48,5 +48,5 @@ module.exports = function(app, mongoose) {
   app.use(app.router);
   app.use(express["static"](process.g.publicPath));
   hbs = require('hbs');
-  return hbs.registerPartials(path.join(process.g.viewsPath, 'api'));
+  return hbs.registerPartials(path.join(process.g.viewsPath, 'back', 'base'));
 };

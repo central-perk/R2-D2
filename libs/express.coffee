@@ -46,4 +46,4 @@ module.exports = (app, mongoose)->
     app.use(app.router)
     app.use(express.static(process.g.publicPath)) # 可以设置多个静态目录
     hbs = require('hbs')
-    hbs.registerPartials(path.join(process.g.viewsPath, 'api'))
+    hbs.registerPartials(path.join(process.g.viewsPath, 'back', 'base'))

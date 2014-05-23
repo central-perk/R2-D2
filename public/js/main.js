@@ -2,14 +2,14 @@ require.config({
 	paths: {
 		jquery: '/libs/jquery/dist/jquery.min',
 		hbs: '/libs/require-handlebars-plugin/hbs',
-		login: '/js/login',
+		auth: '/js/auth',
 		moment: '/libs/momentjs/moment'
 	},
 	shim: {
 
 	}
 });
-define(['jquery', 'login'], function($) {
+define(['jquery', 'auth'], function($) {
 	$().ready(function() {
 		function init_content() {
 			if (location.hash) {
