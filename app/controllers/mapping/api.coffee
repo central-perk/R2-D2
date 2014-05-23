@@ -1,6 +1,8 @@
 path = require('path')
 fs = require('fs-extra')
 markdown = require('markdown-js')
+marked = require('marked')
+
 config = process.g.config
 viewsPath = process.g.viewsPath
 
@@ -14,7 +16,9 @@ module.exports = {
 			if exists
 				content = fs.readFileSync(tplPath, 'utf-8')
 
-				html_content = markdown.parse(content)
+				# html_content = markdown.parse(content)
+				html_content = marked(content)
+
 				# html_content = markdown.toHTML(content)
 				res.send(html_content)
 			else

@@ -1,3 +1,5 @@
+### 日志服务API
+
 1. [创建日志模型](#创建日志模型)
 2. [获取已有的日志模型](#获取已有的日志模型)
 3. [获取授权](#获取授权)
@@ -7,9 +9,9 @@
 
 + 调用
 
-请求方式|接口
---------|--- 
-post|/logmodel
+|请求方式|接口|
+|----|----|
+|post|/logmodel|
 
 + 请求参数
 
@@ -17,6 +19,10 @@ post|/logmodel
 ----|----|:------:|------|----
 type|String, 长度1～20|是| |日志类型
 attributes|Array|是| |[{key:'openID', value: 'String'}]
+
+value支持的数据类型    Boolean, String, Date, Number, Array, Object
+
+
 
 + 返回示例
 

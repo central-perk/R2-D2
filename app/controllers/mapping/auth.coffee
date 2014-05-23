@@ -1,35 +1,65 @@
 crypto = require('crypto')
+config = process.g.config
+AUTH_STATUS = config.STATUS.AUTH
 authDao = require(process.g.daoPath).auth
+
 
 fMd5 = (text)->
 	crypto.createHash('md5').update(text).digest('hex')
 
-# token的生成下次放到model中
-fToken = (appName, appID)->
+# appID和token的生成互相独立
+createToken = (appName)->
 	nRandom = Math.random()
-	text = appID + nRandom + appName
+	text = appName + nRandom
 	fMd5(text)
+
+createAppID = (appName)->
+	createToken(appName).slice(0, 6)
 
 
 
 module.exports = {
+	# 外部接口
 	create: (req, res)->
 		appName = req.body.appName
 		authDao.getOne({appName}, (err, auth)->
 			if !auth
-				authDao.count({}, (err, amount)->
-					appID = Number(amount) + 1
-					token = fToken(appName, appID)
-					authDao.create({appName, appID, token}, (err, raw)->
-						if !err
-							res.requestSucceed({appID, token})
-						else
-							res.requestError('授权失败')
-					)
+				appID = createAppID(appName)
+				token = createToken(appName)
+				authDao.getOne({appID}, (err, auth)-> # appID不能重复
+					if !auth
+						authDao.create({appName, appID, token}, (err, raw)->
+							if !err
+								res.requestSucceed({appName, appID, token})
+							else
+								res.requestError('授权失败')
+						)
+					else # appID重复，概率很低
+						module.exports['create'](req, res)
 				)
 			else
-				res.requestError('appName已存在')
+				appID = auth.appID
+				token = auth.token
+				res.requestSucceed({appName, appID, token})
 		)
-	get: (query, callback)->
-		authDao.getOne(query, callback)
+	list: (req, res)->
+		criteria = {
+			query: {
+				status: AUTH_STATUS.enable
+			}
+		}
+		authDao.list(criteria, {ts: -1}, (err, auths)->
+			if !err
+				res.requestSucceed(auths)
+			else
+				res.requestError('授权列表获取失败')
+		)
+	# 内部接口
+	checkAuth: (query, callback)->
+		appID = query.appID
+		token = query.token
+		authDao.getOne({appID, token}, (err, auth)->
+			bAuthorized = if auth then true else false
+			callback(err, bAuthorized)
+		)
 }

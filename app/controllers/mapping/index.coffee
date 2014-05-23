@@ -1,6 +1,7 @@
 fs = require('fs')
 path = require('path')
 _ = require('lodash')
+mongoose = require('mongoose')
 config = process.g.config
 utils = process.g.utils
 logger = require(path.join(__dirname, 'log'))
@@ -38,28 +39,38 @@ module.exports = {
 					perPage: perPage
 				}
 			}
-			Dao = require(process.g.daoPath)[model]
-
-			Dao.count(criteria, (err, count)->
-				Dao.list(criteria, {'timestamp': -1}, (err, docs)->
-					if !err
-						documents = []
-						if docs.length
-							keys = _.keys(docs[0]._doc)
-							_.each(docs, (doc, index)->
-								documents[index] = {}
-								for key in keys
-									if key != 'timestamp'
-										documents[index][key] = doc[key]
-									else
-										documents[index]['timestamp'] = utils.formatTime(doc.timestamp)
-							)
-						data = {}
-						data[model + 's'] = documents
-						data['pagination'] = utils.pagination(page, perPage, count)
-						res.requestSucceed(data || null);
-					else
-						res.requestError('获取列表失败');
-				)
+			Model = mongoose.model(model)
+			Model.find({}, (err, logs)->
+				if !err
+					res.requestSucceed(logs);
+				else
+					res.requestError('获取列表失败');
 			)
+
+
+			# Model = mongoose
+			# Dao = require(process.g.daoPath)[model]
+
+			# Dao.count(criteria, (err, count)->
+			# 	Dao.list(criteria, {'timestamp': -1}, (err, docs)->
+			# 		if !err
+			# 			documents = []
+			# 			if docs.length
+			# 				keys = _.keys(docs[0]._doc)
+			# 				_.each(docs, (doc, index)->
+			# 					documents[index] = {}
+			# 					for key in keys
+			# 						if key != 'timestamp'
+			# 							documents[index][key] = doc[key]
+			# 						else
+			# 							documents[index]['timestamp'] = utils.formatTime(doc.timestamp)
+			# 				)
+			# 			data = {}
+			# 			data[model + 's'] = documents
+			# 			data['pagination'] = utils.pagination(page, perPage, count)
+			# 			res.requestSucceed(data || null);
+			# 		else
+			# 			res.requestError('获取列表失败');
+			# 	)
+			# )
 }

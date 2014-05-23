@@ -1,31 +1,36 @@
 path = require('path')
+async = require('async')
 utils = process.g.utils
 ctrl = utils.getCtrl('index')
 auth = utils.getCtrl('auth')
 kue  = utils.getCtrl('kue')
-
-
-
+logModel = utils.getCtrl('logModel')
 aAuth = {}
 
 
 fEnqueue = (req, res)->
-	req.type = req.query.type
+	sLogType = req.query.type
+	appID = req.query.appID
 	delete req.query.type
 	delete req.query.appID
 	delete req.query.token
-	kue(req)
+	oLogTemp = {
+		type: sLogType,
+		appID,
+		log: req.query
+	}
+	kue.enqueueLog(oLogTemp)
 	res.requestSucceed('数据提交成功')
-
 
 module.exports = {
 	distribute: (req, res, next)->
-		type = req.query.type
-		appID = Number(req.query.appID)
+		sLogType = req.query.type
+		appID = req.query.appID
 		token = req.query.token
 		ts = req.query.ts
 
-		if !type
+		sLogModelName = "#{appID}.#{sLogType}"
+		if !sLogType
 			res.requestError('缺少type')
 		else if !ts
 			res.requestError('缺少ts')
@@ -34,20 +39,42 @@ module.exports = {
 		else if !token
 			res.requestError('缺少token')
 		else
-			if !require('mongoose').models[type] # 该日志类型的模型不存在
-				res.requestError('日志类型不存在，请先创建')
+			# 授权已经被缓存
+			if aAuth[sLogModelName]
+				if aAuth[sLogModelName] == token
+					fEnqueue(req, res)
+				else
+					res.requestError('授权信息错误')
+			# 授权未被缓存
 			else
-				if aAuth[appID] # 授权已经被缓存
-					if aAuth[appID]['token'] == token
+				async.waterfall([
+					# 检验授权信息
+					(cb)->
+						auth.checkAuth({appID, token}, (err, bAuthorized)->
+							if !err
+								if bAuthorized
+									cb(null, null)
+								else
+									cb('应用未授权')
+							else
+								cb('授权信息检验失败')
+						)
+					# 检验日志模型
+					(result, cb)->
+						logModel.checkLogModel({appID, sLogType}, (err, bLogModel)->
+							if !err
+								if bLogModel
+									cb(null, null)
+								else
+									cb('日志模型不存在')
+							else
+								cb('日志模型检验失败')						
+						)
+				], (err, result)->
+					if !err
+						aAuth[sLogModelName] = token
 						fEnqueue(req, res)
 					else
-						res.requestError('未被授权')
-				else # 授权未被缓存
-					auth.get({appID}, (err, oAuth)->
-						if oAuth and oAuth.token == token
-							aAuth[appID] = {token}
-							fEnqueue(req, res)							
-						else
-							res.requestError('未被授权')
-					)
+						res.requestError(err)
+				)
 }

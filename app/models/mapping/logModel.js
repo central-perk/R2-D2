@@ -5,6 +5,7 @@ var mongoose = require('mongoose'),
     utils = process.g.utils;
 
 var schema = new Schema({
+    appID: String,
     type: String,
     attributes: [{
         key: String,

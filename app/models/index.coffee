@@ -2,8 +2,9 @@ fs         = require('fs')
 path       = require('path')
 _          = require('lodash')
 mongoose   = require('mongoose')
+Schema     = mongoose.Schema
 modelsPath = path.join(__dirname , 'mapping')
-
+utils      = process.g.utils
 oAttrValueMap = {
 	String: String,
 	Date: Date,
@@ -20,22 +21,25 @@ _.each(fs.readdirSync(modelsPath), (file, index)->
 	return
 )
 
-# # 注册动态模型
-# dataModel = mongoose.model('dataModel')
+# # # 注册动态模型
+# logModel = mongoose.model('logModel')
 
-# dataModel.find({}, (err, oModels)->
-# 	_.each(oModels, (oModel)->
+# logModel.find({}, (err, oLogModels)->
+# 	_.each(oLogModels, (oLogModel)->
 # 		oSchema = {}
-# 		sModel = oModel.name
-# 		aAttributes = oModel.attributes
+# 		sModel = oLogModel.type
+# 		aAttributes = oLogModel.attributes
 # 		_.each(aAttributes, (oAttribute)->
-# 			oSchema[key] = 
+# 			key = oAttribute.key
+# 			value = oAttribute.value
+# 			oSchema[key] = oAttrValueMap[value]
 # 		)
-
-
-# 		oSchema.timestamp = Date
+# 		oSchema.timestamp = {
+# 			type: Date,
+# 			get: utils.formatTime
+# 		}
 # 		schema = new Schema(oSchema)
-# 		mongoose.model(sModelName, schema)
+# 		mongoose.model(sModel, schema)
 # 	)
 # )
 

@@ -12,9 +12,12 @@ auth = utils.getCtrl('auth');
 logModel = utils.getCtrl('logModel');
 
 module.exports = function(app, mw) {
-  app.post('/logmodel', logModel.create);
   app.post('/auth', auth.create);
+  app.get('/auth', auth.list);
+  app.post('/logmodel', logModel.create);
+  app.put('/logmodel', logModel.update);
+  app.get('/logmodel', logModel.list);
+  app.get('/logmodel/attrvalue', logModel.listAttrValue);
   app.get('/', mw.distribute);
-  app.post('/storage', ctrl.storage);
   return app.get('/login', ctrl.list('login'));
 };
