@@ -59,7 +59,6 @@ define(['jquery', 'hbs!/modules/login', 'moment'], function($, loginListTpl, mom
 		var url = location.origin + '/login';
 		$.get(url, function(data) {
 			var loginListData = data.message;
-			console.log(data.message)
 			$('.login_list').empty();
 			$('.login_list').append(loginListTpl(loginListData));
 		})

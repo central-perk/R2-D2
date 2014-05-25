@@ -1,0 +1,40 @@
+{{#this}}
+<div class="apps">
+    <div class="alert alert-success"></div>
+    <div class="alert alert-danger"></div>
+
+    <div class="list-group row">
+        <div class="col-md-4">
+            <a class="list-group-item"><strong>日志模型：</strong>{{type}}</a>
+            <a class="list-group-item"><strong>应用ID：</strong>{{appID}}</a>
+            <a class="list-group-item"><strong>创建时间：</strong>{{ts}}</a>
+        </div>
+        <div class="row">
+            <div class="">
+                <label>请求地址：</label>
+            </div>
+            <div class="col-md-4">
+                <input type="text" class="form-control row" value={{url}} disabled>
+            </div>
+            <div class="btn btn-primary copy col-md-1" data-clipboard-text="{{url}}">复制</div>
+        </div>
+    </div>
+    {{#if nPageAmount}}
+    <table class="table">
+        <tr>
+            {{#each aLogKeys}}
+                <th>{{this}}</th>
+            {{/each}}
+        </tr>
+        {{#trList aLogs}}{{/trList}}
+    </table>
+
+    <ul class="pagination">
+        <li><a>共{{nPageAmount}}页</a></li>
+        <li><a class="pre">&laquo;</a></li>
+        <li><a class="page">{{page}}</a></li>
+        <li><a class="next">&raquo;</a></li>
+    </ul>
+    {{/if}}
+</div>
+{{/this}}

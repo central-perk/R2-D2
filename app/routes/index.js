@@ -16,8 +16,7 @@ module.exports = function(app, mw) {
   app.get('/auth', auth.list);
   app.post('/logmodel', logModel.create);
   app.put('/logmodel', logModel.update);
-  app.get('/logmodel', logModel.list);
-  app.get('/logmodel/attrvalue', logModel.listAttrValue);
+  app.get('/logmodel/', logModel.get);
   app.get('/', mw.distribute);
   return app.get('/login', ctrl.list('login'));
 };

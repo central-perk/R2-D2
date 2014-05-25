@@ -38,15 +38,25 @@
     position: absolute;
     top: 150px;
     width: 96%;
-    text-align: center
+    text-align: center;
+    z-index: 20;
 }
-.auth_list {
+.auth_list, .logmodel_list {
     margin-top: 30px;
 }
-.auth_form {
+.auth_form, .logmodel_form {
     display: none;
     margin-top: 10px;
 }
+
+
+.pre, .next{
+    cursor: pointer;
+}
+
+/*.logmodel_form{
+    display: block
+}*/
 /*
  * Scaffolding
  *
@@ -458,7 +468,7 @@
 }
 /* Nav: second level (shown on .active) */
  .bs-sidebar .nav .nav {
-    display: none;
+    /*display: none;*/
     /* Hide by default, but at >768px, show it */
     margin-bottom: 8px;
 }

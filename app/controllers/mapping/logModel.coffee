@@ -10,10 +10,10 @@ auth 		= utils.getCtrl('auth')
 
 
 oAttrValueMap = {
-	Boolean: Boolean,
 	String: String,
-	Date: Date,
 	Number: Number,
+	Boolean: Boolean,
+	Date: Date,
 	Array: [],
 	Object: {}
 }
@@ -39,7 +39,7 @@ module.exports = {
 			async.waterfall([
 				# 检验是否经过授权
 				(cb)->
-					auth.checkAuth({appID, token}, (err, bAuthorized)->
+					auth._checkAuth({appID, token}, (err, bAuthorized)->
 						if !err
 							if bAuthorized
 								cb(null, null)
@@ -50,7 +50,7 @@ module.exports = {
 					)
 				# 查询日志模型是否存在
 				(result, cb)->
-					logModelDao.getOne({type: sLogType}, (err, oLogModel)->
+					logModelDao.getOne({appID, type: sLogType}, (err, oLogModel)->
 						if !err
 							if !oLogModel
 								cb(null, null)
@@ -107,7 +107,7 @@ module.exports = {
 			async.waterfall([
 				# 检验是否经过授权
 				(cb)->
-					auth.checkAuth({appID, token}, (err, bAuthorized)->
+					auth._checkAuth({appID, token}, (err, bAuthorized)->
 						if !err
 							if bAuthorized
 								cb(null, null)
@@ -118,7 +118,7 @@ module.exports = {
 					)
 				# 查询日志模型是否存在
 				(result, cb)->
-					logModelDao.getOne({type: sLogType}, (err, oLogModel)->
+					logModelDao.getOne({appID, type: sLogType}, (err, oLogModel)->
 						if !err
 							if oLogModel
 								cb(null, null)
@@ -138,26 +138,34 @@ module.exports = {
 					)
 			],(err, result)->
 				if !err
-					res.requestSucceed('日志模型更新成功，重启服务器以生效')
+					res.requestError('日志模型更新成功，重启服务器以生效')
 				else
 					res.requestError(err)
 			)		
-	list: (req, res)->
-		logModelDao.listAll((err, oLogModels)->
+	get: (req, res)->
+		appID = req.query['appID']
+		type = req.query['type']
+		console.log req.query
+		logModelDao.getOne({appID, type}, (err, oLogModel)->
 			if !err
-				# aLogModel = _.reduce(oLogModels, (arr, oLogModel)->
-				# 	arr.push(oLogModel.type)
-				# 	return arr
-				# , [])
-				res.requestSucceed(oLogModels)
+				res.requestSucceed(oLogModel)
 			else
 				res.requestError('日志模型列表获取失败')
-
 		)
-	listAttrValue: (req, res)->
-		res.requestSucceed(_.keys(oAttrValueMap))
 	# 内部接口
-	
+
+	_get: (query, callback)->
+		logModelDao.get(query, callback)
+	_getOne: (query, callback)->
+		logModelDao.getOne(query, callback)
+	_listAll: (callback)->
+		logModelDao.listAll(callback)
+	_listAttrValue: ()->
+		return _.keys(oAttrValueMap)
+
+
+	listAttrValue: ()->
+		return _.keys(oAttrValueMap)
 	# register和registerAll需要联动地改
 	register: (query, callback)->
 		logModelDao.getOne(query, (err, oLogModel)->

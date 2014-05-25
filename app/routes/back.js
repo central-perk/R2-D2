@@ -6,6 +6,8 @@ utils = process.g.utils;
 back = utils.getCtrl('back');
 
 module.exports = function(app, mw) {
-  app.get('/back', back.index);
-  return app.get('/api/:module', back.getContent);
+  app.get('/back', function(req, res, next) {
+    return req.requireAuthorization(req, res, next);
+  }, back.index);
+  return app.get('/back/:module', back.getContent);
 };

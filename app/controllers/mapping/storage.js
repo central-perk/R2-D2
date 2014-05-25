@@ -103,7 +103,7 @@ module.exports = {
     return async.waterfall([
       function(cb) {
         if (logFileStatus === LOGFILE_STATUS.unstorage) {
-          return cb(null, 1);
+          return cb(null, 0);
         } else {
           return Model.count({
             fileName: oLogFile.name
@@ -113,7 +113,7 @@ module.exports = {
         return fs.readFile(sLogFilePath, 'utf-8', function(err, logs) {
           if (!err) {
             logs = log2json(logs);
-            logs = logs.slice(Number(nLine) - 1);
+            logs = logs.slice(Number(nLine));
             return updateLogFileStatus(oLogFile.name, LOGFILE_STATUS.storaging, function(err) {
               if (!err) {
                 return json2db(Model, logs, cb);

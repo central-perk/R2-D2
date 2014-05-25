@@ -16,9 +16,7 @@ module.exports = (app, mw)->
 	# 日志模型
 	app.post('/logmodel', logModel.create)
 	app.put('/logmodel', logModel.update)
-	app.get('/logmodel', logModel.list)
-
-	app.get('/logmodel/attrvalue', logModel.listAttrValue)
+	app.get('/logmodel/', logModel.get)
 
 
 	# 上传日志入口，由中间件分发到对应的控制器进行处理

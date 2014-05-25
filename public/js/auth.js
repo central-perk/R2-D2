@@ -1,29 +1,24 @@
-define(['jquery'], function($) {
+define(['jquery', 'base'], function($, base) {
+	// 创建授权
 	$('.container').on('click', '.create_auth', function() {
-		var url = '/auth';
-		var appName = $('#appName').val();
-		$.post(url, {
-			appName: appName
-		}, function(data) {
-			if (data.status) {
-				// alert(data.message)
-				console.log(data.message)
-				$('.alert-success').text('授权成功')
-				$('.alert-success').show()
-				$('.alert-success').fadeOut(1000)
-				setTimeout(function(){
-					location.reload()
-				}, 100)
-			} else {
-				$('.alert-danger').text(data.message)
-				$('.alert-danger').show()
-				$('.alert-danger').fadeOut(1000)
-				// alert(data.message)
-			}
-		})
+		if (confirm('确定授权该应用？')) {
+			var url = '/auth';
+			var appName = $('#appName').val();
+			$.post(url, {
+				appName: appName
+			}, function(data) {
+				if (data.status) {
+					base.show_success('授权成功')
+					setTimeout(function() {
+						location.reload()
+					}, 100)
+				} else {
+					base.show_error(data.message)
+				}
+			});
+		}
+
 	});
-
-
 	$('.container').on('click', '.show_auth_form', function() {
 		$('.auth_form').slideToggle();
 	});

@@ -18,10 +18,10 @@ utils = process.g.utils;
 auth = utils.getCtrl('auth');
 
 oAttrValueMap = {
-  Boolean: Boolean,
   String: String,
-  Date: Date,
   Number: Number,
+  Boolean: Boolean,
+  Date: Date,
   Array: [],
   Object: {}
 };
@@ -44,7 +44,7 @@ module.exports = {
     } else {
       return async.waterfall([
         function(cb) {
-          return auth.checkAuth({
+          return auth._checkAuth({
             appID: appID,
             token: token
           }, function(err, bAuthorized) {
@@ -60,6 +60,7 @@ module.exports = {
           });
         }, function(result, cb) {
           return logModelDao.getOne({
+            appID: appID,
             type: sLogType
           }, function(err, oLogModel) {
             if (!err) {
@@ -130,7 +131,7 @@ module.exports = {
     } else {
       return async.waterfall([
         function(cb) {
-          return auth.checkAuth({
+          return auth._checkAuth({
             appID: appID,
             token: token
           }, function(err, bAuthorized) {
@@ -146,6 +147,7 @@ module.exports = {
           });
         }, function(result, cb) {
           return logModelDao.getOne({
+            appID: appID,
             type: sLogType
           }, function(err, oLogModel) {
             if (!err) {
@@ -174,24 +176,43 @@ module.exports = {
         }
       ], function(err, result) {
         if (!err) {
-          return res.requestSucceed('日志模型更新成功，重启服务器以生效');
+          return res.requestError('日志模型更新成功，重启服务器以生效');
         } else {
           return res.requestError(err);
         }
       });
     }
   },
-  list: function(req, res) {
-    return logModelDao.listAll(function(err, oLogModels) {
+  get: function(req, res) {
+    var appID, type;
+    appID = req.query['appID'];
+    type = req.query['type'];
+    console.log(req.query);
+    return logModelDao.getOne({
+      appID: appID,
+      type: type
+    }, function(err, oLogModel) {
       if (!err) {
-        return res.requestSucceed(oLogModels);
+        return res.requestSucceed(oLogModel);
       } else {
         return res.requestError('日志模型列表获取失败');
       }
     });
   },
-  listAttrValue: function(req, res) {
-    return res.requestSucceed(_.keys(oAttrValueMap));
+  _get: function(query, callback) {
+    return logModelDao.get(query, callback);
+  },
+  _getOne: function(query, callback) {
+    return logModelDao.getOne(query, callback);
+  },
+  _listAll: function(callback) {
+    return logModelDao.listAll(callback);
+  },
+  _listAttrValue: function() {
+    return _.keys(oAttrValueMap);
+  },
+  listAttrValue: function() {
+    return _.keys(oAttrValueMap);
   },
   register: function(query, callback) {
     return logModelDao.getOne(query, function(err, oLogModel) {

@@ -91,34 +91,40 @@ module.exports = {
       }
     });
   },
-  listAuth: function(callback) {
-    return authDao.listAll(function(err, auths) {
-      var aAuth;
-      aAuth = [];
+  _get: function(query, callback) {
+    return authDao.get(query, callback);
+  },
+  _getOne: function(query, callback) {
+    return authDao.getOne(query, callback);
+  },
+  _listAll: function(callback) {
+    return authDao.listAll(function(err, aAuth) {
+      var temp;
+      temp = [];
       if (!err) {
-        _.each(auths, function(auth) {
-          return aAuth.push({
-            appName: auth.appName,
-            appID: auth.appID,
-            token: auth.token,
-            ts: auth.ts,
-            status: auth.status
+        _.each(aAuth, function(oAuth) {
+          return temp.push({
+            appName: oAuth.appName,
+            appID: oAuth.appID,
+            token: oAuth.token,
+            ts: oAuth.ts,
+            status: oAuth.status
           });
         });
       }
-      return callback(err, aAuth);
+      return callback(err, temp);
     });
   },
-  checkAuth: function(query, callback) {
+  _checkAuth: function(query, callback) {
     var appID, token;
     appID = query.appID;
     token = query.token;
     return authDao.getOne({
       appID: appID,
       token: token
-    }, function(err, auth) {
+    }, function(err, oAuth) {
       var bAuthorized;
-      bAuthorized = auth ? true : false;
+      bAuthorized = oAuth ? true : false;
       return callback(err, bAuthorized);
     });
   }

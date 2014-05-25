@@ -1,5 +1,6 @@
 env = process.env.NODE_ENV or 'dev'
 express = require('express')
+basicAuth = require('connect-basic-auth')
 
 config = process.g.config
 
@@ -37,6 +38,20 @@ module.exports = (app, mongoose)->
             return (/json|text|javascript|css/).test(res.getHeader('Content-Type'))
         level: 9
     })) 
+    app.use(basicAuth((credentials, req, res, next)->
+        if credentials and credentials.username == "node" and credentials.password == "log"
+            next();  
+        else
+            if !credentials
+                console.log("credentials not provided");  
+            if credentials and credentials.username
+                console.log("credentials-username:" + credentials.username)
+            if credentials and credentials.password
+                console.log("credentials-password:" + credentials.username); 
+            next("Unautherized!")
+        )
+    )
+
     app.use(express.json())
     app.use(express.urlencoded())
     app.use(require('connect-multiparty')())
@@ -47,3 +62,14 @@ module.exports = (app, mongoose)->
     app.use(express.static(process.g.publicPath)) # 可以设置多个静态目录
     hbs = require('hbs')
     hbs.registerPartials(path.join(process.g.viewsPath, 'back', 'base'))
+    hbs.registerHelper('trList', (items, options)->
+        out = ''
+        for item in items
+            out += '<tr>'    
+            for key, value of item
+                out += '<td>' + value + '</td>'
+            out += '</tr>'
+        return out
+    )
+
+

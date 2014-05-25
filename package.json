@@ -11,6 +11,7 @@
         "async": "*",
         "connect-mongo": "*",
         "connect-multiparty": "*",
+        "connect-basic-auth": "*",
         "cron": "*",
         "express": "3.5.0",
         "fs-extra": "*",

@@ -68,26 +68,30 @@ module.exports = {
 				res.requestError('授权列表获取失败')
 		)
 	# 内部接口
-	listAuth: (callback)->
-		authDao.listAll((err, auths)->
-			aAuth = []
+	_get: (query, callback)->
+		authDao.get(query, callback)
+	_getOne: (query, callback)->
+		authDao.getOne(query, callback)
+	_listAll: (callback)->
+		authDao.listAll((err, aAuth)->
+			temp = []
 			if !err
-				_.each(auths, (auth)->
-					aAuth.push({
-						appName: auth.appName,
-						appID: auth.appID,
-						token: auth.token,
-						ts: auth.ts,
-						status: auth.status
+				_.each(aAuth, (oAuth)->
+					temp.push({
+						appName: oAuth.appName,
+						appID: oAuth.appID,
+						token: oAuth.token,
+						ts: oAuth.ts,
+						status: oAuth.status
 					})
 				)
-			callback(err, aAuth)			
-		)
-	checkAuth: (query, callback)->
+			callback(err, temp)		
+		)	
+	_checkAuth: (query, callback)->
 		appID = query.appID
 		token = query.token
-		authDao.getOne({appID, token}, (err, auth)->
-			bAuthorized = if auth then true else false
+		authDao.getOne({appID, token}, (err, oAuth)->
+			bAuthorized = if oAuth then true else false
 			callback(err, bAuthorized)
 		)
 }

@@ -49,6 +49,10 @@ json2db = (Model, logs, callback)->
 			if maxLines >= nLen
 				updateLogFileStatus(logs[0].fileName, LOGFILE_STATUS.storaged, callback)
 			else
+				# # 强制阻断
+				# if nLen > 150
+				# 	callback(null, null)
+				# else
 				json2db(Model, logs.slice(maxLines), callback)
 		else
 			callback(err)
@@ -75,7 +79,7 @@ module.exports = {
 			# 确定日志文件已经入库行数
 			(cb)->
 				if logFileStatus == LOGFILE_STATUS.unstorage
-					cb(null, 1)
+					cb(null, 0)
 				else					
 					Model.count({fileName: oLogFile.name}, cb)
 			(nLine, cb)->
@@ -83,7 +87,7 @@ module.exports = {
 				fs.readFile(sLogFilePath, 'utf-8', (err, logs)->
 					if !err
 						logs = log2json(logs)
-						logs = logs.slice(Number(nLine) - 1)
+						logs = logs.slice(Number(nLine))
 						updateLogFileStatus(oLogFile.name, LOGFILE_STATUS.storaging, (err)->
 							if !err
 								json2db(Model, logs, cb)

@@ -1,5 +1,6 @@
 path = require('path')
 async = require('async')
+basicAuth = require('connect-basic-auth')
 utils = process.g.utils
 ctrl = utils.getCtrl('index')
 auth = utils.getCtrl('auth')
@@ -22,6 +23,7 @@ fEnqueue = (req, res)->
 	kue.enqueueLog(oLogTemp)
 	res.requestSucceed('数据提交成功')
 
+i = 1
 module.exports = {
 	distribute: (req, res, next)->
 		sLogType = req.query.type
@@ -39,6 +41,8 @@ module.exports = {
 		else if !token
 			res.requestError('缺少token')
 		else
+			console.log i
+			i++
 			# 授权已经被缓存
 			if aAuth[sLogModelName]
 				if aAuth[sLogModelName] == token
@@ -50,7 +54,7 @@ module.exports = {
 				async.waterfall([
 					# 检验授权信息
 					(cb)->
-						auth.checkAuth({appID, token}, (err, bAuthorized)->
+						auth._checkAuth({appID, token}, (err, bAuthorized)->
 							if !err
 								if bAuthorized
 									cb(null, null)
@@ -77,4 +81,17 @@ module.exports = {
 					else
 						res.requestError(err)
 				)
+	basicAuth: ()->
+		basicAuth((credentials, req, res, next)->
+			if credentials and credentials.username == "cer" and credentials.password == "site"
+				next();  
+			else
+				if !credentials
+					console.log("credentials not provided");  
+				if credentials and credentials.username
+					console.log("credentials-username:" + credentials.username)
+				if credentials and credentials.password
+					console.log("credentials-password:" + credentials.username); 
+				next("Unautherized!")
+    )
 }

@@ -1,41 +1,188 @@
 path = require('path')
 fs = require('fs-extra')
 _  = require('lodash')
+async = require('async')
+mongoose = require('mongoose')
 
 config = process.g.config
 utils = process.g.utils
 auth = utils.getCtrl('auth')
-
+logModel = utils.getCtrl('logModel')
 viewsPath = process.g.viewsPath
+
+PERPAGE = config.PERPAGE
+
+
+fListAM = (callback)->
+	async.auto({
+		aAuth: (cb)->
+			auth._listAll(cb)
+		aLogModels: (cb)->
+			logModel._listAll(cb)
+	}, callback)
 
 module.exports = {
 	index: (req, res)->
-		auth.listAuth((err, auths)->
+		nav = config.BACK.nav # 静态导航
+		fListAM((err, oListAM)->
 			aDynamicNav = []
-			nav = config.BACK.nav
 			if !err
-				_.each(auths, (auth)->
-					aDynamicNav.push({
-						name: auth.appID,
-						title: auth.appName
-					})
+				aAuth = oListAM.aAuth
+				aLogModels = oListAM.aLogModels
+				_.each(aAuth, (oAuth)->
+					temp = {
+						title: oAuth.appName
+						href: oAuth.appID
+					}
+					if aLogModels.length
+						temp.sub = []
+					_.each(aLogModels, (oLogModel)->
+						if oLogModel.appID == oAuth.appID
+							temp.sub.push({
+								title: oLogModel.type
+								href: "#{oAuth.appID}.#{oLogModel.type}"
+							})
+					)
+					aDynamicNav.push(temp)
 				)
 			nav = nav.concat(aDynamicNav)
-			res.render('back/index.html', {nav})
-		)		
+			res.render('back/index.html', {nav})			
+		)
 	getContent: (req, res)->
 		module = req.params['module']
-		# aStaticNav = _.reduce(config.BACK.nav, (arr, oNav)->
-		# 	arr.push(oNav.name)
-		# 	return arr
-		# , [])
-		if module == 'auth'
-			auth.listAuth((err, oAuthList)->
-				console.log oAuthList
-				res.render('back/auth.html', {oAuthList})
-			)
+		switch module
+			when 'auth'
+				auth._listAll((err, aAuthList)->
+					res.render('back/auth.html', {aAuthList})
+				)
+			when 'logmodel'
+				aLogModelsList = []
+				fListAM((err, oListAM)->
+					if !err
+						aAuth = oListAM.aAuth
+						aLogModels = oListAM.aLogModels
+						_.each(aAuth, (oAuth)->
+							_.each(aLogModels, (oLogModel)->
+								if oAuth.appID == oLogModel.appID
+									aLogModelsList.push({
+										appName: oAuth.appName,
+										appID: oAuth.appID,
+										token: oAuth.token,
+										type: oLogModel.type,
+										ts: oLogModel.ts
+									})
+							)
+						)
+					aAttrValue = logModel._listAttrValue()
+					res.render('back/logmodel.html', {aLogModelsList, aAuth, aLogModels, aAttrValue})
+				)
+			else
+				appID = module.split('.')[0]
+				sLogType = module.split('.')[1]
+				page = (if req.param('page')  > 0 then req.param('page') else 1) - 1
+				try
+					Model = mongoose.model(module)
+					async.auto({
+						getOneAuth: (cb)->
+							auth._getOne({appID}, cb)
+						getOneModel: (cb)->
+							logModel._getOne({appID, type: sLogType}, cb)
+						getLogs: (cb)->
+							Model.find({}, '-__v -_id -fileName') # 在logger服务器没有必要给出__v 和 _id
+								.sort({ts: -1})
+								.skip(PERPAGE * page)
+								.limit(PERPAGE)
+								.exec(cb)
+						pageAmount: (cb)->
+							Model.count({}, (err, num)->
+								cb(err, Math.round(num / PERPAGE))
+							)
+					}, (err, results)->
+						if !err
+							oAuth = results.getOneAuth
+							oLogModel = results.getOneModel
+							nPageAmount = results.pageAmount
+							_aLogs = results.getLogs
 
-		# if _.indexOf(aStaticNav, module) != -1 # 静态目录
-		# else # 动态目录
 
+
+
+							token = oAuth.token
+							ts = oLogModel.ts
+							url = "/?type=#{sLogType}&appID=#{appID}"
+							url += "&token=#{token}&ts={{Date.getTime()}}"
+							_.each(oLogModel.attributes, (oAttr)->
+								url += "&#{oAttr.key}={{#{oAttr.value}}}"
+							)
+
+							if _aLogs.length
+								aLogKeys = _.keys(_aLogs[0]._doc)
+								aLogKeys = _.pull(aLogKeys, 'ts')
+								aLogKeys.push('ts')
+								aLogs = []
+								_.each(_aLogs, (oLog)->
+									temp = {}
+									_.each(aLogKeys, (sLogkey)->
+										temp[sLogkey] = oLog[sLogkey]
+									)
+									aLogs.push(temp)
+								)
+								temp = {
+									url,
+									appID,
+									type: sLogType,
+									ts,
+									aLogs,
+									aLogKeys,
+									nPageAmount,
+									page: page + 1
+								}
+							else
+								temp = {
+									url,
+									appID,
+									type: sLogType,
+									ts
+								}
+							res.render('back/apps.html', temp)
+						else
+							res.render('授权信息出错了!')
+					)
+				catch e
+					res.send('日志模型不存在!')
+
+		# else
+		# 	appID = module
+		# 	async.auto({
+		# 		getModels: (cb)->
+		# 			logModel._get({appID}, cb)
+		# 		getAuth: (cb)->
+		# 			auth._getOne({appID}, cb)
+		# 	}, (err, results)->
+		# 		if !err
+		# 			aLogModels = results.getModels
+		# 			oAuth = results.getAuth
+		# 			token = oAuth.token
+		# 			temp = []
+		# 			_.each(aLogModels, (oLogModels)->
+		# 				url = "/?type=#{oLogModels.type}&appID=#{oLogModels.appID}"
+		# 				url += "&token=#{token}&ts={{Date.getTime()}}"
+		# 				_.each(oLogModels.attributes, (oAttr)->
+		# 					url += "&#{oAttr.key}={{#{oAttr.value}}}"
+		# 				)
+		# 				temp.push({
+		# 					url,
+		# 					appID: oLogModels.appID,
+		# 					type: oLogModels.type,
+		# 					ts: oLogModels.ts
+		# 				})
+		# 			)
+		# 			if temp.length == 0
+		# 				res.send('赶紧去创建日志模型吧！')	
+		# 			else
+		# 				res.render('back/apps.html', temp)
+
+		# 		else
+		# 			res.send('授权信息出错了!')
+		# 	)
 }

@@ -53,7 +53,7 @@ DaoBase = (()->
 				)
 			list: (criteria, sort, callback)->
 				query = criteria.query || {}
-				options = criteria.query
+				options = criteria.options
 				Model.find(query, '-__v -_id') # 在logger服务器没有必要给出__v 和 _id
 					.sort(sort)
 					.limit(options.perPage)
