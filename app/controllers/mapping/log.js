@@ -61,9 +61,14 @@ fWriteableLog = function(sLogModelName, callback) {
 };
 
 fCheckLogSize = function(sWriteableLogPath) {
-  var nSize;
-  nSize = fs.readFileSync(sWriteableLogPath, 'utf8').length;
-  return config.LOG_MAX_SIZE > nSize;
+  var e, nSize;
+  try {
+    nSize = fs.readFileSync(sWriteableLogPath, 'utf8').length;
+    return config.LOG_MAX_SIZE > nSize;
+  } catch (_error) {
+    e = _error;
+    return false;
+  }
 };
 
 fCreateLogFile = function(sLogModelName, callback) {

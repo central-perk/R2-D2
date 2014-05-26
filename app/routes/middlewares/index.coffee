@@ -41,8 +41,6 @@ module.exports = {
 		else if !token
 			res.requestError('缺少token')
 		else
-			console.log i
-			i++
 			# 授权已经被缓存
 			if aAuth[sLogModelName]
 				if aAuth[sLogModelName] == token

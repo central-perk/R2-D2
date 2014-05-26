@@ -185,7 +185,6 @@ module.exports = {
     var appID, type;
     appID = req.query['appID'];
     type = req.query['type'];
-    console.log(req.query);
     return logModelDao.getOne({
       appID: appID,
       type: type

@@ -39,8 +39,12 @@ fWriteableLog = (sLogModelName, callback)->
 
 # 返回日志文件是否可以继续写入
 fCheckLogSize = (sWriteableLogPath)->
-	nSize = fs.readFileSync(sWriteableLogPath, 'utf8').length
-	return config.LOG_MAX_SIZE > nSize
+	try 
+		nSize = fs.readFileSync(sWriteableLogPath, 'utf8').length
+		return config.LOG_MAX_SIZE > nSize
+	catch e
+		return false
+
 
 # 返回最新创建文件的路径
 fCreateLogFile = (sLogModelName, callback)->

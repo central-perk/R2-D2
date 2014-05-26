@@ -54,8 +54,6 @@ module.exports = {
     } else if (!token) {
       return res.requestError('缺少token');
     } else {
-      console.log(i);
-      i++;
       if (aAuth[sLogModelName]) {
         if (aAuth[sLogModelName] === token) {
           return fEnqueue(req, res);

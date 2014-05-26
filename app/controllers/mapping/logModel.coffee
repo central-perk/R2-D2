@@ -143,7 +143,6 @@ module.exports = {
 	get: (req, res)->
 		appID = req.query['appID']
 		type = req.query['type']
-		console.log req.query
 		logModelDao.getOne({appID, type}, (err, oLogModel)->
 			if !err
 				res.requestSucceed(oLogModel)
