@@ -37,21 +37,16 @@ define(['jquery', 'base', 'hbs!/modules/logmodel_form'], function($, base, formT
 	$('.container').on('click', '.show_logmodel_form', function() {
 		$('.logmodel_form').slideToggle();
 	});
+
 	$('.container').on('click', '.add_attr', function() {
-		nAttr = $('#attributes .form-group').length
-		nIndex = $(this).parent('.form-group').index() + 1
-		if (nAttr == nIndex) {
-			$attr = $(this).parent('.form-group').clone()
-			$attr.find('label').empty();
-			var html = $attr[0].outerHTML;
-			$('#attributes').append(html)
-		}
+		$attr = $('#attributes .form-group').last().clone()
+		$('#attributes').append($attr[0].outerHTML)
 	});
 	$('.container').on('click', '.del_attr', function() {
 		nIndex = $(this).parent().parent().index()
-		console.log(nIndex)
 		$('#attributes .form-group').eq(nIndex).remove()
 	});
+	
 	$('.container').on('click', '.edit_logmodel', function() {
 		var $tr = $(this).parent().parent(),
 			$app = $tr.find('td').eq(0),
@@ -71,6 +66,7 @@ define(['jquery', 'base', 'hbs!/modules/logmodel_form'], function($, base, formT
 						aAttributes: aAttributes,
 						attrValue: attrValue
 					});
+				console.log(aAttributes)
 				$('.content').empty();
 				$('.content').append(edit_form);
 			}

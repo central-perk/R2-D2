@@ -37,8 +37,15 @@ require(['jquery', 'zeroclipboard', 'base', 'bootstrap', 'auth', 'logmodel'], fu
 	})
 
 
-	function getContent(module) {
-		$.get('/back/' + module, function(content_html) {
+	function getContent(module, page) {
+		var url = '/back/' + module;
+		if(page){
+			url += '?page=' + page;
+		}
+
+
+
+		$.get(url, function(content_html) {
 			$('.content').empty();
 			$('.content').append(content_html);
 			var client = new zeroclipboard($('.copy'));
@@ -53,31 +60,26 @@ require(['jquery', 'zeroclipboard', 'base', 'bootstrap', 'auth', 'logmodel'], fu
 	$('.container').on('click', '.pre', function() {
 		var module = location.hash.slice(1)
 		var page = Number($('.page').text()) - 1;
-		$.get('/back/' + module + '?page=' + page, function(content_html) {
-			$('.content').empty();
-			$('.content').append(content_html);
-			var client = new zeroclipboard($('.copy'));
-			client.on("load", function(client) {
-				client.on("complete", function(client, args) {
-					base.show_success('复制成功')
-				});
-			});
-		});
+		getContent(module, page);
 	});
 	$('.container').on('click', '.next', function() {
 		var module = location.hash.slice(1)
-		var page = Number($('.page').text()) + 1;
-		$.get('/back/' + module + '?page=' + page, function(content_html) {
-			$('.content').empty();
-			$('.content').append(content_html);
-			var client = new zeroclipboard($('.copy'));
-			client.on("load", function(client) {
-				client.on("complete", function(client, args) {
-					base.show_success('复制成功')
-				});
-			});
-		});
+		var nPageAmount = Number($('.pagination li').eq(0).text().match(/[0-9]+/)[0]);
+		var prePage = Number($('.page').text())
+		var page = prePage >= nPageAmount ? nPageAmount: prePage + 1;
+		getContent(module, page);
 	});
+
+	$('.container').on('click', '.first', function() {
+		getContent(module, 1);
+	});
+	$('.container').on('click', '.last', function() {
+		var module = location.hash.slice(1);
+		var nPageAmount = Number($('.pagination li').eq(0).text().match(/[0-9]+/)[0]);
+
+		getContent(module, nPageAmount);
+	});
+
 
 
 });

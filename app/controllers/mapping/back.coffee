@@ -45,8 +45,8 @@ module.exports = {
 					)
 					aDynamicNav.push(temp)
 				)
-			nav = nav.concat(aDynamicNav)
-			res.render('back/index.html', {nav})			
+			# nav = nav.concat(aDynamicNav)
+			res.render('back/index.html', {nav, dnav:aDynamicNav})			
 		)
 	getContent: (req, res)->
 		module = req.params['module']
@@ -95,7 +95,8 @@ module.exports = {
 								.exec(cb)
 						pageAmount: (cb)->
 							Model.count({}, (err, num)->
-								cb(err, Math.round(num / PERPAGE))
+								pages = Math.floor(num / PERPAGE) + 1
+								cb(err, pages)
 							)
 					}, (err, results)->
 						if !err
@@ -104,8 +105,11 @@ module.exports = {
 							nPageAmount = results.pageAmount
 							_aLogs = results.getLogs
 
-
-
+							aLogKeys = _.reduce(oLogModel.attributes, (arr, attr)->
+								arr.push(attr.key)
+								return arr
+							,[])
+							aLogKeys.push('ts')
 
 							token = oAuth.token
 							ts = oLogModel.ts
@@ -116,14 +120,11 @@ module.exports = {
 							)
 
 							if _aLogs.length
-								aLogKeys = _.keys(_aLogs[0]._doc)
-								aLogKeys = _.pull(aLogKeys, 'ts')
-								aLogKeys.push('ts')
 								aLogs = []
 								_.each(_aLogs, (oLog)->
 									temp = {}
 									_.each(aLogKeys, (sLogkey)->
-										temp[sLogkey] = oLog[sLogkey]
+										temp[sLogkey] = oLog[sLogkey] || ''
 									)
 									aLogs.push(temp)
 								)

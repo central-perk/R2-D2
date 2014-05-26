@@ -13,9 +13,7 @@ oAttrValueMap = {
 	String: String,
 	Number: Number,
 	Boolean: Boolean,
-	Date: Date,
-	Array: [],
-	Object: {}
+	Date: Date
 }
 
 

@@ -64,9 +64,9 @@ module.exports = {
           return aDynamicNav.push(temp);
         });
       }
-      nav = nav.concat(aDynamicNav);
       return res.render('back/index.html', {
-        nav: nav
+        nav: nav,
+        dnav: aDynamicNav
       });
     });
   },
@@ -134,7 +134,9 @@ module.exports = {
             },
             pageAmount: function(cb) {
               return Model.count({}, function(err, num) {
-                return cb(err, Math.round(num / PERPAGE));
+                var pages;
+                pages = Math.floor(num / PERPAGE) + 1;
+                return cb(err, pages);
               });
             }
           }, function(err, results) {
@@ -144,6 +146,11 @@ module.exports = {
               oLogModel = results.getOneModel;
               nPageAmount = results.pageAmount;
               _aLogs = results.getLogs;
+              aLogKeys = _.reduce(oLogModel.attributes, function(arr, attr) {
+                arr.push(attr.key);
+                return arr;
+              }, []);
+              aLogKeys.push('ts');
               token = oAuth.token;
               ts = oLogModel.ts;
               url = "/?type=" + sLogType + "&appID=" + appID;
@@ -152,15 +159,12 @@ module.exports = {
                 return url += "&" + oAttr.key + "={{" + oAttr.value + "}}";
               });
               if (_aLogs.length) {
-                aLogKeys = _.keys(_aLogs[0]._doc);
-                aLogKeys = _.pull(aLogKeys, 'ts');
-                aLogKeys.push('ts');
                 aLogs = [];
                 _.each(_aLogs, function(oLog) {
                   var temp;
                   temp = {};
                   _.each(aLogKeys, function(sLogkey) {
-                    return temp[sLogkey] = oLog[sLogkey];
+                    return temp[sLogkey] = oLog[sLogkey] || '';
                   });
                   return aLogs.push(temp);
                 });
