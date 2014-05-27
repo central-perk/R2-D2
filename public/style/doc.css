@@ -53,8 +53,12 @@
     cursor: pointer;
 }
 
-#attributes .form-group:last-child{
+.attr_tpl{
     display: none;
+}
+
+#attributes .attr_tpl{
+    display: block;
 }
 
 /*.logmodel_form{

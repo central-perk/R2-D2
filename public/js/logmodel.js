@@ -39,7 +39,8 @@ define(['jquery', 'base', 'hbs!/modules/logmodel_form'], function($, base, formT
 	});
 
 	$('.container').on('click', '.add_attr', function() {
-		$attr = $('#attributes .form-group').last().clone()
+
+		var $attr = $('.form-horizontal>.attr_tpl').clone();
 		$('#attributes').append($attr[0].outerHTML)
 	});
 	$('.container').on('click', '.del_attr', function() {
