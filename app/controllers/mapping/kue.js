@@ -27,10 +27,8 @@ jobs.process('storage', config.STORAGE.maxProcess, function(job, done) {
   var oLogFile;
   oLogFile = job.data.oLogFile;
   return storage.store(oLogFile, function(err) {
-    if (!err) {
-      console.log('数据入库成功');
-      return done();
-    }
+    console.log(err || '数据入库成功');
+    return done();
   });
 });
 

@@ -20,9 +20,8 @@ logModel.registerAll((err, aLogModels)->
 jobs.process('storage', config.STORAGE.maxProcess, (job, done)->
 	oLogFile = job.data.oLogFile
 	storage.store(oLogFile, (err)->
-		if !err
-			console.log '数据入库成功'
-			done()
+		console.log err or '数据入库成功'
+		done()
 	)
 )
 
