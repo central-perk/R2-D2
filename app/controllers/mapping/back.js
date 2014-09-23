@@ -56,8 +56,8 @@ module.exports = {
           _.each(aLogModels, function(oLogModel) {
             if (oLogModel.appID === oAuth.appID) {
               return temp.sub.push({
-                title: oLogModel.type,
-                href: "" + oAuth.appID + "." + oLogModel.type
+                title: oLogModel.cname,
+                href: "" + oAuth.appID + "." + oLogModel.name
               });
             }
           });
@@ -71,7 +71,7 @@ module.exports = {
     });
   },
   getContent: function(req, res) {
-    var Model, aLogModelsList, appID, e, module, page, sLogType;
+    var Model, aLogModelsList, e, module, nPage, sAppID, sLogName;
     module = req.params['module'];
     switch (module) {
       case 'auth':
@@ -94,7 +94,8 @@ module.exports = {
                     appName: oAuth.appName,
                     appID: oAuth.appID,
                     token: oAuth.token,
-                    type: oLogModel.type,
+                    name: oLogModel.name,
+                    cname: oLogModel.cname,
                     ts: oLogModel.ts
                   });
                 }
@@ -110,27 +111,27 @@ module.exports = {
           });
         });
       default:
-        appID = module.split('.')[0];
-        sLogType = module.split('.')[1];
-        page = (req.param('page') > 0 ? req.param('page') : 1) - 1;
+        sAppID = module.split('.')[0];
+        sLogName = module.split('.')[1];
+        nPage = (req.param('page') > 0 ? req.param('page') : 1) - 1;
         try {
           Model = mongoose.model(module);
           return async.auto({
             getOneAuth: function(cb) {
               return auth._getOne({
-                appID: appID
+                appID: sAppID
               }, cb);
             },
             getOneModel: function(cb) {
               return logModel._getOne({
-                appID: appID,
-                type: sLogType
+                appID: sAppID,
+                name: sLogName
               }, cb);
             },
             getLogs: function(cb) {
               return Model.find({}, '-__v -_id -fileName').sort({
                 ts: -1
-              }).skip(PERPAGE * page).limit(PERPAGE).exec(cb);
+              }).skip(PERPAGE * nPage).limit(PERPAGE).exec(cb);
             },
             pageAmount: function(cb) {
               return Model.count({}, function(err, num) {
@@ -140,50 +141,60 @@ module.exports = {
               });
             }
           }, function(err, results) {
-            var aLogKeys, aLogs, nPageAmount, oAuth, oLogModel, temp, token, ts, url, _aLogs;
+            var aLogAttr, aLogs, nPageAmount, nTs, oAuth, oLogModel, sLogCname, sToken, temp, url, _aLogs;
             if (!err) {
               oAuth = results.getOneAuth;
               oLogModel = results.getOneModel;
               nPageAmount = results.pageAmount;
+              sLogCname = results.getOneModel.cname;
               _aLogs = results.getLogs;
-              aLogKeys = _.reduce(oLogModel.attributes, function(arr, attr) {
-                arr.push(attr.key);
+              aLogAttr = _.reduce(oLogModel.attr, function(arr, attr) {
+                arr.push({
+                  name: attr.name,
+                  cname: attr.cname
+                });
                 return arr;
               }, []);
-              aLogKeys.push('ts');
-              token = oAuth.token;
-              ts = oLogModel.ts;
-              url = "/?type=" + sLogType + "&appID=" + appID;
-              url += "&token=" + token + "&ts={{Date.getTime()}}";
-              _.each(oLogModel.attributes, function(oAttr) {
-                return url += "&" + oAttr.key + "={{" + oAttr.value + "}}";
+              aLogAttr.push({
+                name: 'ts',
+                cname: '时间'
               });
+              aLogAttr.push({
+                name: 'level',
+                cname: '等级'
+              });
+              sToken = oAuth.token;
+              nTs = oLogModel.ts;
+              url = "/upload/app/" + sAppID + "/logname/" + sLogName + "/token/" + sToken;
               if (_aLogs.length) {
                 aLogs = [];
                 _.each(_aLogs, function(oLog) {
                   var temp;
                   temp = {};
-                  _.each(aLogKeys, function(sLogkey) {
-                    return temp[sLogkey] = oLog[sLogkey] || '';
+                  _.each(aLogAttr, function(oAttr) {
+                    var name;
+                    name = oAttr.name;
+                    return temp[name] = oLog[name] || '';
                   });
                   return aLogs.push(temp);
                 });
                 temp = {
                   url: url,
-                  appID: appID,
-                  type: sLogType,
-                  ts: ts,
-                  aLogs: aLogs,
-                  aLogKeys: aLogKeys,
-                  nPageAmount: nPageAmount,
-                  page: page + 1
+                  appID: sAppID,
+                  name: sLogName,
+                  cname: sLogCname,
+                  ts: nTs,
+                  logs: aLogs,
+                  logAttr: aLogAttr,
+                  pageAmount: nPageAmount,
+                  page: nPage + 1
                 };
               } else {
                 temp = {
                   url: url,
-                  appID: appID,
-                  type: sLogType,
-                  ts: ts
+                  appID: sAppID,
+                  name: sLogName,
+                  ts: nTs
                 };
               }
               return res.render('back/apps.html', temp);
@@ -193,6 +204,7 @@ module.exports = {
           });
         } catch (_error) {
           e = _error;
+          console.log(e);
           return res.send('日志模型不存在!');
         }
     }

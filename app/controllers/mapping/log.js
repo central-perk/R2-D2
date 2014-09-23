@@ -15,26 +15,26 @@ logsPath = process.g.logsPath;
 
 logFileDao = require(process.g.daoPath).logFile;
 
-fWriteableLog = function(sLogModelName, callback) {
-  var appID, sLogType;
-  appID = sLogModelName.split('.')[0];
-  sLogType = sLogModelName.split('.')[1];
+fWriteableLog = function(sFullLogName, callback) {
+  var sAppID, sLogName;
+  sAppID = sFullLogName.split('.')[0];
+  sLogName = sFullLogName.split('.')[1];
   return logFileDao.getOne({
-    appID: appID,
-    type: sLogType,
+    appID: sAppID,
+    name: sLogName,
     status: LOGFILE_STATUS.writeable
-  }, function(err, oWriteableLog) {
-    var bLogSizeOK, sWriteableLog, sWriteableLogPath;
+  }, function(err, oLogFile) {
+    var bLogFileSizeOK, sLogFileName, sLogFilePath;
     if (!err) {
-      if (oWriteableLog) {
-        sWriteableLog = oWriteableLog.name;
-        sWriteableLogPath = path.join(logsPath, sWriteableLog);
-        bLogSizeOK = fCheckLogSize(sWriteableLogPath);
-        if (bLogSizeOK) {
-          return callback(null, sWriteableLogPath);
+      if (oLogFile) {
+        sLogFileName = oLogFile.fileName;
+        sLogFilePath = path.join(logsPath, sLogFileName);
+        bLogFileSizeOK = fCheckLogSize(sLogFilePath);
+        if (bLogFileSizeOK) {
+          return callback(null, sLogFilePath);
         } else {
           logFileDao.update({
-            name: sWriteableLog
+            fileName: sLogFileName
           }, {
             status: LOGFILE_STATUS.unstorage
           }, function(err, doc) {
@@ -43,16 +43,16 @@ fWriteableLog = function(sLogModelName, callback) {
               kue = utils.getCtrl('kue');
               return setTimeout(function() {
                 return kue.enqueueStorage({
-                  name: sWriteableLog,
+                  logFileName: sLogFileName,
                   status: LOGFILE_STATUS.unstorage
                 });
               }, config.STORAGE.delay);
             }
           });
-          return fCreateLogFile(sLogModelName, callback);
+          return fCreateLogFile(sFullLogName, callback);
         }
       } else {
-        return fCreateLogFile(sLogModelName, callback);
+        return fCreateLogFile(sFullLogName, callback);
       }
     } else {
       return callback('日志文件查询失败');
@@ -60,10 +60,10 @@ fWriteableLog = function(sLogModelName, callback) {
   });
 };
 
-fCheckLogSize = function(sWriteableLogPath) {
+fCheckLogSize = function(sLogFilePath) {
   var e, nSize;
   try {
-    nSize = fs.readFileSync(sWriteableLogPath, 'utf8').length;
+    nSize = fs.readFileSync(sLogFilePath, 'utf8').length;
     return config.LOG_MAX_SIZE > nSize;
   } catch (_error) {
     e = _error;
@@ -71,40 +71,41 @@ fCheckLogSize = function(sWriteableLogPath) {
   }
 };
 
-fCreateLogFile = function(sLogModelName, callback) {
-  var appID, sLogType, sWriteableLog, sWriteableLogPath;
-  appID = sLogModelName.split('.')[0];
-  sLogType = sLogModelName.split('.')[1];
-  sWriteableLog = "" + sLogModelName + "." + (utils.getTime()) + ".log";
-  sWriteableLogPath = path.join(logsPath, sWriteableLog);
-  fs.createFileSync(sWriteableLogPath);
+fCreateLogFile = function(sFullLogName, callback) {
+  var sAppID, sLogFileName, sLogFilePath, sLogName;
+  sAppID = sFullLogName.split('.')[0];
+  sLogName = sFullLogName.split('.')[1];
+  sLogFileName = "" + sFullLogName + "." + (utils.getTime()) + ".log";
+  console.log(sLogFileName);
+  sLogFilePath = path.join(logsPath, sLogFileName);
+  fs.createFileSync(sLogFilePath);
   return logFileDao.create({
-    appID: appID,
-    type: sLogType,
-    name: sWriteableLog
+    appID: sAppID,
+    name: sLogName,
+    fileName: sLogFileName
   }, function(err, raw) {
-    return callback(err, sWriteableLogPath);
+    return callback(err, sLogFilePath);
   });
 };
 
-fWriteFile = function(sWriteableLogPath) {
+fWriteFile = function(sLogFilePath) {
   return function(message, cb) {
     var sLogFileName;
-    sLogFileName = path.basename(sWriteableLogPath);
+    sLogFileName = path.basename(sLogFilePath);
     message.fileName = sLogFileName;
     message = JSON.stringify(message, null, 0) + '\n';
-    if (!fs.existsSync(sWriteableLogPath)) {
-      createFileSync(sWriteableLogPath);
+    if (!fs.existsSync(sLogFilePath)) {
+      createFileSync(sLogFilePath);
     }
-    return fs.writeFile(sWriteableLogPath, message, {
+    return fs.writeFile(sLogFilePath, message, {
       encoding: 'utf8',
       flag: 'a'
     }, cb);
   };
 };
 
-module.exports = function(sLogModelName, callback) {
-  return fWriteableLog(sLogModelName, function(err, sWriteableLogPath) {
-    return callback(err, fWriteFile(sWriteableLogPath));
+module.exports = function(sFullLogName, callback) {
+  return fWriteableLog(sFullLogName, function(err, sLogFilePath) {
+    return callback(err, fWriteFile(sLogFilePath));
   });
 };

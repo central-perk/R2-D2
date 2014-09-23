@@ -20,52 +20,53 @@ logModel = utils.getCtrl('logModel');
 aAuth = {};
 
 fEnqueue = function(req, res) {
-  var appID, oLogTemp, sLogType;
-  sLogType = req.query.type;
-  appID = req.query.appID;
-  delete req.query.type;
-  delete req.query.appID;
-  delete req.query.token;
+  var oLogTemp, sAppID, sLogName;
+  sAppID = req.params.appID;
+  sLogName = req.params.name;
   oLogTemp = {
-    type: sLogType,
-    appID: appID,
-    log: req.query
+    appID: sAppID,
+    name: sLogName,
+    log: req.body
   };
   kue.enqueueLog(oLogTemp);
-  return res.requestSucceed('数据提交成功');
+  return res.success('数据提交成功');
 };
 
 i = 1;
 
 module.exports = {
   distribute: function(req, res, next) {
-    var appID, sLogModelName, sLogType, token, ts;
-    sLogType = req.query.type;
-    appID = req.query.appID;
-    token = req.query.token;
-    ts = req.query.ts;
-    sLogModelName = "" + appID + "." + sLogType;
-    if (!sLogType) {
-      return res.requestError('缺少type');
-    } else if (!ts) {
-      return res.requestError('缺少ts');
-    } else if (!appID) {
-      return res.requestError('缺少appID');
-    } else if (!token) {
-      return res.requestError('缺少token');
+    var nLevel, nTs, oBody, sAppID, sFullLogName, sLogName, sToken;
+    oBody = req.body;
+    sAppID = req.params.appID;
+    sLogName = req.params.name;
+    sToken = req.params.token;
+    nTs = oBody.ts;
+    nLevel = oBody.level;
+    sFullLogName = "" + sAppID + "." + sLogName;
+    if (!sAppID) {
+      return res.error('缺少appID');
+    } else if (!sLogName) {
+      return res.error('缺少日志名');
+    } else if (!sToken) {
+      return res.error('缺少秘钥');
+    } else if (!nTs) {
+      return res.error('缺少时间戳');
+    } else if (!nLevel) {
+      return res.error('缺少日志等级');
     } else {
-      if (aAuth[sLogModelName]) {
-        if (aAuth[sLogModelName] === token) {
+      if (aAuth[sFullLogName]) {
+        if (aAuth[sFullLogName] === sToken) {
           return fEnqueue(req, res);
         } else {
-          return res.requestError('授权信息错误');
+          return res.error('授权信息错误');
         }
       } else {
         return async.waterfall([
           function(cb) {
             return auth._checkAuth({
-              appID: appID,
-              token: token
+              appID: sAppID,
+              token: sToken
             }, function(err, bAuthorized) {
               if (!err) {
                 if (bAuthorized) {
@@ -79,8 +80,8 @@ module.exports = {
             });
           }, function(result, cb) {
             return logModel.checkLogModel({
-              appID: appID,
-              sLogType: sLogType
+              appID: sAppID,
+              name: sLogName
             }, function(err, bLogModel) {
               if (!err) {
                 if (bLogModel) {
@@ -95,10 +96,10 @@ module.exports = {
           }
         ], function(err, result) {
           if (!err) {
-            aAuth[sLogModelName] = token;
+            aAuth[sFullLogName] = sToken;
             return fEnqueue(req, res);
           } else {
-            return res.requestError(err);
+            return res.error(err);
           }
         });
       }

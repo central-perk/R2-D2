@@ -10,49 +10,50 @@ aAuth = {}
 
 
 fEnqueue = (req, res)->
-	sLogType = req.query.type
-	appID = req.query.appID
-	delete req.query.type
-	delete req.query.appID
-	delete req.query.token
+	sAppID 		= req.params.appID
+	sLogName 	= req.params.name
 	oLogTemp = {
-		type: sLogType,
-		appID,
-		log: req.query
+		appID: sAppID,
+		name: sLogName
+		log: req.body
 	}
 	kue.enqueueLog(oLogTemp)
-	res.requestSucceed('数据提交成功')
+	res.success('数据提交成功')
 
 i = 1
 module.exports = {
 	distribute: (req, res, next)->
-		sLogType = req.query.type
-		appID = req.query.appID
-		token = req.query.token
-		ts = req.query.ts
+		oBody 		= req.body
+		sAppID 		= req.params.appID
+		sLogName 	= req.params.name
+		sToken 		= req.params.token
+		nTs 		= oBody.ts
+		nLevel 		= oBody.level
 
-		sLogModelName = "#{appID}.#{sLogType}"
-		if !sLogType
-			res.requestError('缺少type')
-		else if !ts
-			res.requestError('缺少ts')
-		else if !appID
-			res.requestError('缺少appID')
-		else if !token
-			res.requestError('缺少token')
+		sFullLogName = "#{sAppID}.#{sLogName}"
+		if !sAppID
+			res.error('缺少appID')
+		else if !sLogName
+			res.error('缺少日志名')
+		else if !sToken
+			res.error('缺少秘钥')
+		else if !nTs
+			res.error('缺少时间戳')
+		else if !nLevel
+			res.error('缺少日志等级')
 		else
 			# 授权已经被缓存
-			if aAuth[sLogModelName]
-				if aAuth[sLogModelName] == token
+			if aAuth[sFullLogName]
+				if aAuth[sFullLogName] == sToken
 					fEnqueue(req, res)
 				else
-					res.requestError('授权信息错误')
+					res.error('授权信息错误')
 			# 授权未被缓存
 			else
 				async.waterfall([
 					# 检验授权信息
 					(cb)->
-						auth._checkAuth({appID, token}, (err, bAuthorized)->
+						auth._checkAuth({appID: sAppID, token: sToken}, (err, bAuthorized)->
 							if !err
 								if bAuthorized
 									cb(null, null)
@@ -63,7 +64,7 @@ module.exports = {
 						)
 					# 检验日志模型
 					(result, cb)->
-						logModel.checkLogModel({appID, sLogType}, (err, bLogModel)->
+						logModel.checkLogModel({appID: sAppID, name: sLogName}, (err, bLogModel)->
 							if !err
 								if bLogModel
 									cb(null, null)
@@ -74,10 +75,10 @@ module.exports = {
 						)
 				], (err, result)->
 					if !err
-						aAuth[sLogModelName] = token
+						aAuth[sFullLogName] = sToken
 						fEnqueue(req, res)
 					else
-						res.requestError(err)
+						res.error(err)
 				)
 	basicAuth: ()->
 		basicAuth((credentials, req, res, next)->

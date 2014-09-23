@@ -20,7 +20,8 @@ module.exports = (app, mw)->
 
 
 	# 上传日志入口，由中间件分发到对应的控制器进行处理
-	app.get('/', mw.distribute)
+	# app.get('/', mw.distribute)
+	app.post('/upload/app/:appID/logname/:name/token/:token', mw.distribute)
 
 	# 日志列表接口
 	app.get('/login', ctrl.list('login'))

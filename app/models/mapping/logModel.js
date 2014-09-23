@@ -6,10 +6,12 @@ var mongoose = require('mongoose'),
 
 var schema = new Schema({
     appID: String,
-    type: String,
-    attributes: [{
-        key: String,
-        value: String
+    name: String,
+    cname: String,
+    attr: [{
+       name: String,
+       cname: String,
+       dataType: String 
     }],
     ts: {
         type: Date,

@@ -17,29 +17,19 @@ Dao = {}
 
 # 得到需要入库的文件名
 getFile = (callback)->
-	logFileDao.get({status: {'$in': [20, 30]}}, (err, oLogFiles)->
-		aLogFile = _.reduce(oLogFiles, (arr, oLogFile)->
-			name = oLogFile.name
-			status = oLogFile.status
-			arr.push({name, status})
-			return arr
-		, [])
-		callback(null, aLogFile)
-	)
+	logFileDao.get({status: {'$in': [20, 30]}}, callback)
 
 # 将log文件传话为json数据格式
 log2json = (data)->
 	logs = data.split('\n').slice(0, -1)
 	_.each(logs, (log, index)->
 		logs[index] = JSON.parse(logs[index])
-		delete logs[index].level
-		delete logs[index].message
 	)
 	return logs
 
 # 更新日志文件状态
-updateLogFileStatus = (sfileName, status, cb)->
-	logFileDao.update({name: sfileName}, {status}, cb)
+updateLogFileStatus = (sLogFileName, status, cb)->
+	logFileDao.update({fileName: sLogFileName}, {status}, cb)
 
 # 将json文件存至数据库
 json2db = (Model, logs, callback)->
@@ -68,27 +58,27 @@ module.exports = {
 			)
 		)
 	store: (oLogFile, callback)->
-		aLogFileTemp = oLogFile.name.split('.')
-		appID = aLogFileTemp[0]
-		sLogType = aLogFileTemp[1]
-		sLogModelName = "#{appID}.#{sLogType}"
-		sLogFilePath = path.join(logsPath, oLogFile.name)
-		logFileStatus = oLogFile.status
-		Model = mongoose.model(sLogModelName)
+		sAppID = oLogFile.appID
+		sLogName = oLogFile.name
+		sFullLogName = "#{sAppID}.#{sLogName}"
+		sLogFilePath = path.join(logsPath, oLogFile.fileName)
+		nLogFileStatus = oLogFile.status
+		Model = mongoose.model(sFullLogName)
 		async.waterfall([
 			# 确定日志文件已经入库行数
 			(cb)->
-				if logFileStatus == LOGFILE_STATUS.unstorage
+				if nLogFileStatus == LOGFILE_STATUS.unstorage
 					cb(null, 0)
 				else					
-					Model.count({fileName: oLogFile.name}, cb)
+					Model.count({fileName: oLogFile.fileName}, cb)
 			(nLine, cb)->
 				# 入库前，日志文件可能被删除
 				fs.readFile(sLogFilePath, 'utf-8', (err, logs)->
+					console.log logs 
 					if !err
 						logs = log2json(logs)
 						logs = logs.slice(Number(nLine))
-						updateLogFileStatus(oLogFile.name, LOGFILE_STATUS.storaging, (err)->
+						updateLogFileStatus(oLogFile.fileName, LOGFILE_STATUS.storaging, (err)->
 							if !err
 								json2db(Model, logs, cb)
 							else

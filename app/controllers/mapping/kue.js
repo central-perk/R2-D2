@@ -34,25 +34,25 @@ jobs.process('storage', config.STORAGE.maxProcess, function(job, done) {
 
 module.exports = {
   enqueueLog: function(oLogTemp) {
-    var appID, oLog, sLogModelName, sLogType;
-    appID = oLogTemp.appID;
-    sLogType = oLogTemp.type;
-    sLogModelName = "" + appID + "." + sLogType;
+    var oLog, sAppID, sFullLogName, sLogName;
+    sAppID = oLogTemp.appID;
+    sLogName = oLogTemp.name;
+    sFullLogName = "" + sAppID + "." + sLogName;
     oLog = oLogTemp.log;
-    return jobs.create(sLogModelName, {
+    return jobs.create(sFullLogName, {
       log: oLog
     }).attempts(3).save();
   },
   processLog: function(oLogModel) {
-    var appID, sLogModelName, sLogType;
-    appID = oLogModel.appID;
-    sLogType = oLogModel.type;
-    sLogModelName = "" + appID + "." + sLogType;
-    return jobs.process(sLogModelName, 1, function(job, done) {
+    var sAppID, sFullLogName, sLogName;
+    sAppID = oLogModel.appID;
+    sLogName = oLogModel.name;
+    sFullLogName = "" + sAppID + "." + sLogName;
+    return jobs.process(sFullLogName, 1, function(job, done) {
       var oLog;
-      sLogModelName = job.type;
+      sFullLogName = job.type;
       oLog = job.data.log;
-      return logger(sLogModelName, function(err, fWriteLog) {
+      return logger(sFullLogName, function(err, fWriteLog) {
         return fWriteLog(oLog, function(err) {
           if (!err) {
             return done();

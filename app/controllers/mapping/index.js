@@ -24,23 +24,23 @@ module.exports = {
     var fWriteLog, sModel;
     sModel = req.type;
     if (!require('mongoose').models[sModel]) {
-      res.requestError('日志类型不存在，请先创建');
+      res.error('日志类型不存在，请先创建');
     }
     fWriteLog = new logger(sModel);
     return fWriteLog(req.query, function(err) {
       if (!err) {
-        return res.requestSucceed('数据提交成功');
+        return res.success('数据提交成功');
       } else {
-        return res.requestError('数据提交失败');
+        return res.error('数据提交失败');
       }
     });
   },
   storage: function(req, res) {
     return storage(function(err) {
       if (!err) {
-        return res.requestSucceed('数据已经被更新');
+        return res.success('数据已经被更新');
       } else {
-        return res.requestError('数据更新失败');
+        return res.error('数据更新失败');
       }
     }, true);
   },
@@ -59,9 +59,9 @@ module.exports = {
       Model = mongoose.model(model);
       return Model.find({}, function(err, logs) {
         if (!err) {
-          return res.requestSucceed(logs);
+          return res.success(logs);
         } else {
-          return res.requestError('获取列表失败');
+          return res.error('获取列表失败');
         }
       });
     };

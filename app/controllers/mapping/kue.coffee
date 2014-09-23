@@ -28,19 +28,19 @@ jobs.process('storage', config.STORAGE.maxProcess, (job, done)->
 
 module.exports = {
 	enqueueLog: (oLogTemp)->
-		appID = oLogTemp.appID
-		sLogType = oLogTemp.type
-		sLogModelName = "#{appID}.#{sLogType}"
-		oLog = oLogTemp.log
-		jobs.create(sLogModelName, {log: oLog}).attempts(3).save()
+		sAppID 			= oLogTemp.appID
+		sLogName 		= oLogTemp.name
+		sFullLogName 	= "#{sAppID}.#{sLogName}"
+		oLog 			= oLogTemp.log
+		jobs.create(sFullLogName, {log: oLog}).attempts(3).save()
 	processLog: (oLogModel)->
-		appID = oLogModel.appID
-		sLogType = oLogModel.type
-		sLogModelName = "#{appID}.#{sLogType}"
-		jobs.process(sLogModelName, 1, (job, done)->
-			sLogModelName = job.type
+		sAppID = oLogModel.appID
+		sLogName = oLogModel.name
+		sFullLogName 	= "#{sAppID}.#{sLogName}"
+		jobs.process(sFullLogName, 1, (job, done)->
+			sFullLogName = job.type
 			oLog = job.data.log
-			logger(sLogModelName, (err, fWriteLog)->
+			logger(sFullLogName, (err, fWriteLog)->
 				fWriteLog(oLog, (err)->
 					if !err
 						done()

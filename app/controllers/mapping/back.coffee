@@ -39,8 +39,8 @@ module.exports = {
 					_.each(aLogModels, (oLogModel)->
 						if oLogModel.appID == oAuth.appID
 							temp.sub.push({
-								title: oLogModel.type
-								href: "#{oAuth.appID}.#{oLogModel.type}"
+								title: oLogModel.cname
+								href: "#{oAuth.appID}.#{oLogModel.name}"
 							})
 					)
 					aDynamicNav.push(temp)
@@ -68,7 +68,8 @@ module.exports = {
 										appName: oAuth.appName,
 										appID: oAuth.appID,
 										token: oAuth.token,
-										type: oLogModel.type,
+										name: oLogModel.name,
+										cname: oLogModel.cname,
 										ts: oLogModel.ts
 									})
 							)
@@ -77,20 +78,20 @@ module.exports = {
 					res.render('back/logmodel.html', {aLogModelsList, aAuth, aLogModels, aAttrValue})
 				)
 			else
-				appID = module.split('.')[0]
-				sLogType = module.split('.')[1]
-				page = (if req.param('page')  > 0 then req.param('page') else 1) - 1
+				sAppID = module.split('.')[0]
+				sLogName = module.split('.')[1]
+				nPage = (if req.param('page')  > 0 then req.param('page') else 1) - 1
 				try
 					Model = mongoose.model(module)
 					async.auto({
 						getOneAuth: (cb)->
-							auth._getOne({appID}, cb)
+							auth._getOne({appID: sAppID}, cb)
 						getOneModel: (cb)->
-							logModel._getOne({appID, type: sLogType}, cb)
+							logModel._getOne({appID: sAppID, name: sLogName}, cb)
 						getLogs: (cb)->
 							Model.find({}, '-__v -_id -fileName') # 在logger服务器没有必要给出__v 和 _id
 								.sort({ts: -1})
-								.skip(PERPAGE * page)
+								.skip(PERPAGE * nPage)
 								.limit(PERPAGE)
 								.exec(cb)
 						pageAmount: (cb)->
@@ -103,87 +104,60 @@ module.exports = {
 							oAuth = results.getOneAuth
 							oLogModel = results.getOneModel
 							nPageAmount = results.pageAmount
+							sLogCname = results.getOneModel.cname
 							_aLogs = results.getLogs
 
-							aLogKeys = _.reduce(oLogModel.attributes, (arr, attr)->
-								arr.push(attr.key)
+							aLogAttr = _.reduce(oLogModel.attr, (arr, attr)->
+								arr.push({
+									name: attr.name,
+									cname: attr.cname
+								})
 								return arr
 							,[])
-							aLogKeys.push('ts')
-
-							token = oAuth.token
-							ts = oLogModel.ts
-							url = "/?type=#{sLogType}&appID=#{appID}"
-							url += "&token=#{token}&ts={{Date.getTime()}}"
-							_.each(oLogModel.attributes, (oAttr)->
-								url += "&#{oAttr.key}={{#{oAttr.value}}}"
-							)
-
+							aLogAttr.push({
+								name: 'ts',
+								cname: '时间'
+							})
+							aLogAttr.push({
+								name: 'level',
+								cname: '等级'
+							})
+							sToken = oAuth.token
+							nTs = oLogModel.ts
+							url = "/upload/app/#{sAppID}/logname/#{sLogName}/token/#{sToken}"
 							if _aLogs.length
 								aLogs = []
 								_.each(_aLogs, (oLog)->
 									temp = {}
-									_.each(aLogKeys, (sLogkey)->
-										temp[sLogkey] = oLog[sLogkey] || ''
+									_.each(aLogAttr, (oAttr)->
+										name = oAttr.name
+										temp[name] = oLog[name] || ''
 									)
 									aLogs.push(temp)
 								)
 								temp = {
 									url,
-									appID,
-									type: sLogType,
-									ts,
-									aLogs,
-									aLogKeys,
-									nPageAmount,
-									page: page + 1
+									appID: sAppID,
+									name: sLogName,
+									cname: sLogCname,
+									ts: nTs,
+									logs: aLogs,
+									logAttr: aLogAttr,
+									pageAmount: nPageAmount,
+									page: nPage + 1
 								}
 							else
 								temp = {
 									url,
-									appID,
-									type: sLogType,
-									ts
+									appID: sAppID,
+									name: sLogName,
+									ts: nTs
 								}
 							res.render('back/apps.html', temp)
 						else
 							res.render('授权信息出错了!')
 					)
 				catch e
+					console.log e
 					res.send('日志模型不存在!')
-
-		# else
-		# 	appID = module
-		# 	async.auto({
-		# 		getModels: (cb)->
-		# 			logModel._get({appID}, cb)
-		# 		getAuth: (cb)->
-		# 			auth._getOne({appID}, cb)
-		# 	}, (err, results)->
-		# 		if !err
-		# 			aLogModels = results.getModels
-		# 			oAuth = results.getAuth
-		# 			token = oAuth.token
-		# 			temp = []
-		# 			_.each(aLogModels, (oLogModels)->
-		# 				url = "/?type=#{oLogModels.type}&appID=#{oLogModels.appID}"
-		# 				url += "&token=#{token}&ts={{Date.getTime()}}"
-		# 				_.each(oLogModels.attributes, (oAttr)->
-		# 					url += "&#{oAttr.key}={{#{oAttr.value}}}"
-		# 				)
-		# 				temp.push({
-		# 					url,
-		# 					appID: oLogModels.appID,
-		# 					type: oLogModels.type,
-		# 					ts: oLogModels.ts
-		# 				})
-		# 			)
-		# 			if temp.length == 0
-		# 				res.send('赶紧去创建日志模型吧！')	
-		# 			else
-		# 				res.render('back/apps.html', temp)
-
-		# 		else
-		# 			res.send('授权信息出错了!')
-		# 	)
 }

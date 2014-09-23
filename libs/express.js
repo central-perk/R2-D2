@@ -17,16 +17,16 @@ module.exports = function(app, mongoose) {
     app.use(express.logger('dev'));
   }
   app.use(function(req, res, next) {
-    res.requestError = function(data) {
+    res.error = function(data) {
       return res.json({
-        status: 0,
-        message: data
+        code: data.code || 400,
+        msg: data
       });
     };
-    res.requestSucceed = function(data) {
+    res.success = function(data) {
       return res.json({
-        status: 1,
-        message: data
+        code: 200,
+        msg: data
       });
     };
     return next();

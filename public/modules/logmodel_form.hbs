@@ -8,30 +8,39 @@
         </div>
     </div>
     <div class="form-group">
-        <label for="sLogModelName" class="col-sm-2 control-label">日志模型</label>
-        <div class="col-sm-4">
-            <input type="text" class="form-control" id="sLogModelName" value="{{sLogModelName}}" disabled>
+        <label for="name" class="col-sm-2 control-label">日志名称</label>
+        <div class="col-sm-2">
+            <input type="text" class="form-control" id="sLogModelCname" value="{{cname}}">
+        </div>
+        <div class="col-sm-2">
+            <input type="text" class="form-control" id="sLogModelName" value="{{name}}" disabled>
         </div>
     </div>
     <div id="attributes">
-        {{#each aAttributes}}
+        {{#each attr}}
         <div class="form-group">
             <label class="col-sm-2 control-label">参数</label>
             <div class="col-sm-2">
-                <input type="text" class="form-control key" value="{{key}}" disabled>
+                <input type="text" class="form-control cname" value="{{cname}}">
             </div>
             <div class="col-sm-2">
-                <input type="text" class="form-control value" value="{{value}}" disabled>
+                <input type="text" class="form-control name" value="{{name}}" disabled>
+            </div>
+            <div class="col-sm-2">
+                <input type="text" class="form-control data-type" value="{{dataType}}" disabled>
             </div>
         </div>
         {{/each}}
         <div class="form-group attr_tpl">
             <label class="col-sm-2 control-label">参数</label>
             <div class="col-sm-2">
-                <input type="text" class="form-control key" placeholder="名称">
+                <input type="text" class="form-control cname" placeholder="中文全称">
             </div>
             <div class="col-sm-2">
-                {{{attrValue}}}
+                <input type="text" class="form-control name" placeholder="英文缩写">
+            </div>
+            <div class="col-sm-2">
+                {{{sDataType}}}
             </div>
             <div>
                 <div class="btn btn-warning del_attr">删除</div>
@@ -51,7 +60,7 @@
             <input type="text" class="form-control key" placeholder="名称">
         </div>
         <div class="col-sm-2">
-            {{{attrValue}}}
+            {{{sDataType}}}
         </div>
         <div>
             <div class="btn btn-warning del_attr">删除</div>

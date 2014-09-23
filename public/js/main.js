@@ -28,13 +28,14 @@ require(['jquery', 'zeroclipboard', 'base', 'bootstrap', 'auth', 'logmodel'], fu
 	}
 
 	$('.bs-sidenav>li>a, .bs-sidenav>li>ul>li>a').on('click', function() {
-
-		var self = $(this),
-			module = self.attr('href').slice(1);
-		$('.bs-sidenav li').removeClass('active');
-		self.parent('li').addClass('active');
-		getContent(module)
-	})
+		var self = $(this);
+		if(self.attr('href')) {
+			var module = self.attr('href').slice(1);
+			$('.bs-sidenav li').removeClass('active');
+			self.parent('li').addClass('active');
+			getContent(module)
+		}
+	});
 
 
 	function getContent(module, page) {

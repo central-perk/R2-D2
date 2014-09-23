@@ -5,7 +5,7 @@
 
     <div class="list-group row">
         <div class="col-md-4">
-            <a class="list-group-item"><strong>日志模型：</strong>{{type}}</a>
+            <a class="list-group-item"><strong>日志类型：</strong>{{cname}}</a>
             <a class="list-group-item"><strong>应用ID：</strong>{{appID}}</a>
             <a class="list-group-item"><strong>创建时间：</strong>{{ts}}</a>
         </div>
@@ -19,18 +19,18 @@
             <div class="btn btn-primary copy col-md-1" data-clipboard-text="{{url}}">复制</div>
         </div>
     </div>
-    {{#if nPageAmount}}
+    {{#if pageAmount}}
     <table class="table">
         <tr>
-            {{#each aLogKeys}}
-                <th>{{this}}</th>
+            {{#each logAttr}}
+                <th>{{cname}}</th>
             {{/each}}
         </tr>
-        {{#trList aLogs}}{{/trList}}
+        {{#trList logs}}{{/trList}}
     </table>
 
     <ul class="pagination">
-        <li><a>共{{nPageAmount}}页</a></li>
+        <li><a>共{{pageAmount}}页</a></li>
         <li><a class="first">首页</a></li>
         <li><a class="pre">&laquo;</a></li>
         <li><a class="page">{{page}}</a></li>

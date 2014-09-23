@@ -18,15 +18,15 @@ module.exports = (app, mongoose)->
 
     # res的中间件
     app.use (req,res,next)->
-        res.requestError = (data)-> 
+        res.error = (data)-> 
             res.json({
-                status: 0,
-                message: data
+                code: data.code || 400,
+                msg: data
             })
-        res.requestSucceed = (data)->
+        res.success = (data)->
             res.json({
-                status: 1,
-                message: data
+                code: 200,
+                msg: data
             })
         next()
     app.set('port', config.PORT)

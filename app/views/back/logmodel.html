@@ -2,7 +2,7 @@
 <div class="logmodel">
     <div class="alert alert-success"></div>
     <div class="alert alert-danger"></div>
-    <button type="button" class="btn btn-primary show_logmodel_form">创建日志模型</button>
+    <button type="button" class="btn btn-primary show_logmodel_form">创建日志</button>
     <div class="logmodel_form">
         <div class="form-horizontal">
             <div class="form-group" id="app">
@@ -16,19 +16,25 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="sLogModelName" class="col-sm-2 control-label">日志模型</label>
-                <div class="col-sm-4">
-                    <input type="text" class="form-control" id="sLogModelName">
+                <label for="sLogModelName" class="col-sm-2 control-label">日志名称</label>
+                <div class="col-sm-2">
+                    <input type="text" class="form-control" id="sLogModelCname" placeholder="中文全称">
+                </div>
+                <div class="col-sm-2">
+                    <input type="text" class="form-control" id="sLogModelName" placeholder="英文缩写">
                 </div>
             </div>
             <div id="attributes">
                 <div class="form-group">
                     <label class="col-sm-2 control-label">参数</label>
                     <div class="col-sm-2">
-                        <input type="text" class="form-control key" placeholder="名称">
+                        <input type="text" class="form-control cname" placeholder="中文全称">
                     </div>
                     <div class="col-sm-2">
-                        <select class="form-control value">
+                        <input type="text" class="form-control name" placeholder="英文缩写">
+                    </div>
+                    <div class="col-sm-2">
+                        <select class="form-control data-type">
                             {{#each aAttrValue}}
                             <option>{{this}}</option>
                             {{/each}}
@@ -48,10 +54,10 @@
             <div class="form-group attr_tpl">
                 <label class="col-sm-2 control-label">参数</label>
                 <div class="col-sm-2">
-                    <input type="text" class="form-control key" placeholder="名称">
+                    <input type="text" class="form-control name" placeholder="名称">
                 </div>
                 <div class="col-sm-2">
-                    <select class="form-control value">
+                    <select class="form-control data-type">
                         {{#each aAttrValue}}
                         <option>{{this}}</option>
                         {{/each}}
@@ -74,11 +80,11 @@
             {{#each aLogModelsList}}
             <tr>
                 <td appID="{{appID}}" token="{{token}}">{{appName}}</td>
-                <td>{{type}}</td>
+                <td name="{{name}}">{{cname}}</td>
                 <td>{{ts}}</th>
-                    <td>
-                        <div class="btn btn-default edit_logmodel">编辑</div>
-                    </td>
+                <td>
+                    <div class="btn btn-default edit_logmodel">编辑</div>
+                </td>
             </tr>
             {{/each}}
         </table>

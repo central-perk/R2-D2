@@ -47,9 +47,9 @@ module.exports = {
               token: token
             }, function(err, raw) {
               if (!err) {
-                return res.requestSucceed('应用授权成功');
+                return res.success('应用授权成功');
               } else {
-                return res.requestError('应用授权失败');
+                return res.error('应用授权失败');
               }
             });
           } else {
@@ -59,7 +59,7 @@ module.exports = {
       } else {
         appID = auth.appID;
         token = auth.token;
-        return res.requestError('应用已授权');
+        return res.error('应用已授权');
       }
     });
   },
@@ -85,9 +85,9 @@ module.exports = {
             status: auth.status
           });
         });
-        return res.requestSucceed(aAuth);
+        return res.success(aAuth);
       } else {
-        return res.requestError('授权列表获取失败');
+        return res.error('授权列表获取失败');
       }
     });
   },

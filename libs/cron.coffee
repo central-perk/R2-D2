@@ -5,8 +5,12 @@ config = process.g.config
 utils = process.g.utils
 storage = utils.getCtrl('storage')
 
+
+delay3s = ((new Date()).getSeconds() + 3) % 60
+
+cron = "#{delay3s} * * * * *"
 if config.STORAGE.cron
-	store = new CronJob(config.STORAGE.cron, ()->
+	store = new CronJob(cron, ()->
 		storage.start()
 	null, true, 'Asia/Shanghai')
 

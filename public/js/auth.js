@@ -7,13 +7,13 @@ define(['jquery', 'base'], function($, base) {
 			$.post(url, {
 				appName: appName
 			}, function(data) {
-				if (data.status) {
+				if (data.code === 200) {
 					base.show_success('授权成功')
 					setTimeout(function() {
 						location.reload()
 					}, 100)
 				} else {
-					base.show_error(data.message)
+					base.show_error(data.msg)
 				}
 			});
 		}

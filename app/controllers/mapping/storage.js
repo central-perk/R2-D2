@@ -30,36 +30,21 @@ getFile = function(callback) {
     status: {
       '$in': [20, 30]
     }
-  }, function(err, oLogFiles) {
-    var aLogFile;
-    aLogFile = _.reduce(oLogFiles, function(arr, oLogFile) {
-      var name, status;
-      name = oLogFile.name;
-      status = oLogFile.status;
-      arr.push({
-        name: name,
-        status: status
-      });
-      return arr;
-    }, []);
-    return callback(null, aLogFile);
-  });
+  }, callback);
 };
 
 log2json = function(data) {
   var logs;
   logs = data.split('\n').slice(0, -1);
   _.each(logs, function(log, index) {
-    logs[index] = JSON.parse(logs[index]);
-    delete logs[index].level;
-    return delete logs[index].message;
+    return logs[index] = JSON.parse(logs[index]);
   });
   return logs;
 };
 
-updateLogFileStatus = function(sfileName, status, cb) {
+updateLogFileStatus = function(sLogFileName, status, cb) {
   return logFileDao.update({
-    name: sfileName
+    fileName: sLogFileName
   }, {
     status: status
   }, cb);
@@ -92,29 +77,29 @@ module.exports = {
     });
   },
   store: function(oLogFile, callback) {
-    var Model, aLogFileTemp, appID, logFileStatus, sLogFilePath, sLogModelName, sLogType;
-    aLogFileTemp = oLogFile.name.split('.');
-    appID = aLogFileTemp[0];
-    sLogType = aLogFileTemp[1];
-    sLogModelName = "" + appID + "." + sLogType;
-    sLogFilePath = path.join(logsPath, oLogFile.name);
-    logFileStatus = oLogFile.status;
-    Model = mongoose.model(sLogModelName);
+    var Model, nLogFileStatus, sAppID, sFullLogName, sLogFilePath, sLogName;
+    sAppID = oLogFile.appID;
+    sLogName = oLogFile.name;
+    sFullLogName = "" + sAppID + "." + sLogName;
+    sLogFilePath = path.join(logsPath, oLogFile.fileName);
+    nLogFileStatus = oLogFile.status;
+    Model = mongoose.model(sFullLogName);
     return async.waterfall([
       function(cb) {
-        if (logFileStatus === LOGFILE_STATUS.unstorage) {
+        if (nLogFileStatus === LOGFILE_STATUS.unstorage) {
           return cb(null, 0);
         } else {
           return Model.count({
-            fileName: oLogFile.name
+            fileName: oLogFile.fileName
           }, cb);
         }
       }, function(nLine, cb) {
         return fs.readFile(sLogFilePath, 'utf-8', function(err, logs) {
+          console.log(logs);
           if (!err) {
             logs = log2json(logs);
             logs = logs.slice(Number(nLine));
-            return updateLogFileStatus(oLogFile.name, LOGFILE_STATUS.storaging, function(err) {
+            return updateLogFileStatus(oLogFile.fileName, LOGFILE_STATUS.storaging, function(err) {
               if (!err) {
                 return json2db(Model, logs, cb);
               } else {

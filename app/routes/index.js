@@ -17,6 +17,6 @@ module.exports = function(app, mw) {
   app.post('/logmodel', logModel.create);
   app.put('/logmodel', logModel.update);
   app.get('/logmodel/', logModel.get);
-  app.get('/', mw.distribute);
+  app.post('/upload/app/:appID/logname/:name/token/:token', mw.distribute);
   return app.get('/login', ctrl.list('login'));
 };

@@ -1,13 +1,13 @@
 define(['jquery'], function($) {
 
-	function show_success(message) {
-		$('.alert-success').text(message)
+	function show_success(msg) {
+		$('.alert-success').text(msg)
 		$('.alert-success').show()
 		$('.alert-success').fadeOut(3000)
 	}
 
-	function show_error(message) {
-		$('.alert-danger').text(message)
+	function show_error(msg) {
+		$('.alert-danger').text(msg)
 		$('.alert-danger').show()
 	}
 

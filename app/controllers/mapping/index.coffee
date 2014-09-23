@@ -13,20 +13,20 @@ module.exports = {
 	fWriteLog: (req, res)->
 		sModel = req.type
 		if !require('mongoose').models[sModel] # 模型不存在
-			res.requestError('日志类型不存在，请先创建')
+			res.error('日志类型不存在，请先创建')
 		fWriteLog = new logger(sModel)
 		fWriteLog(req.query, (err)->
 			if !err
-				res.requestSucceed('数据提交成功')
+				res.success('数据提交成功')
 			else
-				res.requestError('数据提交失败')
+				res.error('数据提交失败')
 		)
 	storage: (req, res)->
 		storage((err)->
 			if !err
-				res.requestSucceed('数据已经被更新')
+				res.success('数据已经被更新')
 			else
-				res.requestError('数据更新失败')
+				res.error('数据更新失败')
 		, true)
 	list: (model)->
 		return (req, res)->
@@ -42,9 +42,9 @@ module.exports = {
 			Model = mongoose.model(model)
 			Model.find({}, (err, logs)->
 				if !err
-					res.requestSucceed(logs);
+					res.success(logs);
 				else
-					res.requestError('获取列表失败');
+					res.error('获取列表失败');
 			)
 
 
@@ -68,9 +68,9 @@ module.exports = {
 			# 			data = {}
 			# 			data[model + 's'] = documents
 			# 			data['pagination'] = utils.pagination(page, perPage, count)
-			# 			res.requestSucceed(data || null);
+			# 			res.success(data || null);
 			# 		else
-			# 			res.requestError('获取列表失败');
+			# 			res.error('获取列表失败');
 			# 	)
 			# )
 }

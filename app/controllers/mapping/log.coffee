@@ -7,76 +7,77 @@ logsPath = process.g.logsPath
 logFileDao = require(process.g.daoPath).logFile
 
 # 返回可写日志文件的路径
-fWriteableLog = (sLogModelName, callback)->
-	appID = sLogModelName.split('.')[0]
-	sLogType = sLogModelName.split('.')[1]
-
-	logFileDao.getOne({appID, type: sLogType, status: LOGFILE_STATUS.writeable}, (err, oWriteableLog)->
+fWriteableLog = (sFullLogName, callback)->
+	sAppID 		= sFullLogName.split('.')[0]
+	sLogName 	= sFullLogName.split('.')[1]
+	logFileDao.getOne({appID: sAppID, name: sLogName, status: LOGFILE_STATUS.writeable}, (err, oLogFile)->
 		if !err
-			if oWriteableLog # 状态为可写的日志文件存在
-				sWriteableLog = oWriteableLog.name
-				sWriteableLogPath = path.join(logsPath, sWriteableLog)
-				bLogSizeOK = fCheckLogSize(sWriteableLogPath)
-				if bLogSizeOK # 日志文件是否可以继续写入
-					callback(null, sWriteableLogPath)
+			if oLogFile # 状态为可写的日志文件存在
+				sLogFileName = oLogFile.fileName
+				sLogFilePath = path.join(logsPath, sLogFileName)
+				bLogFileSizeOK = fCheckLogSize(sLogFilePath)
+				if bLogFileSizeOK
+					callback(null, sLogFilePath)
 				else
-					logFileDao.update({name: sWriteableLog}, {status: LOGFILE_STATUS.unstorage}, (err, doc)->
+					logFileDao.update({fileName: sLogFileName}, {status: LOGFILE_STATUS.unstorage}, (err, doc)->
 						if config.STORAGE.delay # 如果设置了延时入库
 							kue = utils.getCtrl('kue')
 							setTimeout(()->
 								kue.enqueueStorage({
-									name: sWriteableLog,
+									logFileName: sLogFileName,
 									status: LOGFILE_STATUS.unstorage
 								})
 							, config.STORAGE.delay)
 					)
-					fCreateLogFile(sLogModelName, callback)
+					# create new log file
+					fCreateLogFile(sFullLogName, callback)
 			else # 状态为可写的日志文件不存在，则创建新文件
-				fCreateLogFile(sLogModelName, callback)
+				fCreateLogFile(sFullLogName, callback)
 		else
 			callback('日志文件查询失败')
 	)
 
 # 返回日志文件是否可以继续写入
-fCheckLogSize = (sWriteableLogPath)->
+fCheckLogSize = (sLogFilePath)->
 	try 
-		nSize = fs.readFileSync(sWriteableLogPath, 'utf8').length
+		nSize = fs.readFileSync(sLogFilePath, 'utf8').length
 		return config.LOG_MAX_SIZE > nSize
 	catch e
 		return false
 
 
 # 返回最新创建文件的路径
-fCreateLogFile = (sLogModelName, callback)->
-	appID = sLogModelName.split('.')[0]
-	sLogType = sLogModelName.split('.')[1]
-	sWriteableLog = "#{sLogModelName}.#{utils.getTime()}.log"
-	sWriteableLogPath = path.join(logsPath, sWriteableLog)
-	fs.createFileSync(sWriteableLogPath)
-	logFileDao.create({appID, type: sLogType, name: sWriteableLog}, (err, raw)->
-		callback(err, sWriteableLogPath)
+fCreateLogFile = (sFullLogName, callback)->
+	sAppID 		= sFullLogName.split('.')[0]
+	sLogName 	= sFullLogName.split('.')[1]
+
+	sLogFileName = "#{sFullLogName}.#{utils.getTime()}.log"
+
+	console.log sLogFileName
+
+	sLogFilePath = path.join(logsPath, sLogFileName)
+	fs.createFileSync(sLogFilePath)
+	logFileDao.create({appID: sAppID, name: sLogName, fileName: sLogFileName}, (err, raw)->
+		callback(err, sLogFilePath)
 	)
 
 # 将日志写入到文件
-fWriteFile = (sWriteableLogPath)->
+fWriteFile = (sLogFilePath)->
 	return (message, cb)->
-		sLogFileName = path.basename(sWriteableLogPath)
+
+		sLogFileName = path.basename(sLogFilePath)
 		message.fileName = sLogFileName
 		message = JSON.stringify(message, null, 0) + '\n'
-		if !fs.existsSync(sWriteableLogPath)
-			createFileSync(sWriteableLogPath)
-		fs.writeFile(sWriteableLogPath, message, {
+		if !fs.existsSync(sLogFilePath)
+			createFileSync(sLogFilePath)
+		fs.writeFile(sLogFilePath, message, {
 			encoding: 'utf8'
 			flag:'a'
 		}, cb)
 
 
 
-# module.exports = (logType, callback)->
-# 	fWriteableLog(logType, (err, sWriteableLogPath)->
-# 		callback(null, fWriteFile(sWriteableLogPath))	
-# 	)
-module.exports = (sLogModelName, callback)->
-	fWriteableLog(sLogModelName, (err, sWriteableLogPath)->
-		callback(err, fWriteFile(sWriteableLogPath))
+module.exports = (sFullLogName, callback)->
+	fWriteableLog(sFullLogName, (err, sLogFilePath)->
+		callback(err, fWriteFile(sLogFilePath))
 	)

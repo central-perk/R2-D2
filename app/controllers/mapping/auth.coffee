@@ -31,10 +31,10 @@ module.exports = {
 					if !auth
 						authDao.create({appName, appID, token}, (err, raw)->
 							if !err
-								# res.requestSucceed({appName, appID, token})
-								res.requestSucceed('应用授权成功')
+								# res.success({appName, appID, token})
+								res.success('应用授权成功')
 							else
-								res.requestError('应用授权失败')
+								res.error('应用授权失败')
 						)
 					else # appID重复，概率很低
 						module.exports['create'](req, res)
@@ -42,8 +42,8 @@ module.exports = {
 			else
 				appID = auth.appID
 				token = auth.token
-				# res.requestSucceed({appName, appID, token})
-				res.requestError('应用已授权')
+				# res.success({appName, appID, token})
+				res.error('应用已授权')
 		)
 	list: (req, res)->
 		criteria = {
@@ -63,9 +63,9 @@ module.exports = {
 						status: auth.status
 					})
 				)
-				res.requestSucceed(aAuth)
+				res.success(aAuth)
 			else
-				res.requestError('授权列表获取失败')
+				res.error('授权列表获取失败')
 		)
 	# 内部接口
 	_get: (query, callback)->
