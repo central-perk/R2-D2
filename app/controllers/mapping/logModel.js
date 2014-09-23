@@ -27,14 +27,13 @@ oAttrValueMap = {
 };
 
 attrLegal = function(aAttr) {
-  var aKeywords, aName, aUniqueName, bAttrUnique, bNameValid;
+  var aName, aUniqueName, bAttrUnique, bNameValid;
   aName = _.flatten(aAttr, 'name');
   aUniqueName = _.uniq(aName);
   bAttrUnique = aName.length === aUniqueName.length;
   bNameValid = true;
-  aKeywords = ['ts', 'type', 'name', 'token'];
-  _.each(aKeywords, function(sKeyword) {
-    if (_.indexOf(aUniqueName, sKeyword) !== -1) {
+  _.each(aAttr, function(oAttr) {
+    if (oAttr.name.slice(0, 1) === '_') {
       return bNameValid = false;
     }
   });
@@ -61,7 +60,7 @@ module.exports = {
     } else if (sName.length > 20 || sCname.length > 20) {
       return res.error('日志名称的长度不符');
     } else if (!attrLegal(aAttr)) {
-      return res.error('参数不符合要求，检查是否重复或者包含关键词');
+      return res.error('属性不能以下划线开头，且不能重复');
     } else {
       return async.waterfall([
         function(cb) {
@@ -260,12 +259,12 @@ module.exports = {
         dataType = attr.dataType;
         return oSchema[name] = oAttrValueMap[dataType];
       });
-      oSchema.ts = {
+      oSchema._ts = {
         type: Date,
         get: utils.formatTime
       };
-      oSchema.fileName = String;
-      oSchema.level = Number;
+      oSchema._fileName = String;
+      oSchema._level = Number;
       schema = new Schema(oSchema);
       try {
         mongoose.model(sLogModelName, schema);

@@ -1,8 +1,6 @@
 module.exports = {
 	PORT: process.env.PORT || 8001, //服务端口号
-	// LOG_MAX_SIZE: 50000, // 50k
-	// LOG_MAX_SIZE: 1000000, // 1M
-	LOG_MAX_SIZE: 100, // 1M
+	LOG_MAX_SIZE: 5000,
 	PERPAGE: 20, //log文件前端显示每页条数
 	STORAGE: {
  		cron: '38 * * * * *', // 定时入库的时间
@@ -12,6 +10,7 @@ module.exports = {
 		maxLines: 50 //一次入库操作的数据行数
 	},
 	STATUS: {
+		// 需要改成logfile独立成一个对象，包含status属性
 		LOGFILE: {
 			writeable: 10, //可写入
 			unstorage: 20, //待入库
@@ -33,4 +32,15 @@ module.exports = {
 			href: 'logmodel'
 		}]
 	},
+	LOG: {
+		level: {
+			trace: 10,
+			debug: 20,
+			info: 30,
+			warn: 40,
+			error: 50,
+			fatal: 60
+		},
+		defaultLevel: 'info'
+	}
 };

@@ -8,7 +8,6 @@ var mongoose = require('mongoose'),
 var schema = new Schema({
     appID: String,
     name: String,
-    // longName: String,
     fileName: String,
     status: {
         type: Number,

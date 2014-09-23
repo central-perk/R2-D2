@@ -1,21 +1,36 @@
 path = require('path')
 async = require('async')
+_ = require('lodash')
 basicAuth = require('connect-basic-auth')
+config = process.g.config
 utils = process.g.utils
 ctrl = utils.getCtrl('index')
 auth = utils.getCtrl('auth')
 kue  = utils.getCtrl('kue')
 logModel = utils.getCtrl('logModel')
-aAuth = {}
+LOG_LEVEL = config.LOG.level
+LOG_DEFAULT_LEVEL = LOG_LEVEL[config.LOG.defaultLevel]
+aLogLevelValue = _.values(LOG_LEVEL)
+oAuth = {}
+
 
 
 fEnqueue = (req, res)->
 	sAppID 		= req.params.appID
 	sLogName 	= req.params.name
+	oLog 		= _.cloneDeep(req.body)
+	oLog._level = Number(oLog._level)
+
+	# 添加日志生成时间
+	oLog._ts 	= Number(new Date())
+	# 设置日志默认等级
+	if _.indexOf(aLogLevelValue, oLog._level) == -1
+		oLog._level = LOG_DEFAULT_LEVEL
+
 	oLogTemp = {
-		appID: sAppID,
+		appID: sAppID
 		name: sLogName
-		log: req.body
+		log: oLog
 	}
 	kue.enqueueLog(oLogTemp)
 	res.success('数据提交成功')
@@ -24,11 +39,10 @@ i = 1
 module.exports = {
 	distribute: (req, res, next)->
 		oBody 		= req.body
+		# oParams 	= req.body.params
 		sAppID 		= req.params.appID
 		sLogName 	= req.params.name
 		sToken 		= req.params.token
-		nTs 		= oBody.ts
-		nLevel 		= oBody.level
 
 		sFullLogName = "#{sAppID}.#{sLogName}"
 		if !sAppID
@@ -37,14 +51,10 @@ module.exports = {
 			res.error('缺少日志名')
 		else if !sToken
 			res.error('缺少秘钥')
-		else if !nTs
-			res.error('缺少时间戳')
-		else if !nLevel
-			res.error('缺少日志等级')
 		else
 			# 授权已经被缓存
-			if aAuth[sFullLogName]
-				if aAuth[sFullLogName] == sToken
+			if oAuth[sFullLogName]
+				if oAuth[sFullLogName] == sToken
 					fEnqueue(req, res)
 				else
 					res.error('授权信息错误')
@@ -75,7 +85,7 @@ module.exports = {
 						)
 				], (err, result)->
 					if !err
-						aAuth[sFullLogName] = sToken
+						oAuth[sFullLogName] = sToken
 						fEnqueue(req, res)
 					else
 						res.error(err)

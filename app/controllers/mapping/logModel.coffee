@@ -21,9 +21,8 @@ attrLegal = (aAttr)->
 	aUniqueName = _.uniq(aName)
 	bAttrUnique = aName.length == aUniqueName.length
 	bNameValid = true
-	aKeywords = ['ts', 'type', 'name', 'token']
-	_.each(aKeywords, (sKeyword)->
-		if _.indexOf(aUniqueName, sKeyword) != -1
+	_.each(aAttr, (oAttr)->
+		if oAttr.name.slice(0,1) == '_'
 			bNameValid = false
 	)
 	return bAttrUnique and bNameValid
@@ -50,7 +49,7 @@ module.exports = {
 		else if sName.length > 20 or sCname.length > 20
 			res.error('日志名称的长度不符')
 		else if !attrLegal(aAttr)
-			res.error('参数不符合要求，检查是否重复或者包含关键词')
+			res.error('属性不能以下划线开头，且不能重复')
 		else
 			async.waterfall([
 				# 检验是否经过授权
@@ -210,13 +209,15 @@ module.exports = {
 				dataType = attr.dataType
 				oSchema[name] = oAttrValueMap[dataType]
 			)
-			oSchema.ts = {
+			# 私有字段使用下划线打头
+			oSchema._ts = {
 				type: Date,
 				get: utils.formatTime
 			}
-			oSchema.fileName = String
+			oSchema._fileName = String
 			# 日志等级
-			oSchema.level = Number
+			oSchema._level = Number
+			
 			schema = new Schema(oSchema)
 			try
 				mongoose.model(sLogModelName, schema)
