@@ -40,7 +40,7 @@ module.exports = {
 		jobs.process(sFullLogName, 1, (job, done)->
 			sFullLogName = job.type
 			oLog = job.data.log
-			logger(sFullLogName, (err, fWriteLog)->
+			logger.write(sFullLogName, (err, fWriteLog)->
 				fWriteLog(oLog, (err)->
 					if !err
 						done()

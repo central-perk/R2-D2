@@ -104,8 +104,19 @@ fWriteFile = function(sLogFilePath) {
   };
 };
 
-module.exports = function(sFullLogName, callback) {
-  return fWriteableLog(sFullLogName, function(err, sLogFilePath) {
-    return callback(err, fWriteFile(sLogFilePath));
-  });
+module.exports = {
+  write: function(sFullLogName, callback) {
+    return fWriteableLog(sFullLogName, function(err, sLogFilePath) {
+      return callback(err, fWriteFile(sLogFilePath));
+    });
+  },
+  readyStorage: function(callback) {
+    return logFileDao.Model.update({
+      status: LOGFILE_STATUS.writeable
+    }, {
+      status: LOGFILE_STATUS.unstorage
+    }, {
+      multi: true
+    }, callback);
+  }
 };

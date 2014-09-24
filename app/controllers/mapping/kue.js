@@ -52,7 +52,7 @@ module.exports = {
       var oLog;
       sFullLogName = job.type;
       oLog = job.data.log;
-      return logger(sFullLogName, function(err, fWriteLog) {
+      return logger.write(sFullLogName, function(err, fWriteLog) {
         return fWriteLog(oLog, function(err) {
           if (!err) {
             return done();

@@ -10,6 +10,7 @@ storage = require(path.join(__dirname, 'storage'))
 require(process.g.modelsPath)
 
 module.exports = {
+	# 好像暂时废弃了该接口
 	fWriteLog: (req, res)->
 		sModel = req.type
 		if !require('mongoose').models[sModel] # 模型不存在

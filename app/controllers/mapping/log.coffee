@@ -76,8 +76,22 @@ fWriteFile = (sLogFilePath)->
 		}, cb)
 
 
+module.exports = {
+	write: (sFullLogName, callback)->
+		fWriteableLog(sFullLogName, (err, sLogFilePath)->
+			callback(err, fWriteFile(sLogFilePath))
+		)
+	readyStorage: (callback)->
+		# 将日志文件状态从可写入转为待入库状态
+		logFileDao.Model.update(
+			{status: LOGFILE_STATUS.writeable},
+			{status: LOGFILE_STATUS.unstorage},
+			{multi: true},
+			callback
+		)
+}
 
-module.exports = (sFullLogName, callback)->
-	fWriteableLog(sFullLogName, (err, sLogFilePath)->
-		callback(err, fWriteFile(sLogFilePath))
-	)
+# module.exports = (sFullLogName, callback)->
+# 	fWriteableLog(sFullLogName, (err, sLogFilePath)->
+# 		callback(err, fWriteFile(sLogFilePath))
+# 	)
