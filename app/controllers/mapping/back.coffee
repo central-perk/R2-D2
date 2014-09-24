@@ -115,11 +115,11 @@ module.exports = {
 								return arr
 							,[])
 							aLogAttr.push({
-								name: 'ts',
+								name: '_ts',
 								cname: '时间'
 							})
 							aLogAttr.push({
-								name: 'level',
+								name: '_level',
 								cname: '等级'
 							})
 							sToken = oAuth.token

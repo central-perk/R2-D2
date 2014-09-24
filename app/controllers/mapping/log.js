@@ -76,7 +76,7 @@ fCreateLogFile = function(sFullLogName, callback) {
   sAppID = sFullLogName.split('.')[0];
   sLogName = sFullLogName.split('.')[1];
   sLogFileName = "" + sFullLogName + "." + (utils.getTime()) + ".log";
-  console.log(sLogFileName);
+  console.log('create', sLogFileName);
   sLogFilePath = path.join(logsPath, sLogFileName);
   fs.createFileSync(sLogFilePath);
   return logFileDao.create({
@@ -92,7 +92,8 @@ fWriteFile = function(sLogFilePath) {
   return function(message, cb) {
     var sLogFileName;
     sLogFileName = path.basename(sLogFilePath);
-    message.fileName = sLogFileName;
+    message._fileName = sLogFileName;
+    console.log(message);
     message = JSON.stringify(message, null, 0) + '\n';
     if (!fs.existsSync(sLogFilePath)) {
       createFileSync(sLogFilePath);

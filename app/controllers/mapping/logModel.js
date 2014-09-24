@@ -293,12 +293,12 @@ module.exports = {
           dataType = attr.dataType;
           return oSchema[name] = oAttrValueMap[dataType];
         });
-        oSchema.ts = {
+        oSchema._ts = {
           type: Date,
           get: utils.formatTime
         };
-        oSchema.fileName = String;
-        oSchema.level = Number;
+        oSchema._fileName = String;
+        oSchema._level = Number;
         schema = new Schema(oSchema);
         try {
           return mongoose.model(sLogModelName, schema);

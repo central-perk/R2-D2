@@ -241,13 +241,14 @@ module.exports = {
 					dataType = attr.dataType
 					oSchema[name] = oAttrValueMap[dataType]
 				)
-				oSchema.ts = {
+				oSchema._ts = {
 					type: Date,
 					get: utils.formatTime
 				}
-				oSchema.fileName = String
+				oSchema._fileName = String
 				# 日志等级
-				oSchema.level = Number
+				oSchema._level = Number
+				
 				schema = new Schema(oSchema)
 				try
 					mongoose.model(sLogModelName, schema)

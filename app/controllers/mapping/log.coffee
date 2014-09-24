@@ -53,7 +53,7 @@ fCreateLogFile = (sFullLogName, callback)->
 
 	sLogFileName = "#{sFullLogName}.#{utils.getTime()}.log"
 
-	console.log sLogFileName
+	console.log 'create', sLogFileName
 
 	sLogFilePath = path.join(logsPath, sLogFileName)
 	fs.createFileSync(sLogFilePath)
@@ -64,9 +64,10 @@ fCreateLogFile = (sFullLogName, callback)->
 # 将日志写入到文件
 fWriteFile = (sLogFilePath)->
 	return (message, cb)->
-
 		sLogFileName = path.basename(sLogFilePath)
-		message.fileName = sLogFileName
+		# _fileName属于私有变量需要下划线开头
+		message._fileName = sLogFileName
+		console.log message
 		message = JSON.stringify(message, null, 0) + '\n'
 		if !fs.existsSync(sLogFilePath)
 			createFileSync(sLogFilePath)
