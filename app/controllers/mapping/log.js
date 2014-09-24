@@ -43,7 +43,9 @@ fWriteableLog = function(sFullLogName, callback) {
               kue = utils.getCtrl('kue');
               return setTimeout(function() {
                 return kue.enqueueStorage({
-                  logFileName: sLogFileName,
+                  appID: sAppID,
+                  name: sLogName,
+                  fileName: sLogFileName,
                   status: LOGFILE_STATUS.unstorage
                 });
               }, config.STORAGE.delay);

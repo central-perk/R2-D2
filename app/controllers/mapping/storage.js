@@ -56,7 +56,8 @@ json2db = function(Model, logs, callback) {
   return Model.create(logs.slice(0, maxLines), function(err, raw) {
     if (!err) {
       if (maxLines >= nLen) {
-        return updateLogFileStatus(logs[0].fileName, LOGFILE_STATUS.storaged, callback);
+        console.log(logs[0], '-----');
+        return updateLogFileStatus(logs[0]._fileName, LOGFILE_STATUS.storaged, callback);
       } else {
         return json2db(Model, logs.slice(maxLines), callback);
       }

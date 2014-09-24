@@ -37,7 +37,8 @@ json2db = (Model, logs, callback)->
 	Model.create(logs.slice(0, maxLines), (err, raw)->
 		if !err
 			if maxLines >= nLen
-				updateLogFileStatus(logs[0].fileName, LOGFILE_STATUS.storaged, callback)
+				console.log logs[0], '-----'
+				updateLogFileStatus(logs[0]._fileName, LOGFILE_STATUS.storaged, callback)
 			else
 				# # 强制阻断
 				# if nLen > 150

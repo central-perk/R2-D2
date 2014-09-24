@@ -24,7 +24,9 @@ fWriteableLog = (sFullLogName, callback)->
 							kue = utils.getCtrl('kue')
 							setTimeout(()->
 								kue.enqueueStorage({
-									logFileName: sLogFileName,
+									appID: sAppID,
+									name: sLogName,
+									fileName: sLogFileName,
 									status: LOGFILE_STATUS.unstorage
 								})
 							, config.STORAGE.delay)
