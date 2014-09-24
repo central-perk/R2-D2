@@ -69,7 +69,6 @@ fWriteFile = (sLogFilePath)->
 		sLogFileName = path.basename(sLogFilePath)
 		# _fileName属于私有变量需要下划线开头
 		message._fileName = sLogFileName
-		console.log message
 		message = JSON.stringify(message, null, 0) + '\n'
 		if !fs.existsSync(sLogFilePath)
 			createFileSync(sLogFilePath)

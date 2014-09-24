@@ -37,7 +37,6 @@ json2db = (Model, logs, callback)->
 	Model.create(logs.slice(0, maxLines), (err, raw)->
 		if !err
 			if maxLines >= nLen
-				console.log logs[0], '-----'
 				updateLogFileStatus(logs[0]._fileName, LOGFILE_STATUS.storaged, callback)
 			else
 				# # 强制阻断
@@ -71,11 +70,10 @@ module.exports = {
 				if nLogFileStatus == LOGFILE_STATUS.unstorage
 					cb(null, 0)
 				else					
-					Model.count({fileName: oLogFile.fileName}, cb)
+					Model.count({_fileName: oLogFile.fileName}, cb)
 			(nLine, cb)->
 				# 入库前，日志文件可能被删除
 				fs.readFile(sLogFilePath, 'utf-8', (err, logs)->
-					console.log logs 
 					if !err
 						logs = log2json(logs)
 						logs = logs.slice(Number(nLine))

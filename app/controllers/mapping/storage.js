@@ -56,7 +56,6 @@ json2db = function(Model, logs, callback) {
   return Model.create(logs.slice(0, maxLines), function(err, raw) {
     if (!err) {
       if (maxLines >= nLen) {
-        console.log(logs[0], '-----');
         return updateLogFileStatus(logs[0]._fileName, LOGFILE_STATUS.storaged, callback);
       } else {
         return json2db(Model, logs.slice(maxLines), callback);
@@ -91,12 +90,11 @@ module.exports = {
           return cb(null, 0);
         } else {
           return Model.count({
-            fileName: oLogFile.fileName
+            _fileName: oLogFile.fileName
           }, cb);
         }
       }, function(nLine, cb) {
         return fs.readFile(sLogFilePath, 'utf-8', function(err, logs) {
-          console.log(logs);
           if (!err) {
             logs = log2json(logs);
             logs = logs.slice(Number(nLine));

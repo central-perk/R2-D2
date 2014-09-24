@@ -95,7 +95,6 @@ fWriteFile = function(sLogFilePath) {
     var sLogFileName;
     sLogFileName = path.basename(sLogFilePath);
     message._fileName = sLogFileName;
-    console.log(message);
     message = JSON.stringify(message, null, 0) + '\n';
     if (!fs.existsSync(sLogFilePath)) {
       createFileSync(sLogFilePath);

@@ -221,7 +221,6 @@ module.exports = {
       name: name
     }, function(err, oLogModel) {
       if (!err) {
-        console.log(oLogModel);
         return res.success(oLogModel);
       } else {
         return res.error('日志列表获取失败');

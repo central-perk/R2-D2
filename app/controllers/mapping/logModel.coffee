@@ -174,7 +174,6 @@ module.exports = {
 		name = req.query['name']
 		logModelDao.getOne({appID, name}, (err, oLogModel)->
 			if !err
-				console.log oLogModel
 				res.success(oLogModel)
 			else
 				res.error('日志列表获取失败')
