@@ -256,7 +256,14 @@ module.exports = {
         name = attr.name;
         cname = attr.cname;
         dataType = attr.dataType;
-        return oSchema[name] = oAttrValueMap[dataType];
+        if (dataType === Date) {
+          return oSchema[name] = {
+            type: Date,
+            get: utils.formatTime
+          };
+        } else {
+          return oSchema[name] = oAttrValueMap[dataType];
+        }
       });
       oSchema._ts = {
         type: Date,
@@ -290,7 +297,14 @@ module.exports = {
           name = attr.name;
           cname = attr.cname;
           dataType = attr.dataType;
-          return oSchema[name] = oAttrValueMap[dataType];
+          if (dataType === 'Date') {
+            return oSchema[name] = {
+              type: Date,
+              get: utils.formatTime
+            };
+          } else {
+            return oSchema[name] = oAttrValueMap[dataType];
+          }
         });
         oSchema._ts = {
           type: Date,

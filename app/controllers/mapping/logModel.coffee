@@ -206,7 +206,13 @@ module.exports = {
 				name = attr.name
 				cname = attr.cname
 				dataType = attr.dataType
-				oSchema[name] = oAttrValueMap[dataType]
+				if dataType == Date
+					oSchema[name] = {
+						type: Date,
+						get: utils.formatTime
+					}
+				else
+					oSchema[name] = oAttrValueMap[dataType]
 			)
 			# 私有字段使用下划线打头
 			oSchema._ts = {
@@ -238,7 +244,13 @@ module.exports = {
 					name = attr.name
 					cname = attr.cname
 					dataType = attr.dataType
-					oSchema[name] = oAttrValueMap[dataType]
+					if dataType == 'Date'
+						oSchema[name] = {
+							type: Date,
+							get: utils.formatTime
+						}
+					else
+						oSchema[name] = oAttrValueMap[dataType]
 				)
 				oSchema._ts = {
 					type: Date,

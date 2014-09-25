@@ -130,7 +130,7 @@ module.exports = {
             },
             getLogs: function(cb) {
               return Model.find({}, '-__v -_id -fileName').sort({
-                ts: -1
+                _ts: -1
               }).skip(PERPAGE * nPage).limit(PERPAGE).exec(cb);
             },
             pageAmount: function(cb) {
@@ -148,6 +148,7 @@ module.exports = {
               nPageAmount = results.pageAmount;
               sLogCname = results.getOneModel.cname;
               _aLogs = results.getLogs;
+              console.log(_aLogs);
               aLogAttr = _.reduce(oLogModel.attr, function(arr, attr) {
                 arr.push({
                   name: attr.name,
@@ -155,13 +156,13 @@ module.exports = {
                 });
                 return arr;
               }, []);
-              aLogAttr.push({
-                name: '_ts',
-                cname: '时间'
-              });
-              aLogAttr.push({
+              aLogAttr.unshift({
                 name: '_level',
                 cname: '等级'
+              });
+              aLogAttr.unshift({
+                name: '_ts',
+                cname: '时间'
               });
               sToken = oAuth.token;
               nTs = oLogModel.ts;

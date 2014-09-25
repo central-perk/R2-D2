@@ -90,7 +90,7 @@ module.exports = {
 							logModel._getOne({appID: sAppID, name: sLogName}, cb)
 						getLogs: (cb)->
 							Model.find({}, '-__v -_id -fileName') # 在logger服务器没有必要给出__v 和 _id
-								.sort({ts: -1})
+								.sort({_ts: -1})
 								.skip(PERPAGE * nPage)
 								.limit(PERPAGE)
 								.exec(cb)
@@ -107,6 +107,7 @@ module.exports = {
 							sLogCname = results.getOneModel.cname
 							_aLogs = results.getLogs
 
+							console.log _aLogs
 							aLogAttr = _.reduce(oLogModel.attr, (arr, attr)->
 								arr.push({
 									name: attr.name,
@@ -114,14 +115,15 @@ module.exports = {
 								})
 								return arr
 							,[])
-							aLogAttr.push({
-								name: '_ts',
-								cname: '时间'
-							})
-							aLogAttr.push({
+							aLogAttr.unshift({
 								name: '_level',
 								cname: '等级'
 							})
+							aLogAttr.unshift({
+								name: '_ts',
+								cname: '时间'
+							})
+
 							sToken = oAuth.token
 							nTs = oLogModel.ts
 							url = "/upload/app/#{sAppID}/logname/#{sLogName}/token/#{sToken}"
