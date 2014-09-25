@@ -27,6 +27,13 @@ attrLegal = (aAttr)->
 	)
 	return bAttrUnique and bNameValid
 
+attrLowerCase = (aAttr)->
+	_.each(aAttr, (oAttr, index)->
+		aAttr[index].name = oAttr.name.toLowerCase()
+	)
+	console.log aAttr
+	return aAttr
+
 module.exports = {
 	# 创建模型以后还需要注册！
 	# 再创建队列的任务
@@ -37,6 +44,8 @@ module.exports = {
 		sName 	= body.name
 		sCname 	= body.cname
 		aAttr 	= body.attr
+
+		aAttr = attrLowerCase(aAttr)
 
 		if !appID
 			res.error('缺少应用ID')
@@ -114,6 +123,9 @@ module.exports = {
 		sName = 	body.name
 		sCname = 	body.cname
 		aAttr = 	body.attr
+
+		aAttr = attrLowerCase(aAttr)
+		
 		if !appID
 			res.error('缺少应用ID')
 		else if !token
