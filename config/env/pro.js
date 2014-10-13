@@ -1,7 +1,8 @@
 module.exports = {
     APP: {
         DB: {
-            host: '127.0.0.1',
+	        name: 'echuandan_logger',
+	        host: '10.80.39.112',
             port: 27017
         }
     }
