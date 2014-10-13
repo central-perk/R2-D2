@@ -903,7 +903,7 @@
 	
 		// config ng-clip
 		myApp.config(['ngClipProvider', function(ngClipProvider) {
-		    ngClipProvider.setPath("/libs/zeroclipboard/dist/ZeroClipboard.swf");
+		    ngClipProvider.setPath("/js/vendor/ZeroClipboard.swf");
 		}]);
 	};
 
