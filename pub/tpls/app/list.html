@@ -5,18 +5,22 @@
         ng-controller="AppEditController"></div>
     <div class="app-list">
         <table class="table table-bordered table-hover">
-            <tr>
-                <th>应用名称</th>
-                <th>应用ID</th>
-                <th>token</th>
-                <th>创建时间</th>
-            </tr>
-            <tr ng-repeat="app in apps">
-                <td>{{app.name}}</td>
-                <td>{{app._id}}</td>
-                <th>{{app.token}}</th>
-                <td>{{app.ts|dateFormat}}</td>
-            </tr>
+            <thead>
+                <tr class="active">
+                    <th>应用名称</th>
+                    <th>应用ID</th>
+                    <th>token</th>
+                    <th>创建时间</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="app in apps">
+                    <td>{{app.name}}</td>
+                    <td>{{app._id}}</td>
+                    <th>{{app.token}}</th>
+                    <td>{{app.ts|dateFormat}}</td>
+                </tr>
+            </tbody>
         </table>
     </div>
     <div growl></div>

@@ -5,24 +5,28 @@
         ng-controller="LogEditController"></div>
     <div class="log-list">
         <table class="table table-bordered table-hover">
-            <tr>
-                <th>应用</th>
-                <th>日志名称</th>
-                <th>创建时间</th>
-                <th>操作</th>
-            </tr>
-            <tr ng-repeat="log in logs">
-                <td>{{log.app.name}}</td>
-                <td>{{log.labelName}}</td>
-                <td>{{log.ts|dateFormat}}</td>
-                <td>
-                    <a class="btn btn-sm btn-default"
-                        clip-copy="log.uploadUrl"
-                        clip-click="copy()">复制接口</a>
-                    <a class="btn btn-sm btn-primary"
-                        ui-sref="back.log.edit({app: log.app._id, name: log.name})">编辑</a>
-                </td>
-            </tr>
+            <thead>
+                <tr class="active">
+                    <th>应用</th>
+                    <th>日志名称</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="log in logs">
+                    <td>{{log.app.name}}</td>
+                    <td>{{log.labelName}}</td>
+                    <td>{{log.ts|dateFormat}}</td>
+                    <td>
+                        <a class="btn btn-sm btn-default"
+                            clip-copy="log.uploadUrl"
+                            clip-click="copy()">复制接口</a>
+                        <a class="btn btn-sm btn-primary"
+                            ui-sref="back.log.edit({app: log.app._id, name: log.name})">编辑</a>
+                    </td>
+                </tr>
+            </tbody>
         </table>
     </div>
     <div growl></div>
