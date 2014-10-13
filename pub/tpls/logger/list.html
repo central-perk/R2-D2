@@ -12,8 +12,10 @@
             <tr ng-repeat="logger in loggers" ng-class="logger._level|logLevelClass">
                 <th ng-bind="logger._ts|dateTimeFormat"></th>
                 <th ng-bind="logger._level|logLevelFilter"></th>
-                <th ng-repeat="attr in log.attrs">
-                    {{logger[attr.fieldName]}}
+                <th ng-repeat="attr in log.attrs"
+                    ng-bind="logger[attr.fieldName]"
+                    field-type="{{attr.fieldType}}"
+                    date-field-fomat>
                 </th>
             </tr>
         </tbody>

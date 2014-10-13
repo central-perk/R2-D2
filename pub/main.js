@@ -51,6 +51,7 @@ require('tpls/index')(myApp);
 
 require('routes')(myApp);
 require('js/filters/index')(myApp);
+require('js/directives/index')(myApp);
 
 
 myApp.controller('mainController', ['$scope', '$timeout', 'cfpLoadingBar',

@@ -22,7 +22,7 @@ module.exports = function(myApp) {
         	if (!data) {
         		return '/'
         	} else {
-        		return $filter('date')(new Date(data), 'yyyy-MM-dd HH:mm');
+                return $filter('date')(new Date(data), 'yyyy-MM-dd HH:mm');
         	}
         };
     });
@@ -78,4 +78,5 @@ module.exports = function(myApp) {
             return tmp;
         };
     });
+
 }
