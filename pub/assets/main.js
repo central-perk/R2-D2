@@ -93,10 +93,10 @@
 	
 	
 	
-	__webpack_require__(25)(myApp);
+	__webpack_require__(26)(myApp);
 	
-	__webpack_require__(30)(myApp);
 	__webpack_require__(31)(myApp);
+	__webpack_require__(32)(myApp);
 	
 	
 	myApp.controller('mainController', ['$scope', '$timeout', 'cfpLoadingBar',
@@ -1022,11 +1022,29 @@
 	        'angular-lodash'
 	    ]);
 		__webpack_require__(24)(myModule);
+		__webpack_require__(25)(myModule);
 	}
 
 
 /***/ },
 /* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(myModule) {
+	    myModule.directive('headerBar', function() {
+	        return {
+	            restrict: 'E',
+	            templateUrl: '/modules/header-bar/index.html',
+	            controller: function($scope) {
+	 
+	            }
+	        };
+	    });
+	}
+
+
+/***/ },
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myModule) {
@@ -1045,19 +1063,19 @@
 
 
 /***/ },
-/* 25 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myApp) {
-		__webpack_require__(26)(myApp);
 		__webpack_require__(27)(myApp);
 		__webpack_require__(28)(myApp);
 		__webpack_require__(29)(myApp);
+		__webpack_require__(30)(myApp);
 	}
 
 
 /***/ },
-/* 26 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myApp) {
@@ -1107,7 +1125,7 @@
 
 
 /***/ },
-/* 27 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myApp) {
@@ -1129,7 +1147,7 @@
 
 
 /***/ },
-/* 28 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myApp) {
@@ -1237,7 +1255,7 @@
 
 
 /***/ },
-/* 29 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myApp) {
@@ -1272,7 +1290,7 @@
 
 
 /***/ },
-/* 30 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myApp) {
@@ -1350,7 +1368,7 @@
 
 
 /***/ },
-/* 31 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myApp) {
