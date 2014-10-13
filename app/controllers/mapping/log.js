@@ -126,7 +126,7 @@ module.exports = {
     delete body.ts;
     return logDao.updateByID(logID, body, function(err, data) {
       if (!err) {
-        return res.successMsg('日志更新成功');
+        return res.successMsg('日志更新成功，重启服务后生效');
       } else {
         return res.errorMsg(err || '日志更新失败');
       }
@@ -152,7 +152,9 @@ module.exports = {
               }
             }
           }
-        ], cb);
+        ], function(err, data) {
+          return cb(err, data);
+        });
       }
     }, function(err, results) {
       var apps;

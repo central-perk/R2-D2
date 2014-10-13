@@ -71,11 +71,6 @@ module.exports = {
 							cb(err and '日志创建成功，mongo注册失败')
 						)
 					)
-				# # 创建队列处理日志的任务
-				# (result, cb)->
-				# 	kue = utils.getCtrl('kue')
-				# 	kue.processLog({appID: appID, name: sName})
-				# 	cb(null)
 			],(err)->
 				if !err
 					res.successMsg('日志创建成功')
@@ -101,7 +96,7 @@ module.exports = {
 		delete body.ts
 		logDao.updateByID(logID, body, (err, data)->
 			if !err
-				res.successMsg('日志更新成功')
+				res.successMsg('日志更新成功，重启服务后生效')
 			else
 				res.errorMsg(err or '日志更新失败')
 		)
@@ -121,7 +116,9 @@ module.exports = {
 							}
 							log: {$push: { name: '$name', labelName: '$labelName'}}
 						}
-					}], cb)
+					}], (err, data)->
+						cb(err, data)
+					)
 
 		}, (err, results)->
 			# 按照应用进行分组

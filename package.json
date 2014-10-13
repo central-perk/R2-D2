@@ -3,9 +3,7 @@
     "description": "logger for echuandan",
     "version": "0.0.1",
     "private": true,
-    "scripts": {
-        "start": "node server.js"
-    },
+    "script" : "server.js",
     "dependencies": {
         "express": "*",
         "compression": "*",

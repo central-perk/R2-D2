@@ -3,6 +3,8 @@ fs 		= require('fs-extra')
 _ 		= require('lodash')
 moment 	= require('moment')
 crypto 	= require('crypto')
+pm2 	= require('pm2')
+
 
 getUTC = (date)->
 	moment(date).utc().zone(-8)
@@ -30,7 +32,6 @@ validateMaxLength = (fieldValue)->
 	maxLength = fieldValue.maxLength
 	(val)->
 		val.length < maxLength
-
 
 
 module.exports = {
@@ -65,8 +66,9 @@ module.exports = {
 				fileName = file.replace('.js', '')
 				process.g.path[fileName] = path.join(libs, file)
 		)
+		packageJSON = require(path.join(rootPath, 'package.json'))
+		process.g.packageJSON = packageJSON
 
-		require(process.g.path.controllers)
 	# 读取scheme的配置文件
 	getSchemaConfig: (schemaName)->
 		config = process.g.config
@@ -138,6 +140,10 @@ module.exports = {
 		return require(path.join(process.g.path.controllers, 'mapping', ctrlName))
 	getDao: (daoName)->
 		return require(process.g.path.daos)[daoName]
+	restart: ()->
+		processName = process.g.packageJSON.name
+		pm2.restart(processName)
+
 	# 暂时未用到
 	walk: (rootPath, include, exclude, removePath)->
 		output = []

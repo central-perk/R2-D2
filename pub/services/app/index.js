@@ -3,8 +3,11 @@ module.exports = function(myService) {
         function(Restangular, growl, $timeout, $state) {
             var baseApps = Restangular.all('app');
             return {
-                list: function() {
-                    return baseApps.getList().$object;
+                list: function(query) {
+                    return baseApps.getList(query).$object;
+                },
+                getList: function(query) {
+                    return baseApps.getList(query);
                 },
                 create: function(app) {
                     baseApps.post(app).then(function(res) {
