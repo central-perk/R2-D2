@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html ng-controller="LayoutController">
+<head>
+    <meta charset="utf-8">
+    <title>管理平台</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <link rel="shortcut icon" href="">
+    <style>
+        [ng-cloak] {
+            display: none;
+        }
+    </style>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?key=5E7EB8655bdf42a13512eb89ca7fcf84&v=1.1&services=true"></script>
+    {{#if isproduction}}
+    <script data-main="js/main-built" src="libs/require/require.min.js"></script>
+    {{else}}
+    <script data-main="js/main" src="libs/require/require.min.js"></script>
+    {{/if}}
+    <script type="text/javascript">
+        {{#if userJSON}}
+        window.document.user = {{{userJSON}}};
+        {{/if}}
+        {{#if sidebar}}
+        window.document.sidebar = {{{sidebar}}};
+        {{/if}}
+    </script>
+    <link rel="stylesheet" href="assets/css/common.min.css" type='text/css' media="all"/>
+</head>
+<body class="page-header-fixed default-layout">
+    <!-- BEGIN HEADER -->
+    <div class="header navbar navbar-fixed-top mega-menu" >
+        <!-- BEGIN TOP NAVIGATION BAR -->
+        <div class="header-inner">
+            <!-- BEGIN LOGO -->
+            <a class="navbar-brand logo" href="/">
+                <span>管理平台</span>
+                <!--  <img src="/assets/imgs/logo.png" alt="logo" class="img-responsive"/>
+                -->
+            </a>
+            <!-- END LOGO -->
+            <!-- BEGIN HORIZANTAL MENU -->
+            <div class="hor-menu">
+                <ul class="nav navbar-nav"></div>
+         
+                <!-- BEGIN TOP NAVIGATION MENU -->
+                <ul class="nav navbar-nav pull-right">
+
+                    <li class="dropdown user">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" style="height: 40px;">
+                            <img alt="" ng-src="{{user.head}}" width="25px" height="25px">
+                            <span class="name" ng-bind="user.name"></span> <i class="fa fa-caret-down"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="/logout"> <i class="fa fa-key"></i>
+                                    退出
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <!-- END TOP NAVIGATION MENU --> </div>
+            <!-- END TOP NAVIGATION BAR --> </div>
+        <!-- END HEADER -->
+
+        <div class="clearfix"></div>
+
+        <div class="page-container">
+            <div class="page-sidebar-wrapper">
+                <!--BEGIN RESPONSIVE MENU TOGGLER -->
+                <a href="javascript:void(0);" class="navbar-toggle hidden-lg hidden-md" data-toggle="collapse" data-target=".navbar-collapse">
+                    <img src="/assets/imgs/menu-toggler.png" alt="菜单" />
+                </a>
+                <!-- END RESPONSIVE MENU TOGGLER -->
+
+                <!-- BEGIN SIDEBAR -->
+                <div class="page-sidebar navbar-collapse collapse" >
+                    <ul id="sidenav" class="page-sidebar-menu" ng-init="initSelected()">
+                        <!-- <li class="sidebar-toggler-wrapper toggle-btn">
+                        <div class="sidebar-toggler hidden-phone"></div>
+                    </li>
+                    -->
+                    <li ng-repeat="i in sidebar" ng-if="i.title" ng-class="{'active' : isSelected(i.route.when)}">
+                        <a ng-click="switchView(i.route.when, i.title)">
+                            <i class="fa fa-icon-{{ i.name }}"></i>
+                            <span class="title" ng-bind="i.title"></span>
+                        </a>
+                        <ul class="sub-menu" ng-init="submenuInit(i.submenu, i.title)" ng-if="i.submenu">
+                            <li ng-repeat="j in i.submenu" ng-class="{'active' : isSelected(j.route.when)}">
+                                <a ng-click="switchView(j.route.when)">
+                                    <span ng-bind="j.title"></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!-- END SIDEBAR --> </div>
+        <div class="page-content-wrapper" ng-view></div>
+    </div>
+</body>
+</html>

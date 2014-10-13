@@ -1,6 +1,6 @@
 *.map
 node_modules/*
 loggers/*
-pub/lib
+pub/libs
 webpack.config.js
 gulpfile.js

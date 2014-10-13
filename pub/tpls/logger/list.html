@@ -1,0 +1,18 @@
+<div ng-init="init()">
+    <table class="table">
+    	<tr>
+    		<th>时间</th>
+    		<th>等级</th>
+    		<th 
+    			ng-repeat="attr in log.attrs" 
+    			ng-bind="attr.labelName"></th>
+    	</tr>
+    	<tr ng-repeat="logger in loggers" ng-class="logger._level|logLevelClass">
+    		<th ng-bind="logger._ts|dateTimeFormat"></th>
+    		<th ng-bind="logger._level|logLevelFilter"></th>
+    		<th ng-repeat="attr in log.attrs">
+    			{{logger[attr.fieldName]}}
+    		</th>
+    	</tr>
+    </table>
+</div>

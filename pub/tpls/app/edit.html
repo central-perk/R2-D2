@@ -1,0 +1,17 @@
+<form name="appCreate" class="app-create-form" novalidate 
+    ng-submit="create()"
+    ng-init="init()">
+    <div class="form-inline">
+        <div class="form-group">
+            <label class="sr-only" for="name">应用名称</label>
+            <input class="form-control" type="text" name="name" placeholder="应用名称" 
+                ng-model="app.name"
+                ng-minlength="1"
+                ng-maxlength="20"
+                required>
+        </div>
+        <input type="submit" class="btn btn-success" value="创建" 
+            ng-disabled="appCreate.$invalid"/>
+    </div>
+    <div growl></div>
+</form>

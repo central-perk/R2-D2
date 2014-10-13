@@ -1,0 +1,19 @@
+@import "variables";
+@import "plugin";
+@import "vendor";
+
+
+@import "./../tpls/app/index";
+@import "./../tpls/log/index";
+
+// // @import "page";
+
+
+// // fa的文字路径还未设置
+// body {
+// 	@include transform-origin(center);
+// }
+
+body {
+	// color: red;
+}
