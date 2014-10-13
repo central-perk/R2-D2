@@ -20,6 +20,7 @@
         "errorhandler": "*",
         "method-override": "*",
         "passport": "*",
+        "source-map-support": "*",
 
         "webpack": "*",
         "webpack-dev-server": "*",

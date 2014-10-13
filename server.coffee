@@ -10,7 +10,6 @@ config = process.g.config
 utils = process.g.utils
 filePath = process.g.path
 
-
 require(filePath.db).connect( 
 	(mongoose)->
 		app = express()

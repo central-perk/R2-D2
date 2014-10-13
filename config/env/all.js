@@ -3,7 +3,7 @@ var mongoose = require('mongoose'),
 
 module.exports = {
     APP: {
-        PORT: process.env.PORT || 3000,
+        PORT: process.env.PORT || 8001,
         COOKIE: {
             maxAge: 60000 * 10
         },
