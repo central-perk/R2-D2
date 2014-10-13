@@ -34,8 +34,11 @@ getWriteableLoggerFilePath = (loggerName, callback)->
 					_fileName: loggerFileName
 				}, {
 					status: LOGGERFILE_STATUS.unstorage
-				}, (err, logger)->
+				}, (err, affected)->
+					# 需要将状态置为可以入库
+					loggerFile.status = LOGGERFILE_STATUS.unstorage
 					process.emit('enqueueStorage', loggerFile);
+
 					createLoggerFile(loggerName, callback)
 				)
 		else

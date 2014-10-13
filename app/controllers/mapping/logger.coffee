@@ -117,6 +117,7 @@ module.exports = {
 		async.waterfall([
 			# 确定日志文件已经入库行数
 			(cb)->
+				#! TODO 对于不是unstorage状态的判断，给出警告 
 				if loggerFileStatus == LOGGERFILE_STATUS.unstorage
 					cb(null, 0)
 				else					
@@ -124,7 +125,6 @@ module.exports = {
 			(line, cb)->
 				# 入库前，日志文件可能被删除
 				fs.readFile(loggerFilePath, 'utf-8', (err, loggers)->
-
 					if !err
 						loggers = log2json(loggers)
 						loggers = loggers.slice(Number(line))

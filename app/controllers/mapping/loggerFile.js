@@ -46,7 +46,8 @@ getWriteableLoggerFilePath = function(loggerName, callback) {
           _fileName: loggerFileName
         }, {
           status: LOGGERFILE_STATUS.unstorage
-        }, function(err, logger) {
+        }, function(err, affected) {
+          loggerFile.status = LOGGERFILE_STATUS.unstorage;
           process.emit('enqueueStorage', loggerFile);
           return createLoggerFile(loggerName, callback);
         });

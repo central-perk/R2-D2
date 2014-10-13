@@ -9,12 +9,13 @@
             </button>
             <a class="navbar-brand" ui-sref="back" ui-sref-opts="{reload: true}">Logger</a>
         </div>
-<!--         <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
-            <ul class="nav navbar-nav">
-                <li ui-sref-active="active">
-                    <a ui-sref="back" ui-sref-opts="{reload: true}">Index</a>
-                </li>
-            </ul>
-        </nav> -->
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a ng-click="restart()">重启服务</a>
+            </li>
+            <li>
+                <a ng-click="cancelRestart()">取消重启重启</a>
+            </li>
+        </ul>
     </div>
 </header>
