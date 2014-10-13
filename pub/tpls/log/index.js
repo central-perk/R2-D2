@@ -61,7 +61,7 @@ module.exports = function(myApp) {
                 if (confirm('确认创建？')) {
                     LogService.create($scope.log).then(function() {
                         $timeout(function() {
-                            // $state.reinit();
+                            $state.reinit();
                         }, 1000);
                     });
                 }
