@@ -1,45 +1,19 @@
-fs         = require('fs')
-path       = require('path')
-_          = require('lodash')
-mongoose   = require('mongoose')
-Schema     = mongoose.Schema
-modelsPath = path.join(__dirname , 'mapping')
-utils      = process.g.utils
-oAttrValueMap = {
-	String: String,
-	Date: Date,
-}
+fs 			= require('fs')
+path 		= require('path')
+_ 			= require('lodash')
+mongoose 	= require('mongoose')
+Schema 		= mongoose.Schema
 
+config 		= process.g.config
+utils 		= process.g.utils
+filePath 	= process.g.path
 
-
+modelConfigPath = path.join(__dirname, 'config')
+modelMappingPath = path.join(__dirname, 'mapping')
 
 # 注册静态模型
-_.each(fs.readdirSync(modelsPath), (file, index)->
-	require(path.join(modelsPath, file))
-	sModel = file.replace('.js', '')
-	module.exports[sModel] = mongoose.model(sModel)
-	return
+_.forEach(fs.readdirSync(modelMappingPath), (modelFileName, index)->
+	modelName = modelFileName.replace('.js', '')
+	require(path.join(modelMappingPath, modelFileName))
+	module.exports[modelName] = mongoose.model(modelName)
 )
-
-# # # 注册动态模型
-# logModel = mongoose.model('logModel')
-
-# logModel.find({}, (err, oLogModels)->
-# 	_.each(oLogModels, (oLogModel)->
-# 		oSchema = {}
-# 		sModel = oLogModel.type
-# 		aAttributes = oLogModel.attributes
-# 		_.each(aAttributes, (oAttribute)->
-# 			key = oAttribute.key
-# 			value = oAttribute.value
-# 			oSchema[key] = oAttrValueMap[value]
-# 		)
-# 		oSchema.timestamp = {
-# 			type: Date,
-# 			get: utils.formatTime
-# 		}
-# 		schema = new Schema(oSchema)
-# 		mongoose.model(sModel, schema)
-# 	)
-# )
-

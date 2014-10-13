@@ -1,0 +1,35 @@
+{
+    "app": {
+        "label": "应用ID",
+        "type": "String",
+        "required": true,
+        "ref": "app"
+    },
+    "name": {
+        "label": "日志名称",
+        "type": "String",
+        "required": true,
+        "minLength": 1,
+        "maxLength": 20
+    },
+    "_fileName": {
+        "label": "日志文件名称",
+        "type": "String",
+        "required": true
+    },
+    "status": {
+        "label": "日志文件状态",
+        "type": "Number",
+        "required": true,
+        "enumeration": {
+            "writeable": 10,
+            "unstorage": 20,
+            "storaging": 30,
+            "storaged": 40
+        }
+    },
+    "ts": {
+        "label": "时间戳",
+        "type": "Date"
+    }
+}
