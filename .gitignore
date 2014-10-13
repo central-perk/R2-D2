@@ -1,4 +1,4 @@
 node_modules/*
-logs/
+loggers/*
 webpack.config.js
 gulpfile.js
