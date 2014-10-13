@@ -8,6 +8,7 @@ utils = process.g.utils
 filePath = process.g.path
 LOGGERFILE_STATUS = config.LOGGERFILE.status
 STORAGE_MAXLINES = config.STORAGE.maxLines
+PERPAGE = config.APP.PAGE.perPage
 
 loggersPath = path.join(filePath.root, 'loggers')
 
@@ -95,17 +96,19 @@ module.exports = {
 		query = req.query
 		appID = query.app
 		name = query.name
+		page = query.page || 0
 		loggerName = "#{appID}.#{name}"
 		Model = mongoose.model(loggerName)
-		Model.find({}, (err, loggers)->
-			if !err
-				res.success(loggers)
-			else
-				res.errorMsg(err or '授权列表获取失败')
-		)
-			# .sort(sort)
-			# .limit(options.perPage)
-			# .skip(options.perPage * options.page)
+		Model.find({})
+			.sort({_ts: -1})
+			.limit(PERPAGE)
+			.skip(PERPAGE * page)
+			.exec((err, loggers)->
+				if !err
+					res.success(loggers)
+				else
+					res.errorMsg(err or '授权列表获取失败')
+			)
 	_storage: (loggerFile, callback)->
 		app = loggerFile.app
 		loggerName = loggerFile.name

@@ -13,6 +13,9 @@ module.exports = {
         },
         DB: {
             name: 'echuandan_logger',
+        },
+        PAGE: {
+            perPage: 20
         }
     },
     FIELD_TYPE_MAP: {
