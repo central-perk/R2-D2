@@ -84,7 +84,7 @@ module.exports = {
 					res.errorMsg(err)
 			)
 	list: (req, res)->
-		query = {}
+		query = req.query
 		options = {}
 		logDao.list(query, options, (err, logs)->
 			if !err

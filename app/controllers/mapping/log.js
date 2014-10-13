@@ -106,7 +106,7 @@ module.exports = {
   },
   list: function(req, res) {
     var options, query;
-    query = {};
+    query = req.query;
     options = {};
     return logDao.list(query, options, function(err, logs) {
       if (!err) {
