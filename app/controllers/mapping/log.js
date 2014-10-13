@@ -27,7 +27,7 @@ logDao = utils.getDao('log');
 
 attrLegal = function(attrs) {
   var attrUnique, name, nameValid, uniqueNames;
-  name = _.flatten(attrs, 'name');
+  name = _.flatten(attrs, 'labelName');
   uniqueNames = _.uniq(name);
   attrUnique = name.length === uniqueNames.length;
   nameValid = true;
@@ -59,7 +59,7 @@ module.exports = {
     } else {
       return async.waterfall([
         function(cb) {
-          return appCtrl.getByID(app, function(err, app) {
+          return appCtrl._getByID(app, function(err, app) {
             if (app) {
               return cb(null, null);
             } else {

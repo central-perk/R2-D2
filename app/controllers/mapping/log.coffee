@@ -15,8 +15,9 @@ LOGGER_DEFAULT_LEVEL = config.LOGGER.defaultLevel
 appCtrl 	= utils.getCtrl('app')
 logDao 		= utils.getDao('log')
 
+
 attrLegal = (attrs)->
-	name = _.flatten(attrs, 'name')
+	name = _.flatten(attrs, 'labelName')
 	uniqueNames = _.uniq(name)
 	attrUnique = name.length == uniqueNames.length
 	nameValid = true
@@ -46,7 +47,7 @@ module.exports = {
 			async.waterfall([
 				# 检验是否经过授权
 				(cb)->
-					appCtrl.getByID(app, (err, app)->
+					appCtrl._getByID(app, (err, app)->
 						if app
 							cb(null, null)
 						else

@@ -12,7 +12,7 @@ module.exports = {
             collection: 'sessions'
         },
         DB: {
-            name: 'logger'
+            name: 'echuandan_logger',
         }
     },
     FIELD_TYPE_MAP: {
