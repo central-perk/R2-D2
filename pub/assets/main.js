@@ -89,15 +89,15 @@
 	__webpack_require__(19)(angular);
 	
 	// require modules
-	__webpack_require__(23)(angular);
+	__webpack_require__(24)(angular);
 	
 	
 	
-	__webpack_require__(26)(myApp);
+	__webpack_require__(27)(myApp);
 	
-	__webpack_require__(31)(myApp);
 	__webpack_require__(32)(myApp);
 	__webpack_require__(33)(myApp);
+	__webpack_require__(34)(myApp);
 	
 	
 	myApp.controller('mainController', ['$scope', '$timeout', 'cfpLoadingBar',
@@ -920,6 +920,7 @@
 		__webpack_require__(20)(myService);
 		__webpack_require__(21)(myService);
 		__webpack_require__(22)(myService);
+		__webpack_require__(23)(myService);
 	}
 
 
@@ -961,6 +962,39 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myService) {
+	    myService.factory('BackService', ['Restangular', 'growl', '$timeout', '$state',
+	        function(Restangular, growl, $timeout, $state) {
+	            var baseBacks = Restangular.all('back');
+	            return {
+	                getList: function(query) {
+	                    return baseBacks.getList(query);
+	                },
+	                restart: function() {
+	                    return baseBacks.customPOST({}, 'restart');
+	                },
+	                create: function(app) {
+	                    baseBacks.post(app).then(function(res) {
+	                        growl.addSuccessMessage(res.msg);
+	                        $timeout(function() {
+	                            $state.reinit();
+	                        }, 1000);
+	                    }, function(res) {
+	                        growl.addErrorMessage(res.data.msg, {
+	                            ttl: -1
+	                        });
+	                    });
+	                }
+	            }
+	        }
+	    ])
+	}
+
+
+/***/ },
+/* 22 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(myService) {
 	    myService.factory('LogService', ['Restangular', 'growl', '$timeout', '$state',
 	        function(Restangular, growl, $timeout, $state) {
 	            var baseLogs = Restangular.all('log');
@@ -995,7 +1029,7 @@
 
 
 /***/ },
-/* 22 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myService) {
@@ -1015,40 +1049,42 @@
 	}
 
 /***/ },
-/* 23 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(angular) {
 	    var myModule = angular.module('myModule', [
 	        'angular-lodash'
 	    ]);
-		__webpack_require__(24)(myModule);
 		__webpack_require__(25)(myModule);
-	}
-
-
-/***/ },
-/* 24 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = function(myModule) {
-	    myModule.directive('headerBar', function() {
-	        return {
-	            restrict: 'E',
-	            templateUrl: '/modules/header-bar/index.html',
-	            controller: function($scope) {
-	            	$scope.restart = function() {
-	                    
-	            		alert('接口未通')
-	            	}
-	            }
-	        };
-	    });
+		__webpack_require__(26)(myModule);
 	}
 
 
 /***/ },
 /* 25 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(myModule) {
+	    myModule.directive('headerBar', ['BackService', function(BackService) {
+	        return {
+	            restrict: 'E',
+	            templateUrl: '/modules/header-bar/index.html',
+	            controller: function($scope) {
+	                $scope.restart = function() {
+	                    if (confirm('确定要重启服务？')) {
+	                        BackService.restart();
+	                        alert('服务将在10秒后重启')
+	                    }
+	                }
+	            }
+	        };
+	    }]);
+	}
+
+
+/***/ },
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myModule) {
@@ -1067,19 +1103,19 @@
 
 
 /***/ },
-/* 26 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myApp) {
-		__webpack_require__(27)(myApp);
 		__webpack_require__(28)(myApp);
 		__webpack_require__(29)(myApp);
 		__webpack_require__(30)(myApp);
+		__webpack_require__(31)(myApp);
 	}
 
 
 /***/ },
-/* 27 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myApp) {
@@ -1129,7 +1165,7 @@
 
 
 /***/ },
-/* 28 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myApp) {
@@ -1151,7 +1187,7 @@
 
 
 /***/ },
-/* 29 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myApp) {
@@ -1259,7 +1295,7 @@
 
 
 /***/ },
-/* 30 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myApp) {
@@ -1294,7 +1330,7 @@
 
 
 /***/ },
-/* 31 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myApp) {
@@ -1372,7 +1408,7 @@
 
 
 /***/ },
-/* 32 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myApp) {
@@ -1460,7 +1496,7 @@
 
 
 /***/ },
-/* 33 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myApp) {

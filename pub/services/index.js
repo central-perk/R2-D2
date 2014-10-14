@@ -4,6 +4,7 @@ module.exports = function(angular) {
         'restangular'
     ]);
 	require('services/app/index')(myService);
+	require('services/back/index')(myService);
 	require('services/log/index')(myService);
 	require('services/logger/index')(myService);
 }

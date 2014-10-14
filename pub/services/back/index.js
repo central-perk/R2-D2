@@ -1,16 +1,16 @@
 module.exports = function(myService) {
-    myService.factory('AppService', ['Restangular', 'growl', '$timeout', '$state',
+    myService.factory('BackService', ['Restangular', 'growl', '$timeout', '$state',
         function(Restangular, growl, $timeout, $state) {
-            var baseApps = Restangular.all('app');
+            var baseBacks = Restangular.all('back');
             return {
-                list: function(query) {
-                    return baseApps.getList(query).$object;
-                },
                 getList: function(query) {
-                    return baseApps.getList(query);
+                    return baseBacks.getList(query);
+                },
+                restart: function() {
+                    return baseBacks.customPOST({}, 'restart');
                 },
                 create: function(app) {
-                    baseApps.post(app).then(function(res) {
+                    baseBacks.post(app).then(function(res) {
                         growl.addSuccessMessage(res.msg);
                         $timeout(function() {
                             $state.reinit();
