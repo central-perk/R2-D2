@@ -7140,6 +7140,16 @@ button.close {
 .growl {
   z-index: 1000; }
 
+.bs-sidenav {
+  margin-top: 15px; }
+  .bs-sidenav:first-child {
+    margin-top: 0; }
+  .bs-sidenav .bs-sidebar .not-allowed {
+    cursor: not-allowed;
+    background-color: #ddd; }
+    .bs-sidenav .bs-sidebar .not-allowed a:hover {
+      background-color: #ddd; }
+
 .bs-sidebar.affix {
   position: static; }
 
@@ -7160,13 +7170,13 @@ button.close {
 .bs-sidebar .nav > li > a:hover, .bs-sidebar .nav > li > a:focus {
   text-decoration: none;
   background-color: #e5e3e9;
-  border-right: 1px solid #dbd8e0; }
+  border-right: 5px solid #dbd8e0; }
 
 .bs-sidebar .nav > .active > a, .bs-sidebar .nav > .active:hover > a, .bs-sidebar .nav > .active:focus > a {
   font-weight: bold;
   color: #2d6ca2;
   background-color: transparent;
-  border-right: 1px solid #2d6ca2; }
+  border-right: 5px solid #2d6ca2; }
 
 /* Nav: second level (shown on .active) */
 .bs-sidebar .nav .nav {
@@ -7191,13 +7201,15 @@ button.close {
 .bs-sidebar .nav > li.static > a:hover {
   background-color: #6197C5; }
 
-.not-allowed {
-  cursor: not-allowed; }
-
 .app .app-create-form {
   margin-top: 10px; }
 .app .app-list {
   margin-top: 10px; }
+
+.main .left-content {
+  min-width: 200px; }
+.main .right-content {
+  max-width: calc(100% - 200px); }
 
 .log .log-create-form {
   margin-top: 10px; }
@@ -7206,3 +7218,8 @@ button.close {
 
 .paging ul li {
   cursor: pointer; }
+
+.logger .table .ts {
+  width: 130px; }
+.logger .table .level {
+  width: 45px; }

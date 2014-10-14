@@ -1,9 +1,9 @@
-<div ng-init="init()">
+<div class="logger" ng-init="init()">
     <table class="table table-bordered table-hover">
         <thead>
             <tr class="active">
-                <th>时间</th>
-                <th>等级</th>
+                <th class="ts">时间</th>
+                <th class="level">等级</th>
                 <th ng-repeat="attr in log.attrs" 
                     ng-bind="attr.labelName"></th>
             </tr>

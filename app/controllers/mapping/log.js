@@ -187,8 +187,7 @@ module.exports = {
       fieldType = attr.fieldType;
       if (fieldType === 'Date') {
         return schemaObj[fieldName] = {
-          type: Date,
-          get: utils.dateTimeFormat
+          type: Date
         };
       } else {
         return schemaObj[fieldName] = FIELD_TYPE_MAP[fieldType];
@@ -196,8 +195,7 @@ module.exports = {
     });
     schemaObj._ts = {
       type: Date,
-      "default": Date.now,
-      get: utils.dateTimeFormat
+      "default": Date.now
     };
     schemaObj._fileName = String;
     schemaObj._level = {

@@ -2,6 +2,7 @@ require('libs/angular/angular.min');
 require('libs/lodash/dist/lodash.min');
 require('libs/jquery/dist/jquery.min');
 ZeroClipboard = require('libs/zeroclipboard/dist/ZeroClipboard.min');
+require('libs/moment/moment');
 
 // angular modules
 require('libs/angular-lodash/angular-lodash');
@@ -14,6 +15,7 @@ require('libs/angular-growl/build/angular-growl.min');
 require('libs/restangular/dist/restangular.min');
 require('libs/ng-clip/src/ngClip');
 
+// require('libs/angular-moment/angular-moment');
 
 require('libs/angular-cookies/angular-cookies.min'); // 暂时未用到
 require('libs/angular-resource/angular-resource.min'); // 暂时未用到
@@ -31,6 +33,7 @@ var myApp = angular.module('myApp', [
     'myService',
     'myModule',
     'ngClipboard',
+    // 'angularMoment',
 
     'ngCookies',
     'ngResource'

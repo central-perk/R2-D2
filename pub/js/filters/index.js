@@ -1,28 +1,28 @@
 module.exports = function(myApp) {
     myApp.filter('dateFormat', function($filter) {
         return function(data) {
-        	if (!data) {
-        		return '/'
+        	if (data) {
+                return $filter('date')(new Date(data), 'yyyy-MM-dd');
         	} else {
-        		return $filter('date')(new Date(data), 'yyyy-MM-dd');
+                return '/'
         	}
         };
     });
     myApp.filter('timeFormat', function($filter) {
         return function(data) {
-        	if (!data) {
-        		return '/'
+        	if (data) {
+                return $filter('date')(new Date(data), 'HH:mm:ss');
         	} else {
-        		return $filter('date')(new Date(data), 'HH:mm:ss');
+                return '/'
         	}
         };
     });
     myApp.filter('dateTimeFormat', function($filter) {
         return function(data) {
-        	if (!data) {
-        		return '/'
-        	} else {
+        	if (data) {
                 return $filter('date')(new Date(data), 'yyyy-MM-dd HH:mm');
+        	} else {
+                return '/'
         	}
         };
     });

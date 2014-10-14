@@ -152,8 +152,8 @@ module.exports = {
 			fieldType = attr.fieldType
 			if fieldType == 'Date'
 				schemaObj[fieldName] = {
-					type: Date,
-					get: utils.dateTimeFormat
+					type: Date
+					# get: utils.dateTimeFormat
 				}
 			else
 				schemaObj[fieldName] = FIELD_TYPE_MAP[fieldType]
@@ -165,7 +165,7 @@ module.exports = {
 		schemaObj._ts = {
 			type: Date,
 			default: Date.now
-			get: utils.dateTimeFormat
+			# get: utils.dateTimeFormat
 		}
 		# 日志文件名
 		schemaObj._fileName = String

@@ -19,6 +19,8 @@
         "ng-clip": "^0.2.4",
         "zeroclipboard": "^2.1.6",
         "jquery": "^2.1.1",
+        "moment": "*",
+        "angular-moment": "*",
 
         "angular-mocks": "^1.2.26",
         "angular-ui-utils": "^0.1.1",

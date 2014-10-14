@@ -8,7 +8,11 @@ module.exports = function(myApp) {
             },
             link: function($scope, $ele, $attrs) {
                 if ($scope.fieldType === 'Date') {
-                    $scope.ngBind = $filter('date')(new Date($scope.ngBind), 'yyyy-MM-dd HH:mm');
+                    if ($scope.ngBind) {
+                        $scope.ngBind = $filter('date')(new Date($scope.ngBind), 'yyyy-MM-dd HH:mm');
+                    } else {
+                        $scope.ngBind = '/'
+                    }
                 }
             }
         }
