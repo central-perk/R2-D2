@@ -5,6 +5,7 @@ module.exports = function(myModule) {
             templateUrl: '/modules/header-bar/index.html',
             controller: function($scope) {
             	$scope.restart = function() {
+                    
             		alert('接口未通')
             	}
             }

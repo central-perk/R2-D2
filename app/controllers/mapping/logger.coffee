@@ -48,7 +48,6 @@ json2db = (Model, loggers, callback)->
 
 module.exports = {
 	create: (req, res)->
-		body 	= req.body
 		appID 	= req.params.appID
 		logName = req.params.logName
 		token 	= req.params.token
@@ -85,7 +84,7 @@ module.exports = {
 						appID
 						logName
 						loggerName
-						logger: _.cloneDeep(req.body)
+						logger: _.cloneDeep(req.query)
 					}
 					process.emit('enqueueLogger', loggerTmp)
 					res.successMsg('数据提交成功')

@@ -41,7 +41,7 @@ processLogger = (loggerName)->
 jobs.process('storage', STORAGE_MAXPROCESS, (job, done)->
 	loggerFile = job.data.loggerFile
 	loggerCtrl._storage(loggerFile, (err)->
-		console.log err or '数据入库成功'
+		console.log err or "#{loggerFile.name}数据入库成功"
 		done()
 	)
 )

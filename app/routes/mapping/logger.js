@@ -6,7 +6,8 @@ logger = utils.getCtrl('logger')
 
 module.exports = function(app, mw, logger) {
 	
-	app.post('/upload/app/:appID/logname/:logName/token/:token', logger.create)
+	// app.post('/upload/app/:appID/logname/:logName/token/:token', logger.create)
+	app.get('/upload/app/:appID/logname/:logName/token/:token', logger.create)
 
 	app.get('/logger', logger.list)
 

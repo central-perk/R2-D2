@@ -41,7 +41,7 @@ jobs.process('storage', STORAGE_MAXPROCESS, function(job, done) {
   var loggerFile;
   loggerFile = job.data.loggerFile;
   return loggerCtrl._storage(loggerFile, function(err) {
-    console.log(err || '数据入库成功');
+    console.log(err || ("" + loggerFile.name + "数据入库成功"));
     return done();
   });
 });

@@ -61,8 +61,7 @@ json2db = function(Model, loggers, callback) {
 
 module.exports = {
   create: function(req, res) {
-    var appID, body, logName, loggerName, token;
-    body = req.body;
+    var appID, logName, loggerName, token;
     appID = req.params.appID;
     logName = req.params.logName;
     token = req.params.token;
@@ -105,7 +104,7 @@ module.exports = {
             appID: appID,
             logName: logName,
             loggerName: loggerName,
-            logger: _.cloneDeep(req.body)
+            logger: _.cloneDeep(req.query)
           };
           process.emit('enqueueLogger', loggerTmp);
           return res.successMsg('数据提交成功');

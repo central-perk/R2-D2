@@ -19,10 +19,10 @@
                     <td>{{log.labelName}}</td>
                     <td>{{log.ts|dateFormat}}</td>
                     <td>
-                        <a class="btn btn-sm btn-default"
+                        <a class="btn btn-xs btn-default"
                             clip-copy="log.uploadUrl"
                             clip-click="copy()">复制接口</a>
-                        <a class="btn btn-sm btn-primary"
+                        <a class="btn btn-xs btn-primary"
                             ui-sref="back.log.edit({app: log.app._id, name: log.name})">编辑</a>
                     </td>
                 </tr>
