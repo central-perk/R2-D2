@@ -61,7 +61,7 @@ createLoggerFile = (loggerName, callback)->
 	logName = loggerName.split('.')[1]
 	loggerFileName = "#{loggerName}.#{utils.tsFormat()}.log"
 	loggerFilePath = path.join(loggersPath, loggerFileName)
-	console.log loggerFilePath
+	# 同一毫秒可能产生同名文件，因此需要判断
 	if fs.existsSync(loggerFilePath)
 		callback(null, loggerFilePath)
 	else

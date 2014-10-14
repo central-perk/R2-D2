@@ -15,13 +15,19 @@ module.exports = function(myApp) {
         'LoggerService',
         function($scope, $state, LogService, LoggerService) {
             $scope.init = function() {
-                // console.log($state.params);
-                // console.log(LoggerService);
                 LogService.getList($state.params).then(function(logs) {
                     $scope.log = logs[0];
                 });
-                LoggerService.getList($state.params).then(function(loggers) {
-                    $scope.loggers = loggers;
+                LoggerService.list($state.params).then(function(data) {
+                    $scope.loggers = data.loggers;
+                    $scope.paging = $scope.paging || data.paging;
+                    $scope.paging.page = 0;
+                });
+            }
+            $scope.doPage = function(none, page) {
+                $state.params.page = page;
+                LoggerService.list($state.params).then(function(data) {
+                    $scope.loggers = data.loggers;
                 });
             }
         }

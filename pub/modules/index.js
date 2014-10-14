@@ -3,5 +3,6 @@ module.exports = function(angular) {
         'angular-lodash'
     ]);
 	require('modules/header-bar/index')(myModule);
+	require('modules/paging/index')(myModule);
 	require('modules/side-nav/index')(myModule);
 }

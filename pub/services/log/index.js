@@ -7,7 +7,9 @@ module.exports = function(myService) {
                     return baseLogs.get(query).$object;
                 },
                 getList: function(query) {
-                    return baseLogs.getList(query);
+                    temp = _.cloneDeep(query)
+                    delete temp.page
+                    return baseLogs.getList(temp);
                 },
                 list: function(query) {
                     return baseLogs.getList(query).$object;

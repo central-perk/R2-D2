@@ -77,7 +77,6 @@ createLoggerFile = function(loggerName, callback) {
   logName = loggerName.split('.')[1];
   loggerFileName = "" + loggerName + "." + (utils.tsFormat()) + ".log";
   loggerFilePath = path.join(loggersPath, loggerFileName);
-  console.log(loggerFilePath);
   if (fs.existsSync(loggerFilePath)) {
     return callback(null, loggerFilePath);
   } else {

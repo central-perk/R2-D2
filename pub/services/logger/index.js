@@ -7,7 +7,10 @@ module.exports = function(myService) {
                     return baseLoggers.getList(query);
                 },
                 list: function(query) {
-                    return baseLoggers.getList(query).$object;
+                    return baseLoggers.customGET('', query);
+                },
+                customPOST: function(body, path, query) {
+                    return baseLoggers.customPOST(body, path, query);
                 }
             }
         }

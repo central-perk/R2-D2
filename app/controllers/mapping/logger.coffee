@@ -95,19 +95,35 @@ module.exports = {
 		query = req.query
 		appID = query.app
 		name = query.name
-		page = query.page || 0
+		page = Number(query.page) - 1 || 0
 		loggerName = "#{appID}.#{name}"
 		Model = mongoose.model(loggerName)
-		Model.find({})
-			.sort({_ts: -1})
-			.limit(PERPAGE)
-			.skip(PERPAGE * page)
-			.exec((err, loggers)->
-				if !err
-					res.success(loggers)
-				else
-					res.errorMsg(err or '授权列表获取失败')
-			)
+
+		console.log page
+		async.auto({
+			getTotal: (cb)->
+				Model.count({}, cb)
+			getList: (cb)->
+				Model.find({})
+					.sort({_ts: -1})
+					.limit(PERPAGE)
+					.skip(PERPAGE * page)
+					.exec(cb)
+		}, (err, results)->
+			if !err
+				loggers = results.getList
+				paging = {
+					perPage: PERPAGE,
+					total: results.getTotal
+				}
+				loggers = results.getList
+				res.success({paging, loggers})
+			else
+				console.log err
+				res.errorMsg('授权列表获取失败')					
+		)
+
+
 	_storage: (loggerFile, callback)->
 		app = loggerFile.app
 		loggerName = loggerFile.name

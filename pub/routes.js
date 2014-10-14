@@ -50,7 +50,7 @@ module.exports = function(myApp) {
                     controller: 'LoggerController'
                 })
                 .state('back.logger.list', {
-                    url: '/list?app&name',
+                    url: '/list?app&name&page',
                     templateUrl: '/tpls/logger/list.html',
                     controller: 'LoggerListController'
                 })

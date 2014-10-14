@@ -14,7 +14,6 @@
         "restangular": "^1.4.0",
         "lodash": "^2.4.1",
         "angular-lodash": "^0.1.0",
-
         "angular-cookies": "^1.2.26",
         "angular-resource": "^1.2.26",
         "ng-clip": "^0.2.4",

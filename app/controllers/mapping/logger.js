@@ -119,16 +119,35 @@ module.exports = {
     query = req.query;
     appID = query.app;
     name = query.name;
-    page = query.page || 0;
+    page = Number(query.page) - 1 || 0;
     loggerName = "" + appID + "." + name;
     Model = mongoose.model(loggerName);
-    return Model.find({}).sort({
-      _ts: -1
-    }).limit(PERPAGE).skip(PERPAGE * page).exec(function(err, loggers) {
+    console.log(page);
+    return async.auto({
+      getTotal: function(cb) {
+        return Model.count({}, cb);
+      },
+      getList: function(cb) {
+        return Model.find({}).sort({
+          _ts: -1
+        }).limit(PERPAGE).skip(PERPAGE * page).exec(cb);
+      }
+    }, function(err, results) {
+      var loggers, paging;
       if (!err) {
-        return res.success(loggers);
+        loggers = results.getList;
+        paging = {
+          perPage: PERPAGE,
+          total: results.getTotal
+        };
+        loggers = results.getList;
+        return res.success({
+          paging: paging,
+          loggers: loggers
+        });
       } else {
-        return res.errorMsg(err || '授权列表获取失败');
+        console.log(err);
+        return res.errorMsg('授权列表获取失败');
       }
     });
   },

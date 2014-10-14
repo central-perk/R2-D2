@@ -20,7 +20,6 @@ require('libs/angular-resource/angular-resource.min'); // 暂时未用到
 
 
 
-
 var myApp = angular.module('myApp', [
     'angular-lodash',
     'mgcrea.ngStrap',
