@@ -8,7 +8,9 @@ module.exports = function(myService) {
                 },
                 getList: function(query) {
                     temp = _.cloneDeep(query)
-                    delete temp.page
+                    if (temp && temp.page) {
+                        delete temp.page
+                    }
                     return baseLogs.getList(temp);
                 },
                 list: function(query) {
