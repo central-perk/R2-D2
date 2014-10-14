@@ -40,6 +40,7 @@ getWriteableLoggerFilePath = function(loggerName, callback) {
       loggerFilePath = path.join(loggersPath, loggerFileName);
       loggerFileSizeOK = checkLogSize(loggerFilePath);
       if (loggerFileSizeOK) {
+        console.log(loggerName);
         return callback(null, loggerFilePath);
       } else {
         return loggerFileDao.update({
@@ -65,6 +66,7 @@ checkLogSize = function(loggerFilePath) {
     return LOGGERFILE_MAXSIZE > size;
   } catch (_error) {
     e = _error;
+    console.log(e);
     return false;
   }
 };
@@ -75,14 +77,19 @@ createLoggerFile = function(loggerName, callback) {
   logName = loggerName.split('.')[1];
   loggerFileName = "" + loggerName + "." + (utils.tsFormat()) + ".log";
   loggerFilePath = path.join(loggersPath, loggerFileName);
-  fs.createFileSync(loggerFilePath);
-  return loggerFileDao.create({
-    app: appID,
-    name: loggerName,
-    _fileName: loggerFileName
-  }, function(err, raw) {
-    return callback(err, loggerFilePath);
-  });
+  console.log(loggerFilePath);
+  if (fs.existsSync(loggerFilePath)) {
+    return callback(null, loggerFilePath);
+  } else {
+    fs.createFileSync(loggerFilePath);
+    return loggerFileDao.create({
+      app: appID,
+      name: loggerName,
+      _fileName: loggerFileName
+    }, function(err, raw) {
+      return callback(err, loggerFilePath);
+    });
+  }
 };
 
 writeFile = function(loggerFilePath) {
@@ -104,6 +111,7 @@ writeFile = function(loggerFilePath) {
 module.exports = {
   write: function(loggerName, callback) {
     return getWriteableLoggerFilePath(loggerName, function(err, loggerFilePath) {
+      console.log(loggerFilePath);
       return callback(err, writeFile(loggerFilePath));
     });
   },

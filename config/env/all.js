@@ -38,7 +38,7 @@ module.exports = {
     },
     LOGGERFILE: {
         status: {
-            writeable: 10, //可写入
+            writeable: 10, //写入中
             unstorage: 20, //待入库
             storaging: 30, //入库中
             storaged: 40 //已入库

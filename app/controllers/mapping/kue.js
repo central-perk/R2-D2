@@ -37,7 +37,7 @@ processLogger = function(loggerName) {
   });
 };
 
-jobs.process('storage', STORAGE_MAXPROCESS, function(job, done) {
+jobs.process('storage', 1, function(job, done) {
   var loggerFile;
   loggerFile = job.data.loggerFile;
   return loggerCtrl._storage(loggerFile, function(err) {

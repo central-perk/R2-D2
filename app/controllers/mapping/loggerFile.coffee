@@ -28,6 +28,7 @@ getWriteableLoggerFilePath = (loggerName, callback)->
 			loggerFilePath = path.join(loggersPath, loggerFileName)
 			loggerFileSizeOK = checkLogSize(loggerFilePath)
 			if loggerFileSizeOK
+				console.log loggerName
 				callback(null, loggerFilePath)
 			else
 				loggerFileDao.update({
@@ -51,6 +52,7 @@ checkLogSize = (loggerFilePath)->
 		size = fs.readFileSync(loggerFilePath, 'utf8').length
 		return LOGGERFILE_MAXSIZE > size
 	catch e
+		console.log e
 		return false
 
 # 返回最新创建文件的路径
@@ -59,15 +61,18 @@ createLoggerFile = (loggerName, callback)->
 	logName = loggerName.split('.')[1]
 	loggerFileName = "#{loggerName}.#{utils.tsFormat()}.log"
 	loggerFilePath = path.join(loggersPath, loggerFileName)
-
-	fs.createFileSync(loggerFilePath)
-	loggerFileDao.create({
-		app: appID,
-		name: loggerName,
-		_fileName: loggerFileName
-	}, (err, raw)->
-		callback(err, loggerFilePath)
-	)
+	console.log loggerFilePath
+	if fs.existsSync(loggerFilePath)
+		callback(null, loggerFilePath)
+	else
+		fs.createFileSync(loggerFilePath)
+		loggerFileDao.create({
+			app: appID,
+			name: loggerName,
+			_fileName: loggerFileName
+		}, (err, raw)->
+			callback(err, loggerFilePath)
+		)
 
 # 将日志写入到文件
 writeFile = (loggerFilePath)->
@@ -85,6 +90,7 @@ writeFile = (loggerFilePath)->
 module.exports = {
 	write: (loggerName, callback)->
 		getWriteableLoggerFilePath(loggerName, (err, loggerFilePath)->
+			console.log loggerFilePath
 			callback(err, writeFile(loggerFilePath))
 		)
 	readyStorage: (callback)->

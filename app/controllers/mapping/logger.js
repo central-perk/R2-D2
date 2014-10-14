@@ -156,6 +156,9 @@ module.exports = {
             loggers = log2json(loggers);
             loggers = loggers.slice(Number(line));
             return loggerFileCtrl.updateStatus(loggerFile, function(err) {
+              if (err) {
+                console.log(err);
+              }
               if (!err) {
                 return json2db(Model, loggers, cb);
               } else {

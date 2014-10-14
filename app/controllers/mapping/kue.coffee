@@ -38,7 +38,7 @@ processLogger = (loggerName)->
 		)
 	)
 # 为入库创建处理队列的任务
-jobs.process('storage', STORAGE_MAXPROCESS, (job, done)->
+jobs.process('storage', 1, (job, done)->
 	loggerFile = job.data.loggerFile
 	loggerCtrl._storage(loggerFile, (err)->
 		console.log err or "#{loggerFile.name}数据入库成功"

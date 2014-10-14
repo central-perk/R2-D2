@@ -122,15 +122,19 @@ module.exports = {
 				#! TODO 对于不是unstorage状态的判断，给出警告 
 				if loggerFileStatus == LOGGERFILE_STATUS.unstorage
 					cb(null, 0)
-				else					
+				else
+					# TODO 添加入库中状态的判定
 					Model.count({_fileName: loggerFileName}, cb)
 			(line, cb)->
+				# console.log line
 				# 入库前，日志文件可能被删除
 				fs.readFile(loggerFilePath, 'utf-8', (err, loggers)->
 					if !err
 						loggers = log2json(loggers)
 						loggers = loggers.slice(Number(line))
 						loggerFileCtrl.updateStatus(loggerFile, (err)->
+							if err
+								console.log err
 							if !err
 								json2db(Model, loggers, cb)
 							else
