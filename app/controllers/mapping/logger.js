@@ -115,41 +115,45 @@ module.exports = {
     }
   },
   list: function(req, res) {
-    var Model, appID, loggerName, name, page, query;
+    var Model, appID, e, loggerName, name, page, query;
     query = req.query;
     appID = query.app;
     name = query.name;
     page = Number(query.page) - 1 || 0;
     loggerName = "" + appID + "." + name;
-    Model = mongoose.model(loggerName);
-    console.log(page);
-    return async.auto({
-      getTotal: function(cb) {
-        return Model.count({}, cb);
-      },
-      getList: function(cb) {
-        return Model.find({}).sort({
-          _ts: -1
-        }).limit(PERPAGE).skip(PERPAGE * page).exec(cb);
-      }
-    }, function(err, results) {
-      var loggers, paging;
-      if (!err) {
-        loggers = results.getList;
-        paging = {
-          perPage: PERPAGE,
-          total: results.getTotal
-        };
-        loggers = results.getList;
-        return res.success({
-          paging: paging,
-          loggers: loggers
-        });
-      } else {
-        console.log(err);
-        return res.errorMsg('授权列表获取失败');
-      }
-    });
+    try {
+      Model = mongoose.model(loggerName);
+      return async.auto({
+        getTotal: function(cb) {
+          return Model.count({}, cb);
+        },
+        getList: function(cb) {
+          return Model.find({}).sort({
+            _ts: -1
+          }).limit(PERPAGE).skip(PERPAGE * page).exec(cb);
+        }
+      }, function(err, results) {
+        var loggers, paging;
+        if (!err) {
+          loggers = results.getList;
+          paging = {
+            perPage: PERPAGE,
+            total: results.getTotal
+          };
+          loggers = results.getList;
+          return res.success({
+            paging: paging,
+            loggers: loggers
+          });
+        } else {
+          console.log(err);
+          return res.errorMsg('授权列表获取失败');
+        }
+      });
+    } catch (_error) {
+      e = _error;
+      return res.errorMsg('日志列表获取失败');
+    }
   },
   _storage: function(loggerFile, callback) {
     var Model, app, logName, loggerFileName, loggerFilePath, loggerFileStatus, loggerName;

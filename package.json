@@ -4,6 +4,7 @@
     "version": "0.0.1",
     "private": true,
     "script" : "server.js",
+    "log_date_format" : "YYYY-MM-DD",
     "dependencies": {
         "express": "*",
         "compression": "*",

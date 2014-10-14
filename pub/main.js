@@ -2,7 +2,7 @@ require('libs/angular/angular.min');
 require('libs/lodash/dist/lodash.min');
 require('libs/jquery/dist/jquery.min');
 ZeroClipboard = require('libs/zeroclipboard/dist/ZeroClipboard.min');
-require('libs/moment/moment');
+// moment = require('libs/moment/moment');
 
 // angular modules
 require('libs/angular-lodash/angular-lodash');

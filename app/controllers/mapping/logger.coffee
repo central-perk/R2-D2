@@ -97,31 +97,32 @@ module.exports = {
 		name = query.name
 		page = Number(query.page) - 1 || 0
 		loggerName = "#{appID}.#{name}"
-		Model = mongoose.model(loggerName)
-
-		console.log page
-		async.auto({
-			getTotal: (cb)->
-				Model.count({}, cb)
-			getList: (cb)->
-				Model.find({})
-					.sort({_ts: -1})
-					.limit(PERPAGE)
-					.skip(PERPAGE * page)
-					.exec(cb)
-		}, (err, results)->
-			if !err
-				loggers = results.getList
-				paging = {
-					perPage: PERPAGE,
-					total: results.getTotal
-				}
-				loggers = results.getList
-				res.success({paging, loggers})
-			else
-				console.log err
-				res.errorMsg('授权列表获取失败')					
-		)
+		try
+			Model = mongoose.model(loggerName)
+			async.auto({
+				getTotal: (cb)->
+					Model.count({}, cb)
+				getList: (cb)->
+					Model.find({})
+						.sort({_ts: -1})
+						.limit(PERPAGE)
+						.skip(PERPAGE * page)
+						.exec(cb)
+			}, (err, results)->
+				if !err
+					loggers = results.getList
+					paging = {
+						perPage: PERPAGE,
+						total: results.getTotal
+					}
+					loggers = results.getList
+					res.success({paging, loggers})
+				else
+					console.log err
+					res.errorMsg('授权列表获取失败')					
+			)
+		catch e
+			res.errorMsg('日志列表获取失败')
 
 
 	_storage: (loggerFile, callback)->
@@ -142,7 +143,6 @@ module.exports = {
 					# TODO 添加入库中状态的判定
 					Model.count({_fileName: loggerFileName}, cb)
 			(line, cb)->
-				# console.log line
 				# 入库前，日志文件可能被删除
 				fs.readFile(loggerFilePath, 'utf-8', (err, loggers)->
 					if !err

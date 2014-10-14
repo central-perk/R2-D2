@@ -41,6 +41,7 @@ module.exports = function(myApp) {
 	}]).run(['Restangular', 'growl', function(Restangular, growl) {
 	    Restangular.setErrorInterceptor(function(response, deferred, responseHandler) {
 	        if (response.status === 500) {
+	        	console.log(500);
 	            growl.addErrorMessage(response.data.msg, {
 	                ttl: -1
 	            });
