@@ -15,9 +15,6 @@ isPro = process.env.NODE_ENV === 'pro';
 
 module.exports = {
   index: function(req, res) {
-    console.log({
-      isPro: isPro
-    });
     return res.render('index', {
       isPro: isPro
     });

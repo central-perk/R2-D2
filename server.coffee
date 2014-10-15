@@ -1,5 +1,3 @@
-process.env.NODE_ENV = 'pro'
-
 path 	= require('path')
 express = require('express')
 passport = require('passport')

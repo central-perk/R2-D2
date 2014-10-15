@@ -9,7 +9,6 @@ isPro = process.env.NODE_ENV == 'pro'
 
 module.exports = {
 	index: (req, res)->
-		console.log {isPro}
 		res.render('index', {isPro})
 	restart: (req, res)->
 		eventRestart = setTimeout(()->
