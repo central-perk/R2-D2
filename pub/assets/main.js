@@ -289,9 +289,9 @@
 	    var myModule = angular.module('myModule', [
 	        'angular-lodash'
 	    ]);
-		__webpack_require__(31)(myModule);
-		__webpack_require__(32)(myModule);
-		__webpack_require__(33)(myModule);
+		__webpack_require__(27)(myModule);
+		__webpack_require__(28)(myModule);
+		__webpack_require__(29)(myModule);
 	}
 
 
@@ -300,10 +300,10 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myApp) {
-		__webpack_require__(27)(myApp);
-		__webpack_require__(28)(myApp);
-		__webpack_require__(29)(myApp);
 		__webpack_require__(30)(myApp);
+		__webpack_require__(31)(myApp);
+		__webpack_require__(32)(myApp);
+		__webpack_require__(33)(myApp);
 	}
 
 
@@ -1256,235 +1256,6 @@
 /* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = function(myApp) {
-	    myApp.controller('AppController', [
-	        '$scope',
-	        '$state',
-	        function($scope, $state) {
-	            if ($state.is('back.app.edit')) {
-	                $state.go('back.app.edit');
-	            } else {
-	                $state.go('back.app.list');
-	            }
-	        }
-	    ]);
-	
-	    myApp.controller('AppListController', [
-	        '$scope',
-	        '$state',
-	        'cfpLoadingBar',
-	        'AppService',
-	        function($scope, $state, cfpLoadingBar, AppService) {
-	            cfpLoadingBar.start();
-	            $scope.init = function() {
-	                cfpLoadingBar.complete();
-	                $scope.apps = AppService.list();
-	            }
-	        }
-	    ]);
-	
-	    myApp.controller('AppEditController', [
-	        '$scope',
-	        '$state',
-	        '$timeout',
-	        'growl',
-	        'AppService',
-	        function($scope, $state, $timeout, growl, AppService) {
-	            $scope.init = function() {
-	                $scope.app = $scope.app || {};
-	            }
-	            $scope.create = function() {
-	                if (confirm('确认创建？')) {
-	                    AppService.create($scope.app);
-	                }
-	            }
-	        }
-	    ]);
-	}
-
-
-/***/ },
-/* 28 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = function(myApp) {
-	    myApp.controller('BackController', [
-	        '$scope',
-	        '$state',
-	        'growl',
-	        function($scope, $state, growl) {
-	            if ($state.is('back')) {
-	                $state.go('back.app');
-	            }
-	            $scope.copy = function(msg) {
-	            	msg = (msg || '') + '复制成功';
-	            	growl.addSuccessMessage(msg)
-	            }
-	        }
-	    ]);
-	}
-
-
-/***/ },
-/* 29 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = function(myApp) {
-	    myApp.controller('LogController', [
-	        '$scope',
-	        '$state',
-	        function($scope, $state) {
-	            if ($state.is('back.log.edit')) {
-	                $state.go('back.log.edit');
-	            } else {
-	                $state.go('back.log.list');
-	            }
-	        }
-	    ]);
-	    myApp.controller('LogListController', [
-	        '$scope',
-	        'cfpLoadingBar',
-	        'LogService',
-	        function($scope, cfpLoadingBar, LogService) {
-	            cfpLoadingBar.start();
-	            $scope.init = function() {
-	                LogService.getList().then(function(logs) {
-	                    cfpLoadingBar.complete();
-	                    $scope.logs = logs;
-	                    setUploadUrl();
-	                });
-	            }
-	            function setUploadUrl() {
-	                _.forEach($scope.logs, function(log) {
-	                    var appID = log.app._id,
-	                        logName = log.name,
-	                        token = log.app.token;
-	                    log.uploadUrl = '/upload/app/' + appID;
-	                    log.uploadUrl += '/logname/' + logName;
-	                    log.uploadUrl += '/token/' + token;
-	                });
-	            }
-	        }
-	    ]);
-	
-	    myApp.controller('LogEditController', [
-	        '$scope',
-	        '$state',
-	        '$timeout',
-	        'AppService',
-	        'LogService',
-	        function($scope, $state, $timeout, AppService, LogService) {
-	            $scope.FIELD_TYPE_MAP = ['String', 'Number', 'Boolean', 'Date'];
-	            $scope.init = function() {
-	                if (_.isEmpty($state.params)) {
-	                    $scope.isEditForm = false;
-	                    $scope.submitBtnValue = '创建';
-	                    initAttrs();
-	                    // 获取应用列表
-	                    $scope.apps = AppService.list();
-	                } else {
-	                    $scope.isEditForm = true;
-	                    $scope.submitBtnValue = '保存';
-	                    // 获取日志信息
-	                    LogService.getList($state.params).then(function(logs) {
-	                        $scope.log = logs[0]
-	                    });
-	                }
-	            }
-	            $scope.submitCreate = function() {
-	                if (confirm('确认创建？')) {
-	                    LogService.create($scope.log).then(function() {
-	                        $timeout(function() {
-	                            $state.reinit();
-	                        }, 1000);
-	                    });
-	                }
-	            }
-	            $scope.submitUpdate = function() {
-	                if (confirm('确认保存？')) {
-	                    LogService.update($scope.log).then(function() {
-	                        $state.go('back.log.list');
-	                    });
-	                }
-	            }
-	
-	            $scope.addAttr = function() {
-	                $scope.log.attrs.push({});
-	            }
-	            $scope.delAttr = function($index) {
-	                $scope.log.attrs.splice($index, 1);
-	            }
-	            $scope.submit = function() {
-	                if ($scope.isEditForm) {
-	                    $scope.submitUpdate();
-	                } else {
-	                    $scope.submitCreate();
-	                }
-	            }
-	
-	            function initAttrs() {
-	                $scope.log = $scope.log || {};
-	                $scope.log.attrs = $scope.log.attrs || [];
-	                if (!$scope.log.attrs.length) {
-	                    $scope.addAttr();
-	                }
-	            }
-	        }
-	    ]);
-	
-	
-	}
-
-
-/***/ },
-/* 30 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = function(myApp) {
-	    myApp.controller('LoggerController', [
-	        '$scope',
-	        '$state',
-	        function($scope, $state) {
-	            if ($state.is('back.logger')) {
-	                $state.go('back.logger.list');
-	            }
-	        }
-	    ]);
-	    myApp.controller('LoggerListController', [
-	        '$scope',
-	        '$state',
-	        'cfpLoadingBar',
-	        'LogService',
-	        'LoggerService',
-	        function($scope, $state, cfpLoadingBar, LogService, LoggerService) {
-	            cfpLoadingBar.start();
-	            $scope.init = function() {
-	                LogService.getList($state.params).then(function(logs) {
-	                    // 进度条提前显示加载完毕
-	                    cfpLoadingBar.complete();
-	                    $scope.log = logs[0];
-	                });
-	                LoggerService.list($state.params).then(function(data) {
-	                    $scope.loggers = data.loggers;
-	                    $scope.paging = $scope.paging || data.paging;
-	                    $scope.paging.page = 0;
-	                });
-	            }
-	            $scope.doPage = function(none, page) {
-	                $state.params.page = page;
-	                LoggerService.list($state.params).then(function(data) {
-	                    $scope.loggers = data.loggers;
-	                });
-	            }
-	        }
-	    ]);
-	}
-
-
-/***/ },
-/* 31 */
-/***/ function(module, exports, __webpack_require__) {
-
 	module.exports = function(myModule) {
 	    myModule.directive('headerBar', ['BackService', function(BackService) {
 	        return {
@@ -1504,7 +1275,7 @@
 
 
 /***/ },
-/* 32 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -1813,7 +1584,7 @@
 	}
 
 /***/ },
-/* 33 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myModule) {
@@ -1829,6 +1600,235 @@
 	            }
 	        };
 	    }]);
+	}
+
+
+/***/ },
+/* 30 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(myApp) {
+	    myApp.controller('AppController', [
+	        '$scope',
+	        '$state',
+	        function($scope, $state) {
+	            if ($state.is('back.app.edit')) {
+	                $state.go('back.app.edit');
+	            } else {
+	                $state.go('back.app.list');
+	            }
+	        }
+	    ]);
+	
+	    myApp.controller('AppListController', [
+	        '$scope',
+	        '$state',
+	        'cfpLoadingBar',
+	        'AppService',
+	        function($scope, $state, cfpLoadingBar, AppService) {
+	            cfpLoadingBar.start();
+	            $scope.init = function() {
+	                cfpLoadingBar.complete();
+	                $scope.apps = AppService.list();
+	            }
+	        }
+	    ]);
+	
+	    myApp.controller('AppEditController', [
+	        '$scope',
+	        '$state',
+	        '$timeout',
+	        'growl',
+	        'AppService',
+	        function($scope, $state, $timeout, growl, AppService) {
+	            $scope.init = function() {
+	                $scope.app = $scope.app || {};
+	            }
+	            $scope.create = function() {
+	                if (confirm('确认创建？')) {
+	                    AppService.create($scope.app);
+	                }
+	            }
+	        }
+	    ]);
+	}
+
+
+/***/ },
+/* 31 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(myApp) {
+	    myApp.controller('BackController', [
+	        '$scope',
+	        '$state',
+	        'growl',
+	        function($scope, $state, growl) {
+	            if ($state.is('back')) {
+	                $state.go('back.app');
+	            }
+	            $scope.copy = function(msg) {
+	            	msg = (msg || '') + '复制成功';
+	            	growl.addSuccessMessage(msg)
+	            }
+	        }
+	    ]);
+	}
+
+
+/***/ },
+/* 32 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(myApp) {
+	    myApp.controller('LogController', [
+	        '$scope',
+	        '$state',
+	        function($scope, $state) {
+	            if ($state.is('back.log.edit')) {
+	                $state.go('back.log.edit');
+	            } else {
+	                $state.go('back.log.list');
+	            }
+	        }
+	    ]);
+	    myApp.controller('LogListController', [
+	        '$scope',
+	        'cfpLoadingBar',
+	        'LogService',
+	        function($scope, cfpLoadingBar, LogService) {
+	            cfpLoadingBar.start();
+	            $scope.init = function() {
+	                LogService.getList().then(function(logs) {
+	                    cfpLoadingBar.complete();
+	                    $scope.logs = logs;
+	                    setUploadUrl();
+	                });
+	            }
+	            function setUploadUrl() {
+	                _.forEach($scope.logs, function(log) {
+	                    var appID = log.app._id,
+	                        logName = log.name,
+	                        token = log.app.token;
+	                    log.uploadUrl = '/upload/app/' + appID;
+	                    log.uploadUrl += '/logname/' + logName;
+	                    log.uploadUrl += '/token/' + token;
+	                });
+	            }
+	        }
+	    ]);
+	
+	    myApp.controller('LogEditController', [
+	        '$scope',
+	        '$state',
+	        '$timeout',
+	        'AppService',
+	        'LogService',
+	        function($scope, $state, $timeout, AppService, LogService) {
+	            $scope.FIELD_TYPE_MAP = ['String', 'Number', 'Boolean', 'Date'];
+	            $scope.init = function() {
+	                if (_.isEmpty($state.params)) {
+	                    $scope.isEditForm = false;
+	                    $scope.submitBtnValue = '创建';
+	                    initAttrs();
+	                    // 获取应用列表
+	                    $scope.apps = AppService.list();
+	                } else {
+	                    $scope.isEditForm = true;
+	                    $scope.submitBtnValue = '保存';
+	                    // 获取日志信息
+	                    LogService.getList($state.params).then(function(logs) {
+	                        $scope.log = logs[0]
+	                    });
+	                }
+	            }
+	            $scope.submitCreate = function() {
+	                if (confirm('确认创建？')) {
+	                    LogService.create($scope.log).then(function() {
+	                        $timeout(function() {
+	                            $state.reinit();
+	                        }, 1000);
+	                    });
+	                }
+	            }
+	            $scope.submitUpdate = function() {
+	                if (confirm('确认保存？')) {
+	                    LogService.update($scope.log).then(function() {
+	                        $state.go('back.log.list');
+	                    });
+	                }
+	            }
+	
+	            $scope.addAttr = function() {
+	                $scope.log.attrs.push({});
+	            }
+	            $scope.delAttr = function($index) {
+	                $scope.log.attrs.splice($index, 1);
+	            }
+	            $scope.submit = function() {
+	                if ($scope.isEditForm) {
+	                    $scope.submitUpdate();
+	                } else {
+	                    $scope.submitCreate();
+	                }
+	            }
+	
+	            function initAttrs() {
+	                $scope.log = $scope.log || {};
+	                $scope.log.attrs = $scope.log.attrs || [];
+	                if (!$scope.log.attrs.length) {
+	                    $scope.addAttr();
+	                }
+	            }
+	        }
+	    ]);
+	
+	
+	}
+
+
+/***/ },
+/* 33 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(myApp) {
+	    myApp.controller('LoggerController', [
+	        '$scope',
+	        '$state',
+	        function($scope, $state) {
+	            if ($state.is('back.logger')) {
+	                $state.go('back.logger.list');
+	            }
+	        }
+	    ]);
+	    myApp.controller('LoggerListController', [
+	        '$scope',
+	        '$state',
+	        'cfpLoadingBar',
+	        'LogService',
+	        'LoggerService',
+	        function($scope, $state, cfpLoadingBar, LogService, LoggerService) {
+	            cfpLoadingBar.start();
+	            $scope.init = function() {
+	                LogService.getList($state.params).then(function(logs) {
+	                    // 进度条提前显示加载完毕
+	                    cfpLoadingBar.complete();
+	                    $scope.log = logs[0];
+	                });
+	                LoggerService.list($state.params).then(function(data) {
+	                    $scope.loggers = data.loggers;
+	                    $scope.paging = $scope.paging || data.paging;
+	                    $scope.paging.page = 0;
+	                });
+	            }
+	            $scope.doPage = function(none, page) {
+	                $state.params.page = page;
+	                LoggerService.list($state.params).then(function(data) {
+	                    $scope.loggers = data.loggers;
+	                });
+	            }
+	        }
+	    ]);
 	}
 
 
