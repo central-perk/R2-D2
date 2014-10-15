@@ -1455,11 +1455,12 @@
 	    myApp.controller('AppListController', [
 	        '$scope',
 	        '$state',
-	        '$timeout',
-	        'growl',
+	        'cfpLoadingBar',
 	        'AppService',
-	        function($scope, $state, $timeout, growl, AppService) {
+	        function($scope, $state, cfpLoadingBar, AppService) {
+	            cfpLoadingBar.start();
 	            $scope.init = function() {
+	                cfpLoadingBar.complete();
 	                $scope.apps = AppService.list();
 	            }
 	        }
@@ -1525,10 +1526,13 @@
 	    ]);
 	    myApp.controller('LogListController', [
 	        '$scope',
+	        'cfpLoadingBar',
 	        'LogService',
-	        function($scope, LogService) {
+	        function($scope, cfpLoadingBar, LogService) {
+	            cfpLoadingBar.start();
 	            $scope.init = function() {
 	                LogService.getList().then(function(logs) {
+	                    cfpLoadingBar.complete();
 	                    $scope.logs = logs;
 	                    setUploadUrl();
 	                });
@@ -1632,11 +1636,15 @@
 	    myApp.controller('LoggerListController', [
 	        '$scope',
 	        '$state',
+	        'cfpLoadingBar',
 	        'LogService',
 	        'LoggerService',
-	        function($scope, $state, LogService, LoggerService) {
+	        function($scope, $state, cfpLoadingBar, LogService, LoggerService) {
+	            cfpLoadingBar.start();
 	            $scope.init = function() {
 	                LogService.getList($state.params).then(function(logs) {
+	                    // 进度条提前显示加载完毕
+	                    cfpLoadingBar.complete();
 	                    $scope.log = logs[0];
 	                });
 	                LoggerService.list($state.params).then(function(data) {

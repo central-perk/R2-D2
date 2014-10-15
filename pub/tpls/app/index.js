@@ -14,11 +14,12 @@ module.exports = function(myApp) {
     myApp.controller('AppListController', [
         '$scope',
         '$state',
-        '$timeout',
-        'growl',
+        'cfpLoadingBar',
         'AppService',
-        function($scope, $state, $timeout, growl, AppService) {
+        function($scope, $state, cfpLoadingBar, AppService) {
+            cfpLoadingBar.start();
             $scope.init = function() {
+                cfpLoadingBar.complete();
                 $scope.apps = AppService.list();
             }
         }
