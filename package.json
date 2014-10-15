@@ -26,6 +26,7 @@
 
         "gulp": "*",
         "gulp-minify-css": "*",
+        "gulp-uglify": "*",
         "gulp-nodemon": "*",
         "gulp-rename": "*",
         "gulp-ruby-sass": "*",
@@ -42,8 +43,8 @@
         "moment": "*",
         "mongodb": "*",
         "mongoose": "*",
-        "nodemailer": "*",
         "kue": "*",
+        "pm2": "*",
         
         "passport-local": "*",
         "qiniu": "*",

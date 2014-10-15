@@ -26,9 +26,6 @@ module.exports = (app)->
 			routesFilePath = path.join(routesPath, routesFileName)
 			require(routesFilePath)(app, mw, ctrl?[ctrlName])
 	)
-	app.get('*', (req, res)->
-        res.render('index')
-    )
 	# # 注册config文件夹中的路由
 	# _.each(fs.readdirSync(routesConfigPath), (configFile, index)->
 	# 	if ~configFile.indexOf '.json'

@@ -1,4 +1,10 @@
 <head>
     <title>日志服务后台</title>
-	<link rel="stylesheet" type="text/css" href="/assets/main.css">
+    {{#if isPro}}
+		<link rel="stylesheet" type="text/css" href="/assets/min/common.css">
+		<link rel="stylesheet" type="text/css" href="/assets/min/main.css">
+	{{else}}
+		<link rel="stylesheet" type="text/css" href="/assets/common.css">
+		<link rel="stylesheet" type="text/css" href="/assets/main.css">
+    {{/if}}
 </head>

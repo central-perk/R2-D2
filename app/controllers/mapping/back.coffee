@@ -5,10 +5,12 @@ utils = process.g.utils
 filePath = process.g.path
 
 eventRestart = null
+isPro = process.env.NODE_ENV == 'pro'
 
 module.exports = {
 	index: (req, res)->
-		res.render('index')
+		console.log {isPro}
+		res.render('index', {isPro})
 	restart: (req, res)->
 		eventRestart = setTimeout(()->
 			utils.restart()
