@@ -1,4 +1,12 @@
 <div class="logger" ng-init="init()">
+<!--     <button type="button" class="btn btn-default"
+        ng-model="selectedIcon"
+        data-html="1"
+        data-template="/tpls/app/edit.html"
+        bs-select>
+        <i class="fa fa-th"></i>
+        <i class="fa fa-caret-down"></i>
+    </button> -->
     <table class="table table-bordered table-hover">
         <thead>
             <tr class="active">
@@ -10,7 +18,7 @@
         </thead>
         <tbody>
             <tr ng-repeat="logger in loggers" ng-class="logger._level|logLevelClass">
-                <th ng-bind="logger._ts|dateTimeFormat"></th>
+                <th ng-bind="logger._ts|monthTimeFormat"></th>
                 <th ng-bind="logger._level|logLevelFilter"></th>
                 <th ng-repeat="attr in log.attrs"
                     ng-bind="logger[attr.fieldName]"

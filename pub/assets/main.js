@@ -48,7 +48,7 @@
 	__webpack_require__(2);
 	__webpack_require__(4);
 	ZeroClipboard = __webpack_require__(6);
-	// moment = require('libs/moment/moment');
+	// moment = require('libs/moment/moment'); 
 	
 	// angular modules
 	__webpack_require__(7);
@@ -60,11 +60,12 @@
 	__webpack_require__(13);
 	__webpack_require__(14);
 	__webpack_require__(15);
+	__webpack_require__(16);
 	
 	// require('libs/angular-moment/angular-moment');
 	
-	__webpack_require__(16); // 暂时未用到
 	__webpack_require__(17); // 暂时未用到
+	__webpack_require__(18); // 暂时未用到
 	
 	
 	
@@ -79,27 +80,28 @@
 	    'myService',
 	    'myModule',
 	    'ngClipboard',
+	    'ngSanitize',
 	    // 'angularMoment',
 	
 	    'ngCookies',
 	    'ngResource'
 	]);
 	
-	__webpack_require__(18)(myApp);
+	__webpack_require__(19)(myApp);
 	
 	// require services
-	__webpack_require__(19)(angular);
+	__webpack_require__(20)(angular);
 	
 	// require modules
-	__webpack_require__(24)(angular);
+	__webpack_require__(25)(angular);
 	
 	
 	
-	__webpack_require__(28)(myApp);
+	__webpack_require__(29)(myApp);
 	
-	__webpack_require__(33)(myApp);
 	__webpack_require__(34)(myApp);
 	__webpack_require__(35)(myApp);
+	__webpack_require__(36)(myApp);
 	
 	
 	myApp.controller('mainController', ['$scope', '$timeout', 'cfpLoadingBar',
@@ -820,6 +822,27 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
+	 AngularJS v1.3.0
+	 (c) 2010-2014 Google, Inc. http://angularjs.org
+	 License: MIT
+	*/
+	(function(q,g,r){'use strict';function F(a){var d=[];t(d,g.noop).chars(a);return d.join("")}function m(a){var d={};a=a.split(",");var c;for(c=0;c<a.length;c++)d[a[c]]=!0;return d}function G(a,d){function c(a,b,c,h){b=g.lowercase(b);if(u[b])for(;f.last()&&v[f.last()];)e("",f.last());w[b]&&f.last()==b&&e("",b);(h=x[b]||!!h)||f.push(b);var n={};c.replace(H,function(a,b,d,c,e){n[b]=s(d||c||e||"")});d.start&&d.start(b,n,h)}function e(a,b){var c=0,e;if(b=g.lowercase(b))for(c=f.length-1;0<=c&&f[c]!=b;c--);
+	if(0<=c){for(e=f.length-1;e>=c;e--)d.end&&d.end(f[e]);f.length=c}}"string"!==typeof a&&(a=null===a||"undefined"===typeof a?"":""+a);var b,l,f=[],n=a,h;for(f.last=function(){return f[f.length-1]};a;){h="";l=!0;if(f.last()&&y[f.last()])a=a.replace(new RegExp("(.*)<\\s*\\/\\s*"+f.last()+"[^>]*>","i"),function(a,b){b=b.replace(I,"$1").replace(J,"$1");d.chars&&d.chars(s(b));return""}),e("",f.last());else{if(0===a.indexOf("\x3c!--"))b=a.indexOf("--",4),0<=b&&a.lastIndexOf("--\x3e",b)===b&&(d.comment&&d.comment(a.substring(4,
+	b)),a=a.substring(b+3),l=!1);else if(z.test(a)){if(b=a.match(z))a=a.replace(b[0],""),l=!1}else if(K.test(a)){if(b=a.match(A))a=a.substring(b[0].length),b[0].replace(A,e),l=!1}else L.test(a)&&((b=a.match(B))?(b[4]&&(a=a.substring(b[0].length),b[0].replace(B,c)),l=!1):(h+="<",a=a.substring(1)));l&&(b=a.indexOf("<"),h+=0>b?a:a.substring(0,b),a=0>b?"":a.substring(b),d.chars&&d.chars(s(h)))}if(a==n)throw M("badparse",a);n=a}e()}function s(a){if(!a)return"";var d=N.exec(a);a=d[1];var c=d[3];if(d=d[2])p.innerHTML=
+	d.replace(/</g,"&lt;"),d="textContent"in p?p.textContent:p.innerText;return a+d+c}function C(a){return a.replace(/&/g,"&amp;").replace(O,function(a){var c=a.charCodeAt(0);a=a.charCodeAt(1);return"&#"+(1024*(c-55296)+(a-56320)+65536)+";"}).replace(P,function(a){return"&#"+a.charCodeAt(0)+";"}).replace(/</g,"&lt;").replace(/>/g,"&gt;")}function t(a,d){var c=!1,e=g.bind(a,a.push);return{start:function(a,l,f){a=g.lowercase(a);!c&&y[a]&&(c=a);c||!0!==D[a]||(e("<"),e(a),g.forEach(l,function(c,f){var k=
+	g.lowercase(f),l="img"===a&&"src"===k||"background"===k;!0!==Q[k]||!0===E[k]&&!d(c,l)||(e(" "),e(f),e('="'),e(C(c)),e('"'))}),e(f?"/>":">"))},end:function(a){a=g.lowercase(a);c||!0!==D[a]||(e("</"),e(a),e(">"));a==c&&(c=!1)},chars:function(a){c||e(C(a))}}}var M=g.$$minErr("$sanitize"),B=/^<((?:[a-zA-Z])[\w:-]*)((?:\s+[\w:-]+(?:\s*=\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*)\s*(\/?)\s*(>?)/,A=/^<\/\s*([\w:-]+)[^>]*>/,H=/([\w:-]+)(?:\s*=\s*(?:(?:"((?:[^"])*)")|(?:'((?:[^'])*)')|([^>\s]+)))?/g,L=/^</,
+	K=/^<\//,I=/\x3c!--(.*?)--\x3e/g,z=/<!DOCTYPE([^>]*?)>/i,J=/<!\[CDATA\[(.*?)]]\x3e/g,O=/[\uD800-\uDBFF][\uDC00-\uDFFF]/g,P=/([^\#-~| |!])/g,x=m("area,br,col,hr,img,wbr");q=m("colgroup,dd,dt,li,p,tbody,td,tfoot,th,thead,tr");r=m("rp,rt");var w=g.extend({},r,q),u=g.extend({},q,m("address,article,aside,blockquote,caption,center,del,dir,div,dl,figure,figcaption,footer,h1,h2,h3,h4,h5,h6,header,hgroup,hr,ins,map,menu,nav,ol,pre,script,section,table,ul")),v=g.extend({},r,m("a,abbr,acronym,b,bdi,bdo,big,br,cite,code,del,dfn,em,font,i,img,ins,kbd,label,map,mark,q,ruby,rp,rt,s,samp,small,span,strike,strong,sub,sup,time,tt,u,var")),
+	y=m("script,style"),D=g.extend({},x,u,v,w),E=m("background,cite,href,longdesc,src,usemap"),Q=g.extend({},E,m("abbr,align,alt,axis,bgcolor,border,cellpadding,cellspacing,class,clear,color,cols,colspan,compact,coords,dir,face,headers,height,hreflang,hspace,ismap,lang,language,nohref,nowrap,rel,rev,rows,rowspan,rules,scope,scrolling,shape,size,span,start,summary,target,title,type,valign,value,vspace,width")),p=document.createElement("pre"),N=/^(\s*)([\s\S]*?)(\s*)$/;g.module("ngSanitize",[]).provider("$sanitize",
+	function(){this.$get=["$$sanitizeUri",function(a){return function(d){var c=[];G(d,t(c,function(c,b){return!/^unsafe/.test(a(c,b))}));return c.join("")}}]});g.module("ngSanitize").filter("linky",["$sanitize",function(a){var d=/((ftp|https?):\/\/|(mailto:)?[A-Za-z0-9._%+-]+@)\S*[^\s.;,(){}<>"]/,c=/^mailto:/;return function(e,b){function l(a){a&&k.push(F(a))}function f(a,c){k.push("<a ");g.isDefined(b)&&(k.push('target="'),k.push(b),k.push('" '));k.push('href="');k.push(a);k.push('">');l(c);k.push("</a>")}
+	if(!e)return e;for(var n,h=e,k=[],m,p;n=h.match(d);)m=n[0],n[2]==n[3]&&(m="mailto:"+m),p=n.index,l(h.substr(0,p)),f(m,n[0].replace(c,"")),h=h.substring(p+n[0].length);l(h);return a(k.join(""))}}])})(window,window.angular);
+	//# sourceMappingURL=angular-sanitize.min.js.map
+
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
 	 AngularJS v1.2.26
 	 (c) 2010-2014 Google, Inc. http://angularjs.org
 	 License: MIT
@@ -830,7 +853,7 @@
 
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -849,7 +872,7 @@
 
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myApp) {
@@ -912,7 +935,7 @@
 	};
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(angular) {
@@ -920,15 +943,15 @@
 	        'angular-lodash',
 	        'restangular'
 	    ]);
-		__webpack_require__(20)(myService);
 		__webpack_require__(21)(myService);
 		__webpack_require__(22)(myService);
 		__webpack_require__(23)(myService);
+		__webpack_require__(24)(myService);
 	}
 
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myService) {
@@ -961,7 +984,7 @@
 
 
 /***/ },
-/* 21 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myService) {
@@ -994,7 +1017,7 @@
 
 
 /***/ },
-/* 22 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myService) {
@@ -1036,7 +1059,7 @@
 
 
 /***/ },
-/* 23 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myService) {
@@ -1059,21 +1082,21 @@
 	}
 
 /***/ },
-/* 24 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(angular) {
 	    var myModule = angular.module('myModule', [
 	        'angular-lodash'
 	    ]);
-		__webpack_require__(25)(myModule);
 		__webpack_require__(26)(myModule);
 		__webpack_require__(27)(myModule);
+		__webpack_require__(28)(myModule);
 	}
 
 
 /***/ },
-/* 25 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myModule) {
@@ -1095,7 +1118,7 @@
 
 
 /***/ },
-/* 26 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -1404,7 +1427,7 @@
 	}
 
 /***/ },
-/* 27 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myModule) {
@@ -1424,19 +1447,19 @@
 
 
 /***/ },
-/* 28 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myApp) {
-		__webpack_require__(29)(myApp);
 		__webpack_require__(30)(myApp);
 		__webpack_require__(31)(myApp);
 		__webpack_require__(32)(myApp);
+		__webpack_require__(33)(myApp);
 	}
 
 
 /***/ },
-/* 29 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myApp) {
@@ -1486,7 +1509,7 @@
 
 
 /***/ },
-/* 30 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myApp) {
@@ -1508,7 +1531,7 @@
 
 
 /***/ },
-/* 31 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myApp) {
@@ -1616,7 +1639,7 @@
 
 
 /***/ },
-/* 32 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myApp) {
@@ -1657,7 +1680,7 @@
 
 
 /***/ },
-/* 33 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myApp) {
@@ -1735,7 +1758,7 @@
 
 
 /***/ },
-/* 34 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myApp) {
@@ -1764,6 +1787,15 @@
 	        	} else {
 	                return '/'
 	        	}
+	        };
+	    });
+	    myApp.filter('monthTimeFormat', function($filter) {
+	        return function(data) {
+	            if (data) {
+	                return $filter('date')(new Date(data), 'MM-dd HH:mm');
+	            } else {
+	                return '/'
+	            }
 	        };
 	    });
 	    myApp.filter('logLevelFilter', function($filter) {
@@ -1823,7 +1855,7 @@
 
 
 /***/ },
-/* 35 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myApp) {
