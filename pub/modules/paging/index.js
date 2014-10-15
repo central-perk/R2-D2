@@ -139,7 +139,7 @@ module.exports = function(myModule) {
             var prevPage = scope.page - 1 <= 0 ? 1 : scope.page - 1;
 
             var first = {
-                value: '<<',
+                value: '<i class="fa fa-angle-double-left">',
                 title: 'First Page',
                 liClass: disabled ? scope.disabledClass : '',
                 action: function () {
@@ -150,7 +150,7 @@ module.exports = function(myModule) {
             };
 
             var prev = {
-                value: '<',
+                value: '<i class="fa fa-angle-left">',
                 title: 'Previous Page',
                 liClass: disabled ? scope.disabledClass : '',
                 action: function () {
@@ -180,7 +180,7 @@ module.exports = function(myModule) {
             var nextPage = scope.page + 1 >= pageCount ? pageCount : scope.page + 1;
 
             var last = {
-                value: '>>',
+                value: '<i class="fa fa-angle-double-right">',
                 title: 'Last Page',
                 liClass: disabled ? scope.disabledClass : '',
                 action: function () {
@@ -191,7 +191,7 @@ module.exports = function(myModule) {
             };
 
             var next = {
-                value: '>',
+                value: '<i class="fa fa-angle-right">',
                 title: 'Next Page',
                 liClass: disabled ? scope.disabledClass : '',
                 action: function () {
@@ -292,7 +292,7 @@ module.exports = function(myModule) {
     				'ng-class="Item.liClass" ' +
     				'ng-click="Item.action()" ' +
     				'ng-repeat="Item in List"> ' +
-    				'<span ng-bind="Item.value"></span> ' +
+    				'<span ng-bind-html="Item.value"></span> ' +
                 '</ul>',
             link: function (scope, element, attrs) {
                 scope.$watch('page', function () {
