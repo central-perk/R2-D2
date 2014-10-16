@@ -6,8 +6,8 @@ ZeroClipboard = require('libs/zeroclipboard/dist/ZeroClipboard.min');
 
 // angular modules
 require('libs/angular-lodash/angular-lodash');
-require('libs/angular-strap/dist/angular-strap.min');
-require('libs/angular-strap/dist/angular-strap.tpl.min');
+require('libs/angular-bootstrap/ui-bootstrap.min');
+require('libs/angular-bootstrap/ui-bootstrap-tpls.min');
 require('libs/angular-ui-router/release/angular-ui-router.min');
 require('libs/angular-loading-bar/build/loading-bar.min');
 require('libs/angular-animate/angular-animate.min');
@@ -23,9 +23,15 @@ require('libs/angular-resource/angular-resource.min'); // 暂时未用到
 
 
 
+// require services
+require('services/index')(angular);
+
+// require modules
+require('modules/index')(angular);
+
 var myApp = angular.module('myApp', [
     'angular-lodash',
-    'mgcrea.ngStrap',
+    'ui.bootstrap',
     'ui.router',
     'chieffancypants.loadingBar',
     'ngAnimate',
@@ -43,13 +49,6 @@ var myApp = angular.module('myApp', [
 
 require('config.app')(myApp);
 
-// require services
-require('services/index')(angular);
-
-// require modules
-require('modules/index')(angular);
-
-
 
 require('tpls/index')(myApp);
 
@@ -58,8 +57,8 @@ require('js/filters/index')(myApp);
 require('js/directives/index')(myApp);
 
 
-myApp.controller('mainController', ['$scope', '$timeout', 'cfpLoadingBar',
-    function($scope, $timeout, cfpLoadingBar) {
+myApp.controller('mainController', ['$scope', '$timeout',
+    function($scope, $timeout) {
         // cfpLoadingBar.start();
 
         // $timeout(function() {

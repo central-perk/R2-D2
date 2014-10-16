@@ -5,8 +5,8 @@
         "**/*.txt"
     ],
     "dependencies": {
-        "angular": "^1.2.26",
-        "angular-strap": "^2.1.1",
+        "angular": "1.2.26",
+        "angular-bootstrap": "^0.11.2",
         "angular-ui-router": "^0.2.11",
         "angular-animate": "^1.2.26",
         "angular-loading-bar": "^0.6.0",
@@ -22,7 +22,6 @@
         "moment": "*",
         "angular-moment": "*",
         "angular-sanitize": "*",
-
         "angular-mocks": "^1.2.26",
         "angular-ui-utils": "^0.1.1",
         "font-awesome": "^4.2.0"

@@ -1,0 +1,14 @@
+<div class="btn-group" dropdown>
+    <button type="button" class="btn btn-default dropdown-toggle">
+        <i class="fa fa-th"></i>
+        <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu" ng-click="$event.stopPropagation()">
+        <li ng-repeat="attr in log.attrs">
+            <label>
+                <input type="checkbox" value="0" ng-model="attr.selected">
+                <span ng-bind="attr.labelName"></span>
+            </label>
+        </li>
+    </ul>
+</div>

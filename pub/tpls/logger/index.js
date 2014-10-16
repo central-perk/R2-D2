@@ -17,6 +17,10 @@ module.exports = function(myApp) {
             $scope.init = function() {
                 LogService.getList($state.params).then(function(logs) {
                     $scope.log = logs[0];
+                    _.forEach($scope.log.attrs, function(attr) {
+                        attr.selected = true;
+                    });
+                    console.log($scope.log);
                 });
                 LoggerService.list($state.params).then(function(data) {
                     $scope.loggers = data.loggers;
@@ -30,6 +34,20 @@ module.exports = function(myApp) {
                     $scope.loggers = data.loggers;
                 });
             }
+            $scope.selectedIcons = ["Gear","Heart","Camera"];
+            $scope.icons = [{
+                "value": "Gear",
+                "label": "<i class=\"fa fa-gear\"></i> Gear"
+            }, {
+                "value": "Globe",
+                "label": "<i class=\"fa fa-globe\"></i> Globe"
+            }, {
+                "value": "Heart",
+                "label": "<i class=\"fa fa-heart\"></i> Heart"
+            }, {
+                "value": "Camera",
+                "label": "<i class=\"fa fa-camera\"></i> Camera"
+            }];
         }
     ]);
 }

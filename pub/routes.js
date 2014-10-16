@@ -2,7 +2,8 @@ module.exports = function(myApp) {
     myApp.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
         function($stateProvider, $urlRouterProvider, $locationProvider) {
             // 开启html5mode
-            $locationProvider.html5Mode(true).hashPrefix('!');
+            $locationProvider.html5Mode(true)
+            // $locationProvider.html5Mode(true).hashPrefix('!');
 
             // 不符合条件的路由指向首页
             $urlRouterProvider.otherwise('/back');
