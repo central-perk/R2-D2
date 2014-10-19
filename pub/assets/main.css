@@ -223,7 +223,17 @@
 .paging ul li {
   cursor: pointer; }
 
+.logger .selector {
+  margin-bottom: 10px; }
+  .logger .selector .dropdown-menu {
+    min-width: 100px;
+    max-height: 300px;
+    overflow: auto; }
+    .logger .selector .dropdown-menu label {
+      padding: 3px 20px;
+      margin-bottom: 0;
+      cursor: pointer; }
 .logger .table .ts {
-  width: 130px; }
+  width: 95px; }
 .logger .table .level {
   width: 45px; }

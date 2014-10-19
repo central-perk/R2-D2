@@ -26,6 +26,15 @@ module.exports = function(myApp) {
         	}
         };
     });
+    myApp.filter('monthTimeFormat', function($filter) {
+        return function(data) {
+            if (data) {
+                return $filter('date')(new Date(data), 'MM-dd HH:mm');
+            } else {
+                return '/'
+            }
+        };
+    });
     myApp.filter('logLevelFilter', function($filter) {
         return function(data) {
             var tmp = '';

@@ -1,19 +1,22 @@
 <div class="logger" ng-init="init()">
+    <div class="selector" ng-include src="'/tpls/logger/selector.html'"></div>
     <table class="table table-bordered table-hover">
         <thead>
             <tr class="active">
                 <th class="ts">时间</th>
                 <th class="level">等级</th>
                 <th ng-repeat="attr in log.attrs" 
-                    ng-bind="attr.labelName"></th>
+                    ng-bind="attr.labelName"
+                    ng-show="attr.selected"></th>
             </tr>
         </thead>
         <tbody>
             <tr ng-repeat="logger in loggers" ng-class="logger._level|logLevelClass">
-                <th ng-bind="logger._ts|dateTimeFormat"></th>
+                <th ng-bind="logger._ts|monthTimeFormat"></th>
                 <th ng-bind="logger._level|logLevelFilter"></th>
                 <th ng-repeat="attr in log.attrs"
                     ng-bind="logger[attr.fieldName]"
+                    ng-show="attr.selected"
                     field-type="{{attr.fieldType}}"
                     date-field-fomat>
                 </th>
