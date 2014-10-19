@@ -26,16 +26,13 @@ mw = require(routesMWPath);
 ctrl = require(filePath.controllers);
 
 module.exports = function(app) {
-  _.forEach(fs.readdirSync(routesPath), function(routesFileName, index) {
+  return _.forEach(fs.readdirSync(routesPath), function(routesFileName, index) {
     var ctrlName, routesFilePath;
     if (~routesFileName.indexOf('.js')) {
       ctrlName = routesFileName.replace('.js', '');
       routesFilePath = path.join(routesPath, routesFileName);
       return require(routesFilePath)(app, mw, ctrl != null ? ctrl[ctrlName] : void 0);
     }
-  });
-  return app.get('*', function(req, res) {
-    return res.render('index');
   });
 };
 

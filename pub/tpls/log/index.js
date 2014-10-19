@@ -12,10 +12,13 @@ module.exports = function(myApp) {
     ]);
     myApp.controller('LogListController', [
         '$scope',
+        'cfpLoadingBar',
         'LogService',
-        function($scope, LogService) {
+        function($scope, cfpLoadingBar, LogService) {
+            cfpLoadingBar.start();
             $scope.init = function() {
                 LogService.getList().then(function(logs) {
+                    cfpLoadingBar.complete();
                     $scope.logs = logs;
                     setUploadUrl();
                 });
