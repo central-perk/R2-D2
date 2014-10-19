@@ -2,6 +2,7 @@ path 	= require('path')
 express = require('express')
 passport = require('passport')
 
+# 支持对coffee的报错
 require('source-map-support').install();
 
 require(path.join(__dirname, 'libs', 'utils')).setG(__dirname)

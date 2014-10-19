@@ -20,6 +20,7 @@
         "method-override": "*",
         "passport": "*",
         "source-map-support": "*",
+        "connect-basic-auth": "*",
 
         "webpack": "*",
         "webpack-dev-server": "*",

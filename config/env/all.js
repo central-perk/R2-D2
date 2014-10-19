@@ -16,6 +16,10 @@ module.exports = {
         },
         PAGE: {
             perPage: 20
+        },
+        BASC_AUTH: {
+            username: 'admin@echuandan.com',
+            password: 'begeek@echuandan'
         }
     },
     FIELD_TYPE_MAP: {

@@ -9,13 +9,25 @@
     .selector {
         margin-bottom: 10px;
         .dropdown-menu {
-        	min-width: 100px;
+            min-width: 100px;
             max-height: 300px;
             overflow: auto;
+            padding: 0;
+            li {
+                &:hover {
+                    background-color: #DBDBDB;
+                }
+            }
             label {
-            	padding: 3px 20px;
-            	margin-bottom: 0;
-            	cursor: pointer;
+                height: 30px;
+                line-height: 30px;
+                margin-bottom: 0;
+                padding-left: 7px;
+                width: 100%;
+                cursor: pointer;
+                input[type="checkbox"] {
+                    margin: 0;
+                }
             }
         }
     }

@@ -228,11 +228,19 @@
   .logger .selector .dropdown-menu {
     min-width: 100px;
     max-height: 300px;
-    overflow: auto; }
+    overflow: auto;
+    padding: 0; }
+    .logger .selector .dropdown-menu li:hover {
+      background-color: #DBDBDB; }
     .logger .selector .dropdown-menu label {
-      padding: 3px 20px;
+      height: 30px;
+      line-height: 30px;
       margin-bottom: 0;
+      padding-left: 7px;
+      width: 100%;
       cursor: pointer; }
+      .logger .selector .dropdown-menu label input[type="checkbox"] {
+        margin: 0; }
 .logger .table .ts {
   width: 95px; }
 .logger .table .level {

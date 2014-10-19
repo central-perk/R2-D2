@@ -12,13 +12,13 @@ errorHandler    = require('errorhandler')
 logger          = require('morgan')
 multer          = require('multer')
 hbs             = require('hbs')
+basicAuth       = require('connect-basic-auth')
 
 config = process.g.config
 utils = process.g.utils
 filePath = process.g.path
 APP_CONFIG = config.APP
-
-
+BASC_AUTH_CONFIG = APP_CONFIG.BASC_AUTH
 
 module.exports = (app, passport, mongoose)->
     # 开发环境
@@ -54,6 +54,16 @@ module.exports = (app, passport, mongoose)->
     app.engine('html', hbs.__express)
     hbs.registerPartials(path.join(filePath.pub, 'views', 'partials'))
     app.enable('jsonp callback')
+
+
+    # basicAuth
+    app.use(basicAuth((credentials, req, res, next)->
+        if credentials and credentials.username == BASC_AUTH_CONFIG.username and credentials.password == BASC_AUTH_CONFIG.password
+            next();  
+        else
+            next("Unautherized!")
+        )
+    )
 
     # compress requests and responses
     app.use(compression()) # 需要进一步设置

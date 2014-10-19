@@ -54,7 +54,7 @@ module.exports = function(myApp) {
                     url: '/list?app&name&page',
                     templateUrl: '/tpls/logger/list.html',
                     controller: 'LoggerListController'
-                })
+                });
         }
     ]);
     // 异步路由
