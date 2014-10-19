@@ -227,17 +227,21 @@
   margin-bottom: 10px; }
   .logger .selector .dropdown-menu {
     min-width: 100px;
-    max-height: 300px;
+    max-height: 200px;
     overflow: auto;
     padding: 0; }
-    .logger .selector .dropdown-menu li:hover {
-      background-color: #DBDBDB; }
+    .logger .selector .dropdown-menu li {
+      width: auto; }
+      .logger .selector .dropdown-menu li:hover {
+        background-color: #DBDBDB; }
     .logger .selector .dropdown-menu label {
       height: 30px;
       line-height: 30px;
+      display: block;
       margin-bottom: 0;
-      padding-left: 7px;
-      width: 100%;
+      padding: 0 7px;
+      clear: both;
+      white-space: nowrap;
       cursor: pointer; }
       .logger .selector .dropdown-menu label input[type="checkbox"] {
         margin: 0; }
