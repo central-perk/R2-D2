@@ -6,11 +6,9 @@
         "ref": "app"
     },
     "name": {
-        "label": "日志名称",
+        "label": "日志全称",
         "type": "String",
-        "required": true,
-        "minLength": 1,
-        "maxLength": 20
+        "required": true
     },
     "_fileName": {
         "label": "日志文件名称",
