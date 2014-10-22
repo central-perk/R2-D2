@@ -6,8 +6,8 @@ ZeroClipboard = require('libs/zeroclipboard/dist/ZeroClipboard.min');
 
 // angular modules
 require('libs/angular-lodash/angular-lodash');
-require('libs/angular-bootstrap/ui-bootstrap.min');
-require('libs/angular-bootstrap/ui-bootstrap-tpls.min');
+// require('libs/angular-bootstrap/ui-bootstrap.min');
+require('libs/angular-bootstrap/ui-bootstrap-tpls');
 require('libs/angular-ui-router/release/angular-ui-router.min');
 require('libs/angular-loading-bar/build/loading-bar.min');
 require('libs/angular-animate/angular-animate.min');

@@ -24,7 +24,6 @@ module.exports = function(myApp) {
                     _.forEach($scope.log.attrs, function(attr) {
                         attr.selected = true;
                     });
-                    console.log($scope.log);
                 });
                 LoggerService.list($state.params).then(function(data) {
                     $scope.loggers = data.loggers;
