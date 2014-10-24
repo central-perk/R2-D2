@@ -21,12 +21,13 @@ require('libs/angular-sanitize/angular-sanitize.min');
 require('libs/angular-cookies/angular-cookies.min'); // 暂时未用到
 require('libs/angular-resource/angular-resource.min'); // 暂时未用到
 
+// common
+require('common/index')(angular);
 
-
-// require services
+// app services
 require('services/index')(angular);
 
-// require modules
+// app modules
 require('modules/index')(angular);
 
 var myApp = angular.module('myApp', [
@@ -37,14 +38,14 @@ var myApp = angular.module('myApp', [
     'ngAnimate',
     'angular-growl',
     'restangular',
-    'myService',
-    'myModule',
     'ngClipboard',
     'ngSanitize',
     // 'angularMoment',
-
     'ngCookies',
-    'ngResource'
+    'ngResource',
+    'myCommon',
+    'myService',
+    'myModule'
 ]);
 
 require('config.app')(myApp);
@@ -53,8 +54,7 @@ require('config.app')(myApp);
 require('tpls/index')(myApp);
 
 require('routes')(myApp);
-require('js/filters/index')(myApp);
-require('js/directives/index')(myApp);
+require('filters/index')(myApp);
 
 
 myApp.controller('mainController', ['$scope', '$timeout',

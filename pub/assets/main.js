@@ -67,13 +67,14 @@
 	__webpack_require__(16); // 暂时未用到
 	__webpack_require__(17); // 暂时未用到
 	
-	
-	
-	// require services
+	// common
 	__webpack_require__(18)(angular);
 	
-	// require modules
-	__webpack_require__(23)(angular);
+	// app services
+	__webpack_require__(22)(angular);
+	
+	// app modules
+	__webpack_require__(27)(angular);
 	
 	var myApp = angular.module('myApp', [
 	    'angular-lodash',
@@ -83,24 +84,23 @@
 	    'ngAnimate',
 	    'angular-growl',
 	    'restangular',
-	    'myService',
-	    'myModule',
 	    'ngClipboard',
 	    'ngSanitize',
 	    // 'angularMoment',
-	
 	    'ngCookies',
-	    'ngResource'
+	    'ngResource',
+	    'myCommon',
+	    'myService',
+	    'myModule'
 	]);
 	
-	__webpack_require__(27)(myApp);
+	__webpack_require__(31)(myApp);
 	
 	
-	__webpack_require__(28)(myApp);
+	__webpack_require__(32)(myApp);
 	
-	__webpack_require__(33)(myApp);
-	__webpack_require__(34)(myApp);
-	__webpack_require__(35)(myApp);
+	__webpack_require__(37)(myApp);
+	__webpack_require__(38)(myApp);
 	
 	
 	myApp.controller('mainController', ['$scope', '$timeout',
@@ -5020,19 +5020,113 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(angular) {
-	    var myService = angular.module('myService', [
-	        'angular-lodash',
-	        'restangular'
+		var myCommon = angular.module('myCommon', [
+	        'angular-lodash'
 	    ]);
-		__webpack_require__(19)(myService);
-		__webpack_require__(20)(myService);
-		__webpack_require__(21)(myService);
-		__webpack_require__(22)(myService);
+	
+		__webpack_require__(19)(myCommon);
+		__webpack_require__(20)(myCommon);
+		__webpack_require__(21)(myCommon);
 	}
 
 
 /***/ },
 /* 19 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(myCommon) {
+	    myCommon.directive('dateFieldFomat', ['$filter', function($filter) {
+	        return {
+	            restrict: 'A',
+	            scope: {
+	                fieldType: '@',
+	                ngBind: '='
+	            },
+	            link: function($scope, $ele, $attrs) {
+	                if ($scope.fieldType === 'Date') {
+	                    if ($scope.ngBind) {
+	                        $scope.ngBind = $filter('date')(new Date($scope.ngBind), 'yyyy-MM-dd HH:mm');
+	                    } else {
+	                        $scope.ngBind = '/'
+	                    }
+	                }
+	            }
+	        }
+	    }]);
+	}
+
+
+/***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(myCommon) {
+	    myCommon.filter('dateFormat', function($filter) {
+	            return function(data) {
+	                if (data) {
+	                    return $filter('date')(new Date(data), 'yyyy-MM-dd');
+	                } else {
+	                    return '/'
+	                }
+	            };
+	        })
+	        .filter('timeFormat', function($filter) {
+	            return function(data) {
+	                if (data) {
+	                    return $filter('date')(new Date(data), 'HH:mm:ss');
+	                } else {
+	                    return '/'
+	                }
+	            };
+	        })
+	        .filter('dateTimeFormat', function($filter) {
+	            return function(data) {
+	                if (data) {
+	                    return $filter('date')(new Date(data), 'yyyy-MM-dd HH:mm');
+	                } else {
+	                    return '/'
+	                }
+	            };
+	        })
+	        .filter('monthTimeFormat', function($filter) {
+	            return function(data) {
+	                if (data) {
+	                    return $filter('date')(new Date(data), 'MM-dd HH:mm');
+	                } else {
+	                    return '/'
+	                }
+	            };
+	        });
+	}
+
+
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(myCommon) {
+	
+	}
+
+
+/***/ },
+/* 22 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(angular) {
+	    var myService = angular.module('myService', [
+	        'angular-lodash',
+	        'restangular'
+	    ]);
+		__webpack_require__(23)(myService);
+		__webpack_require__(24)(myService);
+		__webpack_require__(25)(myService);
+		__webpack_require__(26)(myService);
+	}
+
+
+/***/ },
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myService) {
@@ -5065,7 +5159,7 @@
 
 
 /***/ },
-/* 20 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myService) {
@@ -5098,7 +5192,7 @@
 
 
 /***/ },
-/* 21 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myService) {
@@ -5140,7 +5234,7 @@
 
 
 /***/ },
-/* 22 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myService) {
@@ -5163,21 +5257,21 @@
 	}
 
 /***/ },
-/* 23 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(angular) {
 	    var myModule = angular.module('myModule', [
 	        'angular-lodash'
 	    ]);
-		__webpack_require__(24)(myModule);
-		__webpack_require__(25)(myModule);
-		__webpack_require__(26)(myModule);
+		__webpack_require__(28)(myModule);
+		__webpack_require__(29)(myModule);
+		__webpack_require__(30)(myModule);
 	}
 
 
 /***/ },
-/* 24 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myModule) {
@@ -5199,7 +5293,7 @@
 
 
 /***/ },
-/* 25 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5508,7 +5602,7 @@
 	}
 
 /***/ },
-/* 26 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myModule) {
@@ -5528,7 +5622,7 @@
 
 
 /***/ },
-/* 27 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myApp) {
@@ -5591,19 +5685,19 @@
 	};
 
 /***/ },
-/* 28 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myApp) {
-		__webpack_require__(29)(myApp);
-		__webpack_require__(30)(myApp);
-		__webpack_require__(31)(myApp);
-		__webpack_require__(32)(myApp);
+		__webpack_require__(33)(myApp);
+		__webpack_require__(34)(myApp);
+		__webpack_require__(35)(myApp);
+		__webpack_require__(36)(myApp);
 	}
 
 
 /***/ },
-/* 29 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myApp) {
@@ -5654,7 +5748,7 @@
 
 
 /***/ },
-/* 30 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myApp) {
@@ -5676,7 +5770,7 @@
 
 
 /***/ },
-/* 31 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myApp) {
@@ -5787,7 +5881,7 @@
 
 
 /***/ },
-/* 32 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myApp) {
@@ -5849,7 +5943,7 @@
 
 
 /***/ },
-/* 33 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myApp) {
@@ -5928,44 +6022,34 @@
 
 
 /***/ },
-/* 34 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(myApp) {
-	    myApp.filter('dateFormat', function($filter) {
+	    myApp.filter('logLevelClass', function($filter) {
 	        return function(data) {
-	        	if (data) {
-	                return $filter('date')(new Date(data), 'yyyy-MM-dd');
-	        	} else {
-	                return '/'
-	        	}
-	        };
-	    });
-	    myApp.filter('timeFormat', function($filter) {
-	        return function(data) {
-	        	if (data) {
-	                return $filter('date')(new Date(data), 'HH:mm:ss');
-	        	} else {
-	                return '/'
-	        	}
-	        };
-	    });
-	    myApp.filter('dateTimeFormat', function($filter) {
-	        return function(data) {
-	        	if (data) {
-	                return $filter('date')(new Date(data), 'yyyy-MM-dd HH:mm');
-	        	} else {
-	                return '/'
-	        	}
-	        };
-	    });
-	    myApp.filter('monthTimeFormat', function($filter) {
-	        return function(data) {
-	            if (data) {
-	                return $filter('date')(new Date(data), 'MM-dd HH:mm');
-	            } else {
-	                return '/'
+	            var tmp = '';
+	            switch(data) {
+	                case 10:
+	                    tmp = 'success'
+	                    break;
+	                case 20:
+	                    tmp = 'active'
+	                    break;
+	                case 30:
+	                    tmp = 'info'
+	                    break;
+	                case 40:
+	                    tmp = 'warning'
+	                    break;
+	                case 50:
+	                    tmp = 'danger'
+	                    break;
+	                case 60:
+	                    tmp = 'danger'
+	                    break;
 	            }
+	            return tmp;
 	        };
 	    });
 	    myApp.filter('logLevelFilter', function($filter) {
@@ -5994,61 +6078,7 @@
 	            return tmp;
 	        };
 	    });
-	    myApp.filter('logLevelClass', function($filter) {
-	        return function(data) {
-	            var tmp = '';
-	            switch(data) {
-	                case 10:
-	                    tmp = 'success'
-	                    break;
-	                case 20:
-	                    tmp = 'active'
-	                    break;
-	                case 30:
-	                    tmp = 'info'
-	                    break;
-	                case 40:
-	                    tmp = 'warning'
-	                    break;
-	                case 50:
-	                    tmp = 'danger'
-	                    break;
-	                case 60:
-	                    tmp = 'danger'
-	                    break;
-	            }
-	            return tmp;
-	        };
-	    });
-	
 	}
-
-
-/***/ },
-/* 35 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = function(myApp) {
-	    myApp.directive('dateFieldFomat', ['$filter', function($filter) {
-	        return {
-	            restrict: 'A',
-	            scope: {
-	                fieldType: '@',
-	                ngBind: '='
-	            },
-	            link: function($scope, $ele, $attrs) {
-	                if ($scope.fieldType === 'Date') {
-	                    if ($scope.ngBind) {
-	                        $scope.ngBind = $filter('date')(new Date($scope.ngBind), 'yyyy-MM-dd HH:mm');
-	                    } else {
-	                        $scope.ngBind = '/'
-	                    }
-	                }
-	            }
-	        }
-	    }]);
-	}
-
 
 /***/ }
 /******/ ])
