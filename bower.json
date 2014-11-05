@@ -5,11 +5,25 @@
         "**/*.txt"
     ],
     "dependencies": {
-        "bootstrap": "latest",
-        "momentjs": "latest",
-        "require-handlebars-plugin": "latest",
-        "requirejs": "latest",
-        "requirejs-domready": "latest",
-        "zeroclipboard": "latest"
+        "angular": "1.2.26",
+        "angular-bootstrap": "^0.11.2",
+        "angular-ui-router": "^0.2.11",
+        "angular-animate": "^1.2.26",
+        "angular-loading-bar": "^0.6.0",
+        "angular-growl": "^0.4.0",
+        "restangular": "^1.4.0",
+        "lodash": "^2.4.1",
+        "angular-lodash": "^0.1.0",
+        "angular-cookies": "^1.2.26",
+        "angular-resource": "^1.2.26",
+        "ng-clip": "^0.2.4",
+        "zeroclipboard": "^2.1.6",
+        "jquery": "^2.1.1",
+        "moment": "*",
+        "angular-moment": "*",
+        "angular-sanitize": "*",
+        "angular-mocks": "^1.2.26",
+        "angular-ui-utils": "^0.1.1",
+        "font-awesome": "^4.2.0"
     }
 }

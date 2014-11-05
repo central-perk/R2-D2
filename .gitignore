@@ -1,4 +1,7 @@
+.sass-cache
+*.map
 node_modules/*
-logs/
+loggers/*
+pub/libs
 webpack.config.js
 gulpfile.js

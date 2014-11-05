@@ -1,75 +1,91 @@
-env = process.env.NODE_ENV or 'dev'
-express = require('express')
-basicAuth = require('connect-basic-auth')
+env             = process.env.NODE_ENV or 'dev'
+express         = require('express')
+compression     = require('compression')
+cookieParser    = require('cookie-parser')
+bodyParser      = require('body-parser')
+session         = require('express-session')
+mongoStore      = require('connect-mongo')(session)
+methodOverride  = require('method-override')
+serveStatic     = require('serve-static')
+favicon         = require('serve-favicon')
+errorHandler    = require('errorhandler')
+logger          = require('morgan')
+multer          = require('multer')
+hbs             = require('hbs')
+basicAuth       = require('connect-basic-auth')
 
 config = process.g.config
+utils = process.g.utils
+filePath = process.g.path
+APP_CONFIG = config.APP
+BASC_AUTH_CONFIG = APP_CONFIG.BASC_AUTH
 
-module.exports = (app, mongoose)->
+module.exports = (app, passport, mongoose)->
     # 开发环境
     if app.get('env') == 'dev'
-        app.use(express.errorHandler())
-        app.set('view cache', false)
-        app.use(express.logger('dev')) # 纪录每一个请求，仅在开发环境下
+        app.use(errorHandler())
+        app.use(logger('dev')) # 纪录每一个请求
     # 生产环境
     # if app.get('env') == 'pro'
         # return
 
-    # 所有环境
 
     # res的中间件
-    app.use (req,res,next)->
-        res.error = (data)-> 
-            res.json({
-                code: data.code || 400,
-                msg: data
-            })
+    app.use (req, res, next)->
         res.success = (data)->
-            res.json({
-                code: 200,
-                msg: data
-            })
+            res.json(data)
+        res.successMsg = (data)->
+            res.json({msg: data})
+        res.errorMsg = (data)->
+            res.status(500).json({msg: data})
+        # res.error = (data)-> 
+        #     res.status(500).json({
+        #         # code: 400,
+        #         msg: data
+        #     })
         next()
-    app.set('port', config.PORT)
-    app.set('views', process.g.viewsPath)
+
+    # 所有环境
+
+    app.set('port', APP_CONFIG.PORT)
+    app.set('views', path.join(filePath.pub, 'views'))
+
     app.set('view engine', 'html')
-    app.engine('html', require('hbs').__express)
-    app.use(express.compress({
-        filter: (req, res)->
-            return (/json|text|javascript|css/).test(res.getHeader('Content-Type'))
-        level: 9
-    })) 
+    app.engine('html', hbs.__express)
+    hbs.registerPartials(path.join(filePath.pub, 'views', 'partials'))
+    app.enable('jsonp callback')
+
+
+    # basicAuth
     app.use(basicAuth((credentials, req, res, next)->
-        if credentials and credentials.username == "node" and credentials.password == "log"
+        if credentials and credentials.username == BASC_AUTH_CONFIG.username and credentials.password == BASC_AUTH_CONFIG.password
             next();  
         else
-            if !credentials
-                console.log("credentials not provided");  
-            if credentials and credentials.username
-                console.log("credentials-username:" + credentials.username)
-            if credentials and credentials.password
-                console.log("credentials-password:" + credentials.username); 
             next("Unautherized!")
         )
     )
 
-    app.use(express.json())
-    app.use(express.urlencoded())
-    app.use(require('connect-multiparty')())
-    app.use(express.cookieParser())
-    app.use(express.methodOverride())
-    app.enable('jsonp callback')
-    app.use(app.router)
-    app.use(express.static(process.g.publicPath)) # 可以设置多个静态目录
-    hbs = require('hbs')
-    hbs.registerPartials(path.join(process.g.viewsPath, 'back', 'base'))
-    hbs.registerHelper('trList', (items, options)->
-        out = ''
-        for item in items
-            out += '<tr>'    
-            for key, value of item
-                out += '<td>' + value + '</td>'
-            out += '</tr>'
-        return out
-    )
+    # compress requests and responses
+    app.use(compression()) # 需要进一步设置
+    app.use(cookieParser())
+    app.use(bodyParser.urlencoded({extended: true}))
+    app.use(bodyParser.json())
+    app.use(methodOverride());
+    app.use(serveStatic(filePath.pub)) # 可以设置多个静态目录
+    
+    app.use(session({
+        resave: true,
+        saveUninitialized: true,
+        secret: APP_CONFIG.SESSION.secret,
+        store: new mongoStore({
+            db : mongoose.connection.db,
+            collection: APP_CONFIG.SESSION.collection
+        }),
+        cookie: APP_CONFIG.COOKIE,
+        key: 'ex_mean_sid'
+    }))
+    # 必须放在cookieParser和session后面
+    app.use(passport.initialize())
+    app.use(passport.session())
 
-
+    app.use(multer())

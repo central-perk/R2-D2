@@ -1,12 +1,15 @@
-path = require('path')
-exec = require('child_process').exec
-async = require('async')
-fs = require('fs-extra')
+path 	= require('path')
+fs 		= require('fs-extra')
+async 	= require('async')
 mongoose = require('mongoose')
 
 config = process.g.config
 utils = process.g.utils
-dbHost = "mongodb://#{config.DB.host}:#{config.DB.port}/#{config.DB.name}"
+filePath = process.g.path
+
+DB_CONFIG = config.APP.DB
+
+dbHost = "mongodb://#{DB_CONFIG.host}:#{DB_CONFIG.port}/#{DB_CONFIG.name}_#{process.env.NODE_ENV}"
 
 module.exports = {
 	connect: (callback)->

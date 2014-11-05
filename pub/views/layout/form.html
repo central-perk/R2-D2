@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <title>{{title}}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <!--[if lt IE 9]>
+    <script type="text/javascript">
+        window.location.href = '/browser';
+    </script>
+    <![endif]-->
+    {{#if isproduction}}
+    <script data-main="js/main-built" src="libs/requirejs/require.js"></script>
+    {{else}}
+    <script data-main="js/main" src="libs/requirejs/require.js"></script>
+    {{/if}}
+    <script type="text/javascript">
+        {{#if user}}
+            window.document.user = {{{user}}};
+        {{/if}}
+    </script>
+    <link rel="stylesheet" href="assets/css/common.min.css" type='text/css' media="all"/>
+</head>
+<body class="login">
+    <!-- BEGIN LOGO -->
+    <div class="logo">
+        <a href="/">
+            INDEX
+        </a>
+        <a href="/test">
+            TEST
+        </a>
+    </div>
+    <!-- END LOGO -->
+    <div ng-view=""></div>
+</body>
+</html>

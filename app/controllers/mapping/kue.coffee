@@ -1,52 +1,71 @@
 kue = require('kue')
 jobs = kue.createQueue()
-utils = process.g.utils
-config = process.g.config
-logger = utils.getCtrl('log')
-logModel = utils.getCtrl('logModel')
-storage = utils.getCtrl('storage')
+_ = require('lodash')
 
-aDataModels = _.keys(require('mongoose').models)
+
+config = process.g.config
+utils = process.g.utils
+filePath = process.g.path
+STORAGE_MAXPROCESS = config.STORAGE.maxProcess
+
+logCtrl = utils.getCtrl('log')
+loggerCtrl = utils.getCtrl('logger')
+loggerFileCtrl = utils.getCtrl('loggerFile')
+# storageCtrl = utils.getCtrl('storage')
+
+
 
 
 # 将动态创建的日志模型创建处理队列的任务
-logModel.registerAll((err, aLogModels)->
-	_.each(aLogModels, (oLogModel)->
-		module.exports['processLog'](oLogModel)
-	)
-)
+# logCtrl._registerAll((err, aLogModels)->
+# 	_.each(aLogModels, (oLogModel)->
+# 		module.exports['processLog'](oLogModel)
+# 	)
+# )
 
+
+
+processLogger = (loggerName)->
+	jobs.process(loggerName, 1, (job, done)->
+		loggerName = job.type
+		logger = job.data.logger
+		loggerFileCtrl.write(loggerName, (err, writeFile)->
+			writeFile(logger, (err)->
+				if err
+					console.log err
+				done()
+			)
+		)
+	)
 # 为入库创建处理队列的任务
-jobs.process('storage', config.STORAGE.maxProcess, (job, done)->
-	oLogFile = job.data.oLogFile
-	storage.store(oLogFile, (err)->
-		console.log err or '数据入库成功'
+jobs.process('storage', 1, (job, done)->
+	loggerFile = job.data.loggerFile
+	loggerCtrl._storage(loggerFile, (err)->
+		console.log err or "#{loggerFile.name}数据入库成功"
 		done()
 	)
 )
 
+process.on('registerLogger', (loggerName)->
+	processLogger(loggerName)
+	# module.exports['processLogger'](loggerName)
+)
+
+process.on('enqueueLogger', (loggerTmp)->
+	module.exports['enqueueLogger'](loggerTmp)
+)
+process.on('enqueueStorage', (loggerFile)->
+	module.exports['enqueueStorage'](loggerFile)
+)
+
 
 module.exports = {
-	enqueueLog: (oLogTemp)->
-		sAppID 			= oLogTemp.appID
-		sLogName 		= oLogTemp.name
-		sFullLogName 	= "#{sAppID}.#{sLogName}"
-		oLog 			= oLogTemp.log
-		jobs.create(sFullLogName, {log: oLog}).attempts(3).save()
-	processLog: (oLogModel)->
-		sAppID = oLogModel.appID
-		sLogName = oLogModel.name
-		sFullLogName 	= "#{sAppID}.#{sLogName}"
-		jobs.process(sFullLogName, 1, (job, done)->
-			sFullLogName = job.type
-			oLog = job.data.log
-			logger.write(sFullLogName, (err, fWriteLog)->
-				fWriteLog(oLog, (err)->
-					if !err
-						done()
-				)	
-			)
-		)
-	enqueueStorage: (oLogFile)->
-		jobs.create('storage', {oLogFile}).attempts(3).save()
+	enqueueLogger: (loggerTmp)->
+		appID = loggerTmp.appID # 暂时未使用
+		logName = loggerTmp.logName # 暂时未使用
+		loggerName = loggerTmp.loggerName
+		logger = loggerTmp.logger
+		jobs.create(loggerName, {logger}).attempts(3).save()
+	enqueueStorage: (loggerFile)->
+		jobs.create('storage', {loggerFile}).attempts(3).save()
 }

@@ -1,0 +1,36 @@
+{
+    "_id": {
+        "label": "应用ID",
+        "type": "String",
+        "required": true,
+        "unique": true,
+        "length": 6
+    },
+    "name": {
+        "label": "应用名称",
+        "type": "String",
+        "required": true,
+        "unique": true,
+        "minLength": 1,
+        "maxLength": 20
+    },
+    "token": {
+        "label": "令牌",
+        "type": "String",
+        "required": true,
+        "length": 32
+    },
+    "status": {
+        "label": "状态",
+        "type": "Number",
+        "required": true,
+        "enumeration": {
+            "enable": 10,
+            "disable": 20
+        }
+    },
+    "ts": {
+        "label": "创建时间",
+        "type": "Date"
+    }
+}

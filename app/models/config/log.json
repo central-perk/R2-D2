@@ -1,0 +1,30 @@
+{
+    "app": {
+        "label": "应用ID",
+        "type": "String",
+        "required": true,
+        "ref": "app"
+    },
+    "name": {
+        "label": "日志名称",
+        "type": "String",
+        "required": true,
+        "minLength": 1,
+        "maxLength": 20
+    },
+    "labelName": {
+        "label": "日志标签名称",
+        "type": "String",
+        "required": true,
+        "minLength": 1,
+        "maxLength": 20
+    },
+    "attrs": {
+        "label": "日志属性",
+        "type": "Array"
+    },
+    "ts": {
+        "label": "时间戳",
+        "type": "Date"
+    }
+}

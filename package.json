@@ -2,28 +2,62 @@
     "name": "logger",
     "description": "logger for echuandan",
     "version": "0.0.1",
-    "scripts": {
-        "start": "node server.js"
-    },
     "private": true,
-    "homepage": "app/views/index.hbs",
+    "script" : "server.js",
+    "log_date_format" : "YYYY-MM-DD",
     "dependencies": {
-        "async": "*",
+        "express": "*",
+        "compression": "*",
+        "cookie-parser": "*",
+        "express-session": "*",
         "connect-mongo": "*",
-        "connect-multiparty": "*",
+        "serve-static": "*",
+        "morgan": "*",
+        "multer": "*",
+        "serve-favicon": "*",
+        "body-parser": "*",
+        "errorhandler": "*",
+        "method-override": "*",
+        "passport": "*",
+        "source-map-support": "*",
         "connect-basic-auth": "*",
+
+        "webpack": "*",
+        "webpack-dev-server": "*",
+
+        "gulp": "*",
+        "gulp-minify-css": "*",
+        "gulp-uglify": "*",
+        "gulp-nodemon": "*",
+        "gulp-rename": "*",
+        "gulp-ruby-sass": "*",
+        "gulp-sourcemaps": "*",
+        "gulp-util": "*",
+        "vinyl-source-stream": "*",
+
+        "async": "*",
+        "cheerio": "*",
         "cron": "*",
-        "express": "3.5.0",
         "fs-extra": "*",
         "hbs": "*",
-        "kue": "*",
         "lodash": "*",
-        "marked": "*",
         "moment": "*",
         "mongodb": "*",
         "mongoose": "*",
+        "kue": "*",
+        "pm2": "*",
+        
+        "passport-local": "*",
+        "qiniu": "*",
         "request": "*",
         "should": "*",
-        "time": "*"
+        "time": "*",
+        "validator": "*"
+    },
+    "devDependencies": {
+        "style-loader": "*",
+        "css-loader": "*",
+        "sass-loader": "*",
+        "autoprefixer-loader": "*"
     }
 }

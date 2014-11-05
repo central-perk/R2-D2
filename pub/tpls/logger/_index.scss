@@ -1,0 +1,45 @@
+.paging {
+    ul {
+        li {
+            cursor: pointer;
+        }
+    }
+}
+.logger {
+    .selector {
+        margin-bottom: 10px;
+        .dropdown-menu {
+            min-width: 100px;
+            max-height: 200px;
+            overflow: auto;
+            padding: 0;
+            li {
+                width: auto;
+                &:hover {
+                    background-color: #DBDBDB;
+                }
+            }
+            label {
+                height: 30px;
+                line-height: 30px;
+                display: block;
+                margin-bottom: 0;
+                padding: 0 7px;
+                clear: both;
+                white-space: nowrap;
+                cursor: pointer;
+                input[type="checkbox"] {
+                    margin: 0;
+                }
+            }
+        }
+    }
+    .table {
+        .ts {
+            width: 95px;
+        }
+        .level {
+            width: 45px;
+        }
+    }
+}

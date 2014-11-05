@@ -1,0 +1,27 @@
+<div class="app col-lg-7 col-sm-12" ng-init="init()">
+    <div class="btn btn-primary" ng-click="appEditFormShow = !appEditFormShow">创建应用</div>
+    <div ng-include="'/tpls/app/edit.html'"
+        ng-show="appEditFormShow"
+        ng-controller="AppEditController"></div>
+    <div class="app-list">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr class="active">
+                    <th>应用名称</th>
+                    <th>应用ID</th>
+                    <th>token</th>
+                    <th>创建时间</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="app in apps">
+                    <td>{{app.name}}</td>
+                    <td>{{app._id}}</td>
+                    <th>{{app.token}}</th>
+                    <td>{{app.ts|dateFormat}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div growl></div>
+</div>

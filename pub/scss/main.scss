@@ -1,0 +1,24 @@
+@import "variables";
+@import "vendor";
+
+
+// modules
+@import "./../modules/side-nav/index";
+
+// tpls
+@import "./../tpls/app/index";
+@import "./../tpls/back/index";
+@import "./../tpls/log/index";
+@import "./../tpls/logger/index";
+
+// // @import "page";
+
+
+// // fa的文字路径还未设置
+// body {
+// 	@include transform-origin(center);
+// }
+
+body {
+	// color: red;
+}

@@ -1,0 +1,8 @@
+.main {
+	.left-content {
+		min-width: 200px;
+	}
+	.right-content {
+		max-width: calc(100% - 200px);
+	}
+}

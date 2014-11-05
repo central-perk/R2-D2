@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN" ng-controller="LayoutController">
+
+<head>
+    <meta charset="utf-8">
+    <title>{{title}}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <link rel="shortcut icon" href="">
+    <style>
+        [ng-cloak] {
+            display: none;
+        }
+    </style>
+    {{#if isproduction}}
+        <script data-main="js/main-built" src="libs/require/require.min.js"></script>
+    {{else}}
+        <script data-main="js/main" src="libs/require/require.min.js"></script>
+    {{/if}}
+    <script type="text/javascript">
+            {{#if user}}
+            window.document.user = {{{user}}};
+            {{/if}}
+    </script>
+    <link rel="stylesheet" href="assets/css/common.min.css" type='text/css' media="all"/>
+</head>
+
+<body class="login">
+    <!-- BEGIN LOGO -->
+    <div class="logo">
+        <a href="/">
+            管理平台
+            <!--  <img src="/assets/imgs/logo.png" alt="微行"/>
+            -->
+        </a>
+    </div>
+    <!-- END LOGO -->
+    <div ng-view=""></div>
+</body>
+<script type="text/javascript" charset="UTF-8" src="libs/prefixfree.min.js"></script>
+
+<!--[if lt IE 8]>
+<script type="text/javascript">
+    document.body.innerHTML="<div style='color:red; margin:0 auto; font-size:18px;'>" +
+            "您的浏览器实在太老了！请更新最新的浏览器吧！" +
+            "<a href='http://download.microsoft.com/download/5/D/4/5D405568-02E9-414D-BA52-A8D9890C1D31/IE10-Windows6.1-zh-cn.exe' >IE10</a>" +
+            "|<a href='https://dl.google.com/tag/s/appguid%3D%7B8A69D345-D564-463C-AFF1-A69D9E530F96%7D%26iid%3D%7B0D7D90D0-1294-AFB2-9950-D49F3DDE4495%7D%26lang%3Dzh-TW%26browser%3D4%26usagestats%3D0%26appname%3DGoogle%2520Chrome%26needsadmin%3Dprefers%26installdataindex%3Ddefaultbrowser/update2/installers/ChromeSetup.exe'>chrome</a>"+
+            "</div>";
+</script>
+<![endif]-->
+
+</html>

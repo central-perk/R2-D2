@@ -1,0 +1,33 @@
+<div class="log col-lg-7 col-sm-12" ng-init="init()">
+    <div class="btn btn-primary" ng-click="logEditFormShow = !logEditFormShow">创建日志</div>    
+    <div ng-include="'/tpls/log/edit.html'"
+        ng-show="logEditFormShow"
+        ng-controller="LogEditController"></div>
+    <div class="log-list">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr class="active">
+                    <th>应用</th>
+                    <th>日志名称</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="log in logs">
+                    <td>{{log.app.name}}</td>
+                    <td>{{log.labelName}}</td>
+                    <td>{{log.ts|dateFormat}}</td>
+                    <td>
+                        <a class="btn btn-xs btn-default"
+                            clip-copy="log.uploadUrl"
+                            clip-click="copy()">复制接口</a>
+                        <a class="btn btn-xs btn-primary"
+                            ui-sref="back.log.edit({app: log.app._id, name: log.name})">编辑</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div growl></div>
+</div>
