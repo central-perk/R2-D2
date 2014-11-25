@@ -124,9 +124,6 @@ module.exports = {
     try {
       Model = mongoose.model(loggerName);
       return async.auto({
-        getTotal: function(cb) {
-          return Model.count({}, cb);
-        },
         getList: function(cb) {
           return Model.find({}).sort({
             _ts: -1
@@ -137,10 +134,9 @@ module.exports = {
         if (!err) {
           loggers = results.getList;
           paging = {
-            perPage: PERPAGE,
-            total: results.getTotal
+            curPage: page + 1,
+            noNext: loggers.length < PERPAGE
           };
-          loggers = results.getList;
           return res.success({
             paging: paging,
             loggers: loggers

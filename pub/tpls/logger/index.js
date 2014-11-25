@@ -24,18 +24,17 @@ module.exports = function(myApp) {
                     _.forEach($scope.log.attrs, function(attr) {
                         attr.selected = true;
                     });
-                    console.log($scope.log);
                 });
                 LoggerService.list($state.params).then(function(data) {
                     $scope.loggers = data.loggers;
-                    $scope.paging = $scope.paging || data.paging;
-                    $scope.paging.page = 0;
+                    $scope.paging = data.paging;
                 });
             }
-            $scope.doPage = function(none, page) {
+            $scope.doPage = function(page) {
                 $state.params.page = page;
                 LoggerService.list($state.params).then(function(data) {
                     $scope.loggers = data.loggers;
+                    $scope.paging = data.paging;
                 });
             }
             $scope.selectedIcons = ["Gear","Heart","Camera"];

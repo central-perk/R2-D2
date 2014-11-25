@@ -100,8 +100,8 @@ module.exports = {
 		try
 			Model = mongoose.model(loggerName)
 			async.auto({
-				getTotal: (cb)->
-					Model.count({}, cb)
+				# getTotal: (cb)->
+				# 	Model.count({}, cb)
 				getList: (cb)->
 					Model.find({})
 						.sort({_ts: -1})
@@ -112,14 +112,13 @@ module.exports = {
 				if !err
 					loggers = results.getList
 					paging = {
-						perPage: PERPAGE,
-						total: results.getTotal
+						curPage: page + 1,
+						noNext: loggers.length < PERPAGE
 					}
-					loggers = results.getList
 					res.success({paging, loggers})
 				else
 					console.log err
-					res.errorMsg('授权列表获取失败')					
+					res.errorMsg('授权列表获取失败')
 			)
 		catch e
 			res.errorMsg('日志列表获取失败')
@@ -136,7 +135,7 @@ module.exports = {
 		async.waterfall([
 			# 确定日志文件已经入库行数
 			(cb)->
-				#! TODO 对于不是unstorage状态的判断，给出警告 
+				#! TODO 对于不是unstorage状态的判断，给出警告
 				if loggerFileStatus == LOGGERFILE_STATUS.unstorage
 					cb(null, 0)
 				else

@@ -5,7 +5,7 @@
             <tr class="active">
                 <th class="ts">时间</th>
                 <th class="level">等级</th>
-                <th ng-repeat="attr in log.attrs" 
+                <th ng-repeat="attr in log.attrs"
                     ng-bind="attr.labelName"
                     ng-show="attr.selected"></th>
             </tr>
@@ -23,14 +23,6 @@
             </tr>
         </tbody>
     </table>
-    <div paging
-        class="paging"
-        page="paging.page"
-        page-size="paging.perPage" 
-        total="paging.total"
-        hide-if-empty="true"
-        show-prev-next="true"
-        paging-action="doPage('', page)">>
-    </div>
+    <div paging="paging" on-paging="doPage(pageNum)"></div>
     <div growl></div>
 </div>
