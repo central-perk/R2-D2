@@ -107,7 +107,9 @@ module.exports = {
             logger: _.cloneDeep(req.query)
           };
           process.emit('enqueueLogger', loggerTmp);
-          return res.successMsg('数据提交成功');
+          return res.success({
+            code: 200
+          });
         } else {
           return res.errorMsg(err);
         }

@@ -41,7 +41,6 @@ jobs.process('storage', 1, function(job, done) {
   var loggerFile;
   loggerFile = job.data.loggerFile;
   return loggerCtrl._storage(loggerFile, function(err) {
-    console.log(err || ("" + loggerFile.name + "数据入库成功"));
     return done();
   });
 });

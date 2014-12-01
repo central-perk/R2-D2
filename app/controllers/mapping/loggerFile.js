@@ -40,7 +40,6 @@ getWriteableLoggerFilePath = function(loggerName, callback) {
       loggerFilePath = path.join(loggersPath, loggerFileName);
       loggerFileSizeOK = checkLogSize(loggerFilePath);
       if (loggerFileSizeOK) {
-        console.log(loggerName);
         return callback(null, loggerFilePath);
       } else {
         return loggerFileDao.update({
@@ -110,7 +109,6 @@ writeFile = function(loggerFilePath) {
 module.exports = {
   write: function(loggerName, callback) {
     return getWriteableLoggerFilePath(loggerName, function(err, loggerFilePath) {
-      console.log(loggerFilePath);
       return callback(err, writeFile(loggerFilePath));
     });
   },

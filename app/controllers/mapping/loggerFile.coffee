@@ -28,7 +28,6 @@ getWriteableLoggerFilePath = (loggerName, callback)->
 			loggerFilePath = path.join(loggersPath, loggerFileName)
 			loggerFileSizeOK = checkLogSize(loggerFilePath)
 			if loggerFileSizeOK
-				console.log loggerName
 				callback(null, loggerFilePath)
 			else
 				loggerFileDao.update({
@@ -48,7 +47,7 @@ getWriteableLoggerFilePath = (loggerName, callback)->
 
 # 返回日志文件是否可以继续写入
 checkLogSize = (loggerFilePath)->
-	try 
+	try
 		size = fs.readFileSync(loggerFilePath, 'utf8').length
 		return LOGGERFILE_MAXSIZE > size
 	catch e
@@ -90,7 +89,6 @@ writeFile = (loggerFilePath)->
 module.exports = {
 	write: (loggerName, callback)->
 		getWriteableLoggerFilePath(loggerName, (err, loggerFilePath)->
-			console.log loggerFilePath
 			callback(err, writeFile(loggerFilePath))
 		)
 	readyStorage: (callback)->

@@ -87,7 +87,7 @@ module.exports = {
 						logger: _.cloneDeep(req.query)
 					}
 					process.emit('enqueueLogger', loggerTmp)
-					res.successMsg('数据提交成功')
+					res.success({code: 200})
 				else
 					res.errorMsg(err)
 			)
