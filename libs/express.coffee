@@ -38,7 +38,7 @@ module.exports = (app, passport, mongoose)->
             res.json({msg: data})
         res.errorMsg = (data)->
             res.status(500).json({msg: data})
-        # res.error = (data)-> 
+        # res.error = (data)->
         #     res.status(500).json({
         #         # code: 400,
         #         msg: data
@@ -59,7 +59,7 @@ module.exports = (app, passport, mongoose)->
     # basicAuth
     app.use(basicAuth((credentials, req, res, next)->
         if credentials and credentials.username == BASC_AUTH_CONFIG.username and credentials.password == BASC_AUTH_CONFIG.password
-            next();  
+            next();
         else
             next("Unautherized!")
         )
@@ -72,7 +72,7 @@ module.exports = (app, passport, mongoose)->
     app.use(bodyParser.json())
     app.use(methodOverride());
     app.use(serveStatic(filePath.pub)) # 可以设置多个静态目录
-    
+
     app.use(session({
         resave: true,
         saveUninitialized: true,

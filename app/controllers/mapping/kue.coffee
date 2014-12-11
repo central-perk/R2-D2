@@ -65,7 +65,7 @@ module.exports = {
 		logName = loggerTmp.logName # 暂时未使用
 		loggerName = loggerTmp.loggerName
 		logger = loggerTmp.logger
-		jobs.create(loggerName, {logger}).attempts(3).save()
+		jobs.create(loggerName, {logger}).attempts(3).removeOnComplete(true).save()
 	enqueueStorage: (loggerFile)->
-		jobs.create('storage', {loggerFile}).attempts(3).save()
+		jobs.create('storage', {loggerFile}).attempts(3).removeOnComplete(true).save()
 }

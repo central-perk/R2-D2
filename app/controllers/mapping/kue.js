@@ -66,12 +66,12 @@ module.exports = {
     logger = loggerTmp.logger;
     return jobs.create(loggerName, {
       logger: logger
-    }).attempts(3).save();
+    }).attempts(3).removeOnComplete(true).save();
   },
   enqueueStorage: function(loggerFile) {
     return jobs.create('storage', {
       loggerFile: loggerFile
-    }).attempts(3).save();
+    }).attempts(3).removeOnComplete(true).save();
   }
 };
 
