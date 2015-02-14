@@ -11,7 +11,7 @@ config = process.g.config
 utils = process.g.utils
 filePath = process.g.path
 
-require(filePath.db).connect( 
+require(filePath.db).connect(
 	(mongoose)->
 		app = express()
 
@@ -24,6 +24,8 @@ require(filePath.db).connect(
 		# 注册所有日志
 		logCtrl = utils.getCtrl('log')
 		logCtrl._registerAll()
+
+		require(filePath.cron);
 
 		# # 定时任务
 		# # require(filePath.cron);

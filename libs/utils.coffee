@@ -43,6 +43,7 @@ module.exports = {
 		libs 	= path.join(rootPath, 'libs')
 		pub 	= path.join(rootPath, 'pub')
 		process.g = {
+			rootPath: rootPath,
 			config: require(config),
 			utils: self,
 			path: {
@@ -59,7 +60,7 @@ module.exports = {
 			dirPath = path.join(app, dir)
 			process.g.path[dir] = dirPath
 		)
-		
+
 		# libs文件夹下子文件路径
 		_.each(fs.readdirSync(libs), (file, index)->
 			if ~file.indexOf('.js')
@@ -81,7 +82,7 @@ module.exports = {
 		_.forEach(schemaConfig, (fieldValue, fieldKey)->
 			# 类型转换
 			fieldValue.type = FIELD_TYPE_MAP[fieldValue.type]
-			
+
 			if fieldValue.required
 				fieldValue.required = "#{fieldValue.label}不能为空"
 
@@ -157,7 +158,7 @@ module.exports = {
 				if include.test(file) and (!exclude or !exclude.test(file))
 					output.push(newRootPath.replace(removePath, ''))
 			else if stat.isDirectory()
-				if !exclude or !exclude.test(file)		
+				if !exclude or !exclude.test(file)
 					directories.push(newRootPath)
 		)
 		_.each(directories, (dir, index)->
