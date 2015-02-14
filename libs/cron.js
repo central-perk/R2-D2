@@ -39,7 +39,7 @@ jobBackupDB = new CronJob(after10s, function() {
   return BackupDB.init({
     path: dbBackupPath,
     host: DB.host + ':' + DB.port,
-    name: DB.name
+    name: DB.name + '_' + process.env.NODE_ENV
   });
 }, null, true, 'Asia/Shanghai');
 

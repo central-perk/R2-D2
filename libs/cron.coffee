@@ -40,7 +40,7 @@ jobBackupDB = new CronJob(after10s, ()->
 		host: DB.host + ':' + DB.port
 
 		# 数据库名称
-		name: DB.name
+		name: DB.name + '_' + process.env.NODE_ENV
 	});
 null, true, 'Asia/Shanghai')
 
