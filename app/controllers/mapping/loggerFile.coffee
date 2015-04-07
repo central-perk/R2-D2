@@ -48,7 +48,8 @@ getWriteableLoggerFilePath = (loggerName, callback)->
 # 返回日志文件是否可以继续写入
 checkLogSize = (loggerFilePath)->
 	try
-		size = fs.readFileSync(loggerFilePath, 'utf8').length
+		# size = fs.readFileSync(loggerFilePath, 'utf8').length
+		size = fs.statSync(loggerFilePath).size
 		return LOGGERFILE_MAXSIZE > size
 	catch e
 		console.log e
