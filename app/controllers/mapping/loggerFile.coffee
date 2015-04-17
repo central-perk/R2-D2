@@ -87,6 +87,7 @@ writeFile = (loggerFilePath)->
 			flag:'a'
 		}, cb)
 
+
 module.exports = {
 	write: (loggerName, callback)->
 		getWriteableLoggerFilePath(loggerName, (err, loggerFilePath)->
@@ -108,4 +109,17 @@ module.exports = {
 		}, {
 			status: loggerFileStatus
 		}, callback)
+	clean: ()->
+		loggerFileDao.get({
+			status: LOGGERFILE_STATUS.storaged
+		}, (err, loggerFiles)->
+			_.forEach loggerFiles, (loggerFile)->
+				loggerFileName = loggerFile._fileName
+				loggerFilePath = path.join(loggersPath, loggerFile._fileName)
+
+				loggerFileDao.delete {_fileName: loggerFileName}, (err)->
+					if !err
+						console.log(loggerFileName, 'removed')
+						fs.removeSync(loggerFilePath)
+		)
 }

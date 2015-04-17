@@ -2,7 +2,7 @@ module.exports = {
     dateFormate: 'YYYY.MM.DD',
     dbBackupPath: '/tmp/backup',
     prefix: '',
-    days: 7,
+    days: 3,
     tarExt: '.tar.gz',
     tar: true
 }

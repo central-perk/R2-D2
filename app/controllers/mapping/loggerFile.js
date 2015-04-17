@@ -130,5 +130,24 @@ module.exports = {
     }, {
       status: loggerFileStatus
     }, callback);
+  },
+  clean: function() {
+    return loggerFileDao.get({
+      status: LOGGERFILE_STATUS.storaged
+    }, function(err, loggerFiles) {
+      return _.forEach(loggerFiles, function(loggerFile) {
+        var loggerFileName, loggerFilePath;
+        loggerFileName = loggerFile._fileName;
+        loggerFilePath = path.join(loggersPath, loggerFile._fileName);
+        return loggerFileDao["delete"]({
+          _fileName: loggerFileName
+        }, function(err) {
+          if (!err) {
+            console.log(loggerFileName, 'removed');
+            return fs.removeSync(loggerFilePath);
+          }
+        });
+      });
+    });
   }
 };
