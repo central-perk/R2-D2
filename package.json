@@ -54,6 +54,6 @@
         "validator": "3.19.1",
         "vinyl-source-stream": "1.0.0",
         "webpack": "1.4.4",
-        "webpack-dev-server": "1.6.5",
-    },
+        "webpack-dev-server": "1.6.5"
+    }
 }
