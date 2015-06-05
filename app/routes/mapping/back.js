@@ -1,4 +1,7 @@
 module.exports = function(app, mw, back) {
+	app.get('/',function(req, res){
+		return res.redirect('/back');
+	});
 
 	// 此后不能写back下另外的get请求
 	app.get('/back', function(req, res, next) {
