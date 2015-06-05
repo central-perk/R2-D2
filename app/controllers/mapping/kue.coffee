@@ -15,7 +15,7 @@ loggerFileCtrl = utils.getCtrl('loggerFile')
 
 # 处理日志
 processLogger = (loggerName)->
-	jobs.process(loggerName, 1, (job, done)->
+	jobs.process(loggerName, 1, (job, done)-> # job 即为上报的日志
 		loggerName = job.type
 		logger = job.data.logger
 		loggerFileCtrl.write(loggerName, (err, writeFile)->
@@ -28,7 +28,7 @@ processLogger = (loggerName)->
 	)
 
 # 处理入库任务
-jobs.process('storage', 1, (job, done)->
+jobs.process('storage', 1, (job, done)-> # 1: 同时最多处理一个任务
 	loggerFile = job.data.loggerFile
 	loggerCtrl._storage(loggerFile, (err)->
 		# console.log err or "#{loggerFile.name}数据入库成功"

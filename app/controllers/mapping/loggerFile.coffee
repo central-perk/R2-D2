@@ -93,7 +93,7 @@ module.exports = {
 		getWriteableLoggerFilePath(loggerName, (err, loggerFilePath)->
 			callback(err, writeFile(loggerFilePath))
 		)
-	# 入库前的准备
+	# 入库前的准备，未被调用
 	readyStorage: (callback)->
 		# 将日志文件状态从可写入转为待入库状态
 		logFileDao.Model.update(
@@ -111,7 +111,7 @@ module.exports = {
 		}, {
 			status: loggerFileStatus
 		}, callback)
-	# 清除日志文件
+	# 清理已经入库的日志文件，包含数据库与实体文件
 	clean: ()->
 		loggerFileDao.get({
 			status: LOGGERFILE_STATUS.storaged

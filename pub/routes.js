@@ -2,7 +2,7 @@ module.exports = function(myApp) {
     myApp.config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
         function($stateProvider, $urlRouterProvider, $locationProvider) {
             // 开启html5mode
-            $locationProvider.html5Mode(true)
+            $locationProvider.html5Mode(true);
             // $locationProvider.html5Mode(true).hashPrefix('!');
 
             // 不符合条件的路由指向首页
@@ -57,17 +57,4 @@ module.exports = function(myApp) {
                 });
         }
     ]);
-    // 异步路由
-    // app.run(['$rootScope', '$urlRouter',
-    //     function($rootScope, $urlRouter) {
-    //         $rootScope.$on('$locationChangeSuccess', function(evt) {
-    //             // Halt state change from even starting
-    //             evt.preventDefault();
-    //             // Perform custom logic
-    //             var meetsRequirement = /* ... */
-    //                 // Continue with the update and state transition if logic allows
-    //                 if (meetsRequirement) $urlRouter.sync();
-    //         });
-    //     }
-    // ]);
-}
+};

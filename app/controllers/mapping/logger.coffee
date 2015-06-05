@@ -91,6 +91,7 @@ module.exports = {
 				else
 					res.errorMsg(err)
 			)
+	# 日志列表
 	list: (req, res)->
 		query = req.query
 		appID = query.app
@@ -122,12 +123,10 @@ module.exports = {
 			)
 		catch e
 			res.errorMsg('日志列表获取失败')
-
-
 	_storage: (loggerFile, callback)->
 		app = loggerFile.app
 		loggerName = loggerFile.name
-		logName = loggerName.split('.')[1]
+		logName = loggerName.split('.')[1] # "#{appID}.#{logName}"
 		loggerFileName = loggerFile._fileName
 		loggerFilePath = path.join(loggersPath, loggerFileName)
 		loggerFileStatus = loggerFile.status

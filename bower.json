@@ -19,9 +19,9 @@
 		"ng-clip": "^0.2.4",
 		"zeroclipboard": "^2.1.6",
 		"jquery": "^2.1.1",
-		"moment": "*",
-		"angular-moment": "*",
-		"angular-sanitize": "*",
+		"moment": "2.8.3",
+		"angular-moment": "0.8.2",
+		"angular-sanitize": "1.3.0",
 		"angular-mocks": "^1.2.26",
 		"angular-ui-utils": "^0.1.1",
 		"font-awesome": "^4.2.0"
