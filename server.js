@@ -30,5 +30,3 @@ require(filePath.db).connect(function(mongoose) {
     return console.log("Listen on port " + (app.get('port')));
   });
 });
-
-//# sourceMappingURL=server.js.map

@@ -9,4 +9,3 @@ module.exports = {
 			.skip(options.perPage * options.page)
 			.exec(callback)
 }
-

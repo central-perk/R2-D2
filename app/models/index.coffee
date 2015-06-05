@@ -12,8 +12,7 @@ modelConfigPath = path.join(__dirname, 'config')
 modelMappingPath = path.join(__dirname, 'mapping')
 
 # 注册静态模型
-_.forEach(fs.readdirSync(modelMappingPath), (modelFileName, index)->
+_.forEach fs.readdirSync(modelMappingPath), (modelFileName, index)->
 	modelName = modelFileName.replace('.js', '')
 	require(path.join(modelMappingPath, modelFileName))
 	module.exports[modelName] = mongoose.model(modelName)
-)

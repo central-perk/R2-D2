@@ -10,7 +10,6 @@ module.exports = function(app, mw, log) {
 	app.put('/log/:logID', log.update);
 
 	// 获取根据应用分类的日志列表
-
 	app.get('/log/group/app', log.groupApp);
 
-}
+};

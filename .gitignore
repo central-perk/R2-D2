@@ -3,5 +3,3 @@
 node_modules/*
 loggers/*
 pub/libs
-webpack.config.js
-gulpfile.js

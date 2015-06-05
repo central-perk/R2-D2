@@ -11,20 +11,9 @@ STORAGE_MAXPROCESS = config.STORAGE.maxProcess
 logCtrl = utils.getCtrl('log')
 loggerCtrl = utils.getCtrl('logger')
 loggerFileCtrl = utils.getCtrl('loggerFile')
-# storageCtrl = utils.getCtrl('storage')
 
 
-
-
-# 将动态创建的日志模型创建处理队列的任务
-# logCtrl._registerAll((err, aLogModels)->
-# 	_.each(aLogModels, (oLogModel)->
-# 		module.exports['processLog'](oLogModel)
-# 	)
-# )
-
-
-
+# 处理日志
 processLogger = (loggerName)->
 	jobs.process(loggerName, 1, (job, done)->
 		loggerName = job.type
@@ -37,7 +26,8 @@ processLogger = (loggerName)->
 			)
 		)
 	)
-# 为入库创建处理队列的任务
+
+# 处理入库任务
 jobs.process('storage', 1, (job, done)->
 	loggerFile = job.data.loggerFile
 	loggerCtrl._storage(loggerFile, (err)->
@@ -46,26 +36,32 @@ jobs.process('storage', 1, (job, done)->
 	)
 )
 
+# 处理日志
 process.on('registerLogger', (loggerName)->
 	processLogger(loggerName)
 	# module.exports['processLogger'](loggerName)
 )
 
+# 创建日志任务
 process.on('enqueueLogger', (loggerTmp)->
 	module.exports['enqueueLogger'](loggerTmp)
 )
+
+# 创建入库任务
 process.on('enqueueStorage', (loggerFile)->
 	module.exports['enqueueStorage'](loggerFile)
 )
 
 
 module.exports = {
+	# 创建日志任务
 	enqueueLogger: (loggerTmp)->
 		appID = loggerTmp.appID # 暂时未使用
 		logName = loggerTmp.logName # 暂时未使用
 		loggerName = loggerTmp.loggerName
 		logger = loggerTmp.logger
 		jobs.create(loggerName, {logger}).attempts(3).removeOnComplete(true).save()
+	# 创建入库任务
 	enqueueStorage: (loggerFile)->
 		jobs.create('storage', {loggerFile}).attempts(3).removeOnComplete(true).save()
 }
