@@ -3,3 +3,4 @@
 node_modules/*
 loggers/*
 pub/libs
+npm-debug.log
