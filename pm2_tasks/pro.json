@@ -1,0 +1,10 @@
+{
+	"apps": [{
+		"name": "open",
+		"log_date_format" : "YYYY-MM-DD",
+    	"script" : "server.js",
+		"env": {
+			"NODE_ENV": "production"
+		}
+    }]
+}

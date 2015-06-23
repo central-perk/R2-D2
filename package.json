@@ -3,8 +3,6 @@
     "description": "logger for echuandan",
     "version": "0.0.1",
     "private": true,
-    "script" : "server.js",
-    "log_date_format" : "YYYY-MM-DD",
     "dependencies": {
         "async": "0.9.0",
         "autoprefixer-loader": "1.0.0",
