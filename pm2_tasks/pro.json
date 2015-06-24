@@ -1,6 +1,6 @@
 {
 	"apps": [{
-		"name": "open",
+		"name": "logger",
 		"log_date_format" : "YYYY-MM-DD",
     	"script" : "server.js",
 		"env": {
