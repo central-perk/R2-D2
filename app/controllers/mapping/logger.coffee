@@ -48,49 +48,53 @@ json2db = (Model, loggers, callback)->
 
 module.exports = {
 	create: (req, res)->
-		appID 	= req.params.appID
-		logName = req.params.logName
-		token 	= req.params.token
-		loggerName = "#{appID}.#{logName}"
-		if !appID
-			res.errorMsg('缺少应用ID')
-		else if !logName
-			res.errorMsg('缺少日志名称')
-		else if !token
-			res.errorMsg('缺少令牌')
-		else
-			#! TODO 读取缓存
-			async.waterfall([
-				# 检验授权信息
-				(cb)->
-					appCtrl._getOne({_id: appID, token}, (err, app)->
-						if app
-							cb(null, null)
-						else
-							cb(err or '应用授权错误')
-					)
-				# 检验日志模型
-				(result, cb)->
-					logCtrl._getOne({app: appID, name: logName}, (err, log)->
-						if log
-							cb(null, null)
-						else
-							cb(err or '日志不存在')
-					)
-			], (err, result)->
-				if !err
-					#! TODO 添加缓存
-					loggerTmp = {
-						appID
-						logName
-						loggerName
-						logger: _.cloneDeep(req.query)
-					}
-					process.emit('enqueueLogger', loggerTmp)
-					res.success({code: 200})
-				else
-					res.errorMsg(err)
-			)
+		#! 暂时不收集数据
+	    res.success({code: 200});
+	    
+		# appID 	= req.params.appID
+		# logName = req.params.logName
+		# token 	= req.params.token
+		# loggerName = "#{appID}.#{logName}"
+
+		# if !appID
+		# 	res.errorMsg('缺少应用ID')
+		# else if !logName
+		# 	res.errorMsg('缺少日志名称')
+		# else if !token
+		# 	res.errorMsg('缺少令牌')
+		# else
+		# 	#! TODO 读取缓存
+		# 	async.waterfall([
+		# 		# 检验授权信息
+		# 		(cb)->
+		# 			appCtrl._getOne({_id: appID, token}, (err, app)->
+		# 				if app
+		# 					cb(null, null)
+		# 				else
+		# 					cb(err or '应用授权错误')
+		# 			)
+		# 		# 检验日志模型
+		# 		(result, cb)->
+		# 			logCtrl._getOne({app: appID, name: logName}, (err, log)->
+		# 				if log
+		# 					cb(null, null)
+		# 				else
+		# 					cb(err or '日志不存在')
+		# 			)
+		# 	], (err, result)->
+		# 		if !err
+		# 			#! TODO 添加缓存
+		# 			loggerTmp = {
+		# 				appID
+		# 				logName
+		# 				loggerName
+		# 				logger: _.cloneDeep(req.query)
+		# 			}
+		# 			process.emit('enqueueLogger', loggerTmp)
+		# 			res.success({code: 200})
+		# 		else
+		# 			res.errorMsg(err)
+		# 	)
 	# 日志列表
 	list: (req, res)->
 		query = req.query
