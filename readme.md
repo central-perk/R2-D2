@@ -1,4 +1,4 @@
-# log server
+# R2-D2 - log server
 
 ### Function description
 
