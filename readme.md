@@ -1,39 +1,37 @@
-# 日志服务器
+# log server
 
-### 功能描述
+### Function description
 
-为易传单全线产品提供日志记录服务
+Provide logging services for the full line of Easy Flyer products
 
-### 代码语法
-后端使用coffee编写
+### Code syntax
+The backend is written in coffee
 
 
-### 启动项目
+### Startup project
 
-- 启动 mongoDB
-- 启动 redis
+- start mongoDB
+- start redis
 - sudo npm install
-- sudo npm install pm2 (package.json 不需要写pm2配置)
+- sudo npm install pm2 (package.json does not need to write pm2 configuration)
 - bower install
 - gulp
 
-### 发布至正式版
-```
+### Release to official version
+````
 gulp build-pro
-```
+````
 
-### 生产环境下启动：
+### Start in production environment:
 
-```
+````
 pm2 start package.json
-```
+````
 
-### 前端工具
+### Front-end tools
 
- 1. 使用webpack管理js代码依赖，打包发布js
- 2. gulp构建和发布css
+  1. Use webpack to manage js code dependencies, package and publish js
+  2. gulp build and publish css
 
-### 重启服务功能
-必须以pm2方式启动服务才有效
- 
-    
+### Restart service function
+The service must be started in pm2 mode to be effective
